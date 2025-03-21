@@ -1,12 +1,30 @@
 #include <iostream>
+#include "srcs/LogManager/LogManager.hpp"
 
-int main(int ac, char **av)
+int main(int /*ac*/, char **/*av*/)
 {
-    if (ac != 2) 
-    {
-        std::cerr << "Usage:./webserv [configuration file] " << std::endl;
-        return (EXIT_FAILURE);
-    }
+    // if (ac != 2) 
+    // {
+    //     std::cerr << "Usage:./webserv [configuration file] " << std::endl;
+    //     return (EXIT_FAILURE);
+    // }
+
+    //ignorer **av[1] pour le moment
+
+    LogManager::setLogStatus(true);
+    LogManager::setLogFileStatus(true);
+    LogManager::setLogConsoleStatus(true);
+
+    LogManager::log(LogManager::INFO, "Server is starting...");
+    
+
+
+
+
+
+
+
+
 
     //parsing fichier config (validation et recuperation des données)
 
@@ -19,5 +37,5 @@ int main(int ac, char **av)
 
     //fermeture du serveur
     
-    return (EXIT_SUCCESS);
+    return (0);
 }
