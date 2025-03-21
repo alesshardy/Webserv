@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: apintus <apintus@student.42.fr>            +#+  +:+       +#+         #
+#    By: kammi <kammi@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/17 14:48:41 by apintus           #+#    #+#              #
-#    Updated: 2025/03/17 15:53:21 by apintus          ###   ########.fr        #
+#    Updated: 2025/03/21 17:08:32 by kammi            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,10 @@ OBJ_PATH		=	.obj
 #                                   SOURCES                                    #
 # **************************************************************************** #
 
-SRCS 			=	miniServ.cpp \
+SRCS 			=	main.cpp \
+					srcs/LogManager/LogManager.cpp \
+					
+					
 
 OBJS			=	$(SRCS:%.cpp=$(OBJ_PATH)/%.o)
 
