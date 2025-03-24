@@ -15,17 +15,8 @@ int main(int /*ac*/, char **/*av*/)
     LogManager::setLogFileStatus(true);
     LogManager::setLogConsoleStatus(true);
 
-    LogManager::log(LogManager::INFO, "Server is starting...");
+    LogManager::log(LogManager::DEBUG, "Server is starting...");
     
-
-
-
-
-
-
-
-
-
     //parsing fichier config (validation et recuperation des données)
 
     //creation du serveur : socket et de epoll pour surveiler les sockets
