@@ -6,7 +6,6 @@
 #include <fstream>
 #include <ctime>
 #include <sstream>
-#include <stdarg.h>
 #include <map>
 
 class LogManager
@@ -30,24 +29,20 @@ class LogManager
         static std::map<LogLevel, std::string> _logLevelStr;
         static std::map<LogLevel, std::string> _logLevelColor;
 
-        // Méthodes utilitaires
-        static std::string _generateLogFileName();
-        static void _generateLogLevelStr();
-        static void _generateLogLevelColor();
-        static std::string _formatLog(LogLevel level, const char *msg, const char *time, bool colored);
-        static void _printLog(LogLevel level, const char *msg, const char *time);
-        static void _writeLogInFile(LogLevel level, const char *msg, const char *time);
+        template<typename T>
+        static void _printLog(LogLevel level, T msg, const char *time);
+
+        template<typename T>
+        static void _writeLogInFile(LogLevel level, T msg, const char *time);
 
     public:
-        static void initialize();
-        static void log(LogLevel level, const char *message, ...);
+        template<typename T>
+        static void log(LogLevel level, T msg);
 
-        // setters
+        static void initialize();
         static void setLogStatus(bool status);
         static void setLogFileStatus(bool status);
         static void setLogConsoleStatus(bool status);
-
-        // getters
         static bool getLogStatus();
         static bool getLogFileStatus();
         static bool getLogConsoleStatus();
@@ -55,5 +50,8 @@ class LogManager
         static std::string getLogLevelStr(LogLevel level);
         static std::string getLogLevelColor(LogLevel level);
 };
+
+// Inclure le fichier .tpp ici
+#include "LogManager.tpp"
 
 #endif // LOGMANAGER_HPP
