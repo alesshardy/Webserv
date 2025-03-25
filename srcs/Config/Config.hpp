@@ -4,6 +4,10 @@
 # include <iostream>
 # include <vector>
 # include <map>
+# include <set>
+# include <fstream>
+# include <sstream>
+# include "BlocServer.hpp"
 
 class Config
 {
@@ -11,34 +15,26 @@ class Config
             std::vector<BlocServer>    _server;
 
     public:
-};
+            Config();
+            Config(const Config &copy);
+            ~Config();
 
-class BlocLocation
-{
-    private:
-            std::string                 _root;
-            std::string                 _alias;
-            std::vector<std::string>    _index;
-            std::vector<std::string>    _allowMethod; //une seul clef mais plusieur valeur en face
-            std::vector<std::string>    _cgiExtension;
-            std::string                 _uploadPath;
-            bool                        _autoIndex;
-            
-    public:
-};
+            Config &operator=(const Config &assign);
 
-class BlocServer
-{
-    private:
-            std::vector<int>            _listen;
-            std::vector<std::string>    _serverName;
-            std::string                 _root;
-            std::vector<std::string>    _index;
-            std::map<int, std::string>    _errorPage;
-            long long                   _clientMaxBodySize;
-            std::map<std::string, BlocLocation> _location;
-    
-    public:
+            //Setters
+            void    addServer(const BlocServer &server);
+
+            //Getters
+            const std::vector<BlocServer> &getServers() const;
+            BlocServer &getServer(size_t index);
+
+            //Validation
+            bool    validateConfig() const;
+
+            //Parsing
+            void        parseConfigFile(const std::string &filePath, Config &config);
+            void        eraseWhiteSpace(std::string line);
+            std::string findFirstWord(std::string line);
 };
 
 #endif
