@@ -30,6 +30,13 @@ BlocServer &BlocServer::operator=(const BlocServer &assign)
     return (*this);
 }
 
+//Setters
+void    BlocServer::addLocation(const std::string &path, const BlocLocation &location) 
+{
+    _location[path] = location;
+};
+
+
 //Validation
 bool BlocServer::validateServer() const
 {
