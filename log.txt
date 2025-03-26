@@ -210,3 +210,43 @@
 [2025-03-26 17:58:53] [ERROR] Erreur : bloc de lvl 2 doit etre location
 [2025-03-26 17:59:01] [INFO] Fichier config correct!
 [2025-03-26 17:59:01] [DEBUG] Server is starting...
+[2025-03-26 18:32:24] [INFO] Fichier config correct!
+[2025-03-26 18:32:24] [DEBUG] Server is starting...
+[2025-03-26 18:32:51] [INFO] Fichier config correct!
+[2025-03-26 18:32:51] [DEBUG] Server is starting...
+[2025-03-26 18:34:07] [ERROR] ERREUR : first key must be 'server' 
+[2025-03-26 18:34:20] [ERROR] ERREUR : first key must be 'server' 
+[2025-03-26 18:34:31] [ERROR] Erreur : directive 'server' has no opening '{'
+[2025-03-26 18:34:35] [ERROR] ERREUR : key unknown 
+[2025-03-26 18:34:43] [ERROR] Erreur : ligne requete doit finir par ';2' 
+[2025-03-26 18:34:49] [ERROR] ERREUR : ligne requete doit finir par ';' OU premier bloc doit etre server 
+[2025-03-26 18:34:54] [INFO] Fichier config correct!
+[2025-03-26 18:34:54] [DEBUG] Server is starting...
+[2025-03-26 18:35:14] [INFO] Fichier config correct!
+[2025-03-26 18:35:14] [DEBUG] Server is starting...
+[2025-03-26 18:36:42] [INFO] Fichier config correct!
+[2025-03-26 18:36:42] [DEBUG] Server is starting...
+[2025-03-26 18:36:58] [ERROR] ERREUR : ligne requete doit finir par ';' OU premier bloc doit etre server 
+[2025-03-26 18:37:40] [INFO] Fichier config correct!
+[2025-03-26 18:37:40] [DEBUG] Server is starting...
+[2025-03-26 18:44:26] [INFO] Fichier config correct!
+[2025-03-26 18:44:26] [DEBUG] Server is starting...
+[2025-03-26 18:46:07] [ERROR] ERREUR : ligne requete doit finir par ';' OU premier bloc doit etre server 
+[2025-03-26 18:46:16] [ERROR] Erreur : ligne requete doit finir par ';2' 
+[2025-03-26 18:46:28] [INFO] Fichier config correct!
+[2025-03-26 18:46:28] [DEBUG] Server is starting...
+[2025-03-26 18:46:32] [INFO] Fichier config correct!
+[2025-03-26 18:46:32] [DEBUG] Server is starting...
+[2025-03-26 18:50:09] [ERROR] ERREUR : SVPPPP
+[2025-03-26 18:51:54] [ERROR] ERREUR : SVPPPP
+[2025-03-26 18:52:21] [ERROR] ERREUR : SVPPPP
+[2025-03-26 18:53:15] [ERROR] ERREUR : SVPPPP
+[2025-03-26 18:53:22] [ERROR] ERREUR : SVPPPP
+[2025-03-26 18:56:26] [ERROR] ERREUR : SVPPPP
+[2025-03-26 18:57:04] [ERROR] ERREUR : SVPPPP
+[2025-03-26 18:59:01] [ERROR] ERREUR : SVPPPP
+[2025-03-26 19:00:02] [ERROR] ERREUR : SVPPPP
+[2025-03-26 19:01:33] [ERROR] ERREUR : SVPPPP
+[2025-03-26 19:01:41] [ERROR] ERREUR : SVPPPP
+[2025-03-26 19:01:53] [ERROR] ERREUR : SVPPPP
+[2025-03-26 19:02:50] [ERROR] ERREUR : SVPPPP
