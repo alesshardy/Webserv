@@ -11,6 +11,12 @@ int main(int ac, char **av)
         std::cerr << "Usage:./webserv [configuration file] " << std::endl;
         return (EXIT_FAILURE);
     }
+    
+    // INIT LOGGER
+    LogManager::setLogStatus(true);
+    LogManager::setLogFileStatus(true);
+    LogManager::setLogConsoleStatus(true);
+
     //parsing fichier config (validation et recuperation des données)
     try {
         Config config;
@@ -22,10 +28,6 @@ int main(int ac, char **av)
         return (EXIT_FAILURE);
     }
     
-    LogManager::setLogStatus(true);
-    LogManager::setLogFileStatus(true);
-    LogManager::setLogConsoleStatus(true);
-
     LogManager::log(LogManager::DEBUG, "Server is starting...");
     
     //creation du serveur : socket et de epoll pour surveiler les sockets
