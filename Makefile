@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kammi <kammi@student.42.fr>                +#+  +:+       +#+         #
+#    By: apintus <apintus@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/17 14:48:41 by apintus           #+#    #+#              #
-#    Updated: 2025/03/21 17:08:32 by kammi            ###   ########.fr        #
+#    Updated: 2025/03/26 12:49:09 by apintus          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,8 +54,10 @@ OBJ_PATH		=	.obj
 
 SRCS 			=	main.cpp \
 					srcs/LogManager/LogManager.cpp \
-					
-					
+					srcs/Config/Config.cpp \
+					srcs/Config/BlocServer.cpp \
+					srcs/Config/BlocLocation.cpp \
+					srcs/Utils/Utils.cpp \
 
 OBJS			=	$(SRCS:%.cpp=$(OBJ_PATH)/%.o)
 

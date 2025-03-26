@@ -8,6 +8,9 @@
 # include <fstream>
 # include <sstream>
 # include "BlocServer.hpp"
+# include "../Utils/Utils.hpp"
+
+class BlocServer;
 
 class Config
 {
