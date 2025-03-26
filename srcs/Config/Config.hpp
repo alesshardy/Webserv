@@ -38,6 +38,8 @@ class Config
             void        parseConfigFile(const std::string &filePath, Config &config);
             void        eraseWhiteSpace(std::string line);
             std::string findFirstWord(std::string line);
+            bool        verifKeyServer(std::string token);
+            bool        verifKeyOther(std::string token);
 };
 
 #endif
