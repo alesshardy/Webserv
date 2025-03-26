@@ -14,6 +14,7 @@
 #include "BlocServer.hpp"
 #include "LogManager.hpp"
 
+
 enum State
 {
     STOPPED,
