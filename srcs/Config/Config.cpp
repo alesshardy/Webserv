@@ -101,12 +101,29 @@ std::string Config::findFirstWord(std::string line)
 //     }
 // }
 
-void Config::parseConfigFile(const std::string &filePath, Config &config) 
+
+bool    Config::verifKeyServer(std::string token)
+{
+    if (token == "server")
+        return true;
+    return false;
+}
+
+bool    Config::verifKeyOther(std::string token)
+{
+    if (token == "location" || token == "listen" || token == "server_name" || token == "root"
+    || token == "index" || token == "error_page" || token == "client_max_body_size" 
+    || token == "alias" || token == "allow_methods" || token == "upload_path" || token == "autoindex")
+        return true;
+    return false;
+}
+
+void    Config::parseConfigFile(const std::string &filePath, Config &config) 
 {
     (void)config;
     std::ifstream file(filePath.c_str());
     if (!file) {
-        std::cerr << "Erreur : impossible d'ouvrir le fichier " << filePath << std::endl;
+        throw std::runtime_error("Erreur : impossible d'ouvrir le fichier ");
         return;
     }
 
@@ -118,8 +135,11 @@ void Config::parseConfigFile(const std::string &filePath, Config &config)
     bool contentAfterSemicolon = false; // Indique si du contenu suit un point-virgule sur la même ligne
     bool isKey = true; // Indique si le mot actuel est une clé (premier mot d'une ligne ou d'un bloc)
 
-    // bool inLocBloc = false;
-    // bool inServBloc = false;
+    bool    emptyBloc = true;
+    bool inLocBloc = false;
+    bool inLocLine = false;
+
+
     // BlocLocation    currentLocation;
     // BlocServer      currentServer;
 
@@ -145,10 +165,17 @@ void Config::parseConfigFile(const std::string &filePath, Config &config)
         if (c == '\n') {
             if (!token.empty()) {
                 if (isKey) {
-                    std::cout << "Clé trouvée : " << token << std::endl;
-
+                    std::cout << "Clé trouvé1 : " << token << std::endl;
+                    if (!verifKeyServer(token))
+                        throw std::runtime_error("ERREUR : first key must be 'server' ");
                 } else {
-                    std::cout << "Argument trouvé : " << token << std::endl;
+                    std::cout << "Argument trouvé1 : " << token << std::endl;
+                }
+                // requete doit finir par ';' partie 1
+                if (semicolonCount != 1 && token != "server")
+                {
+                    std::cout << "SIUUU " << token << std::endl;//SIUUU
+                    throw std::runtime_error("ERREUR : ligne requete doit finir par ';' OU premier bloc doit etre server ");
                 }
                 token.clear(); // Vider le token à la fin de la ligne
             }
@@ -161,51 +188,77 @@ void Config::parseConfigFile(const std::string &filePath, Config &config)
             std::cout << "Début de bloc" << std::endl;
             depth++;
             isKey = true; // Réinitialiser pour le début d'un bloc
+            emptyBloc = true;
+            if (depth == 2 && inLocBloc == false)
+                throw std::runtime_error("Erreur : bloc de lvl 2 doit etre location") ;
         } else if (c == '}') {
             std::cout << "Fin de bloc" << std::endl;
+            // gerer les blocs vides
+            if (emptyBloc)
+            {
+                throw std::runtime_error("Erreur : le fichier ne peux contenir de bloc vide") ;
+            }
+            if (inLocBloc == true)
+                inLocBloc = false;
             depth--;
             isKey = true; // Réinitialiser pour la fin d'un bloc
         } 
         // Gestion des points-virgules
         else if (c == ';') {
             semicolonCount++;
+            if (depth == 0)
+                throw std::runtime_error("Erreur : directive 'server' has no opening '{'");
             if (semicolonCount > 1) {
-                std::cerr << "Erreur : plus d'une requête par ligne détectée." << std::endl;
-                return;
+                throw std::runtime_error("Erreur : plus d'une requête par ligne détectée.");
             }
             if (!token.empty()) {
                 if (isKey) {
-                    std::cout << "Clé trouvée : " << token << std::endl;
+                    std::cout << "Clé trouvée2 : " << token << std::endl;
                 } else {
-                    std::cout << "Argument trouvé : " << token << std::endl;
+                    std::cout << "Argument trouvé2 : " << token << std::endl;
                 }
                 token.clear(); // Vider le token après un point-virgule
             }
+            else if (isKey == true)
+            {
+                throw std::runtime_error("Erreur : unexpected ';' ");
+            }
             isKey = true; // Réinitialiser pour que le prochain mot soit une clé
         }
-        // requete doit finir par ';'
+        // requete doit finir par ';' partie 2
         else if (semicolonCount == 1 && !isspace(c) && c != '\n')
         {
-            std::cerr << "Erreur : ligne requete doit finir par ';' " << std::endl;
+            throw std::runtime_error("Erreur : ligne requete doit finir par ';2' ");
             return ;
-        } 
+        }
         // Gestion des espaces
         else if (isspace(c)) {
             if (!token.empty()) {
-                if (isKey) {
-                    std::cout << "Clé trouvée : " << token << std::endl;
+                if (isKey && inLocLine == false) {
+                    std::cout << "Clé trouvée3 : " << token << std::endl;
                     isKey = false; // Le prochain mot sera un argument
+                    if (token == "location")
+                    {
+                        inLocBloc = true;
+                        inLocLine = true;
+                    }
+                    if (!verifKeyOther(token))
+                        throw std::runtime_error("ERREUR : key unknown ");
                 } else {
-                    std::cout << "Argument trouvé : " << token << std::endl;
+                    std::cout << "Argument trouvé3 : " << token << std::endl;
+                    inLocLine = false;
                 }
                 token.clear();
             }
         } 
         // Construction des mots-clés
         else {
+            emptyBloc = false;
             token += c; // Construire le mot clé
         }
     }
+    if (depth != 0)
+        throw std::runtime_error("Erreur : fermeture de bloc incorrect!");
 
     file.close();
 }
