@@ -1,7 +1,7 @@
 #ifndef BLOCLOCATION_HPP
 # define BLOCLOCATION_HPP
 
-# include "BlocServer.hpp"
+# include "Config.hpp"
 
 class BlocLocation
 {

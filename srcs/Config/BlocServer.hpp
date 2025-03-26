@@ -2,9 +2,12 @@
 # define BLOCSERVER_HPP
 
 # include "Config.hpp"
+
 # include "BlocLocation.hpp"
 
 # define DEFAULT_CLIENT_MAX_BODY_SIZE 1048576 // 1MB
+
+class BlocLocation;
 
 class BlocServer
 {
@@ -31,7 +34,7 @@ class BlocServer
             void    addIndex(const std::string &index) {_index.push_back(index);};
             void    addErrorPage(int code, const std::string &path) {_errorPage[code] = path;};
             void    setClientMaxBodySize(long long size) {_clientMaxBodySize = size;};
-            void    addLocation(const std::string &path, const BlocLocation &location) {_location[path] = location;};
+            void    addLocation(const std::string &path, const BlocLocation &location);
 
             //Getters
             const std::vector<int>                      &getListen() const {return _listen;};
