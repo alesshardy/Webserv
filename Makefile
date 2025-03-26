@@ -6,7 +6,7 @@
 #    By: kammi <kammi@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/17 14:48:41 by apintus           #+#    #+#              #
-#    Updated: 2025/03/21 17:08:32 by kammi            ###   ########.fr        #
+#    Updated: 2025/03/26 13:46:00 by kammi            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,6 +47,12 @@ CFLAGS			+=	-Wall -Wextra -Werror -std=c++98
 # **************************************************************************** #
 
 OBJ_PATH		=	.obj
+INC			=	-I./srcs/	\
+				-I./srcs/LogManager	\
+				-I./srcs/Server	\
+				-I./srcs/Request \
+				-I./srcs/Response \
+				-I./srcs/Config \
 
 # **************************************************************************** #
 #                                   SOURCES                                    #
@@ -54,6 +60,7 @@ OBJ_PATH		=	.obj
 
 SRCS 			=	main.cpp \
 					srcs/LogManager/LogManager.cpp \
+					srcs/Server/Socket.cpp \
 					
 					
 
@@ -68,13 +75,13 @@ DEPS			=	$(OBJS:.o=.d)
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) $(INC) -o $(NAME)
 	@echo "\n${GREEN}> $(NAME) was successfuly compiled ${END}"
 
 $(OBJ_PATH)/%.o: %.cpp
 			@mkdir -p $(dir $@)
 			@echo "${BLUE}>Generating $(NAME) objects... %-33.33s\r${END}" $@
-			@$(CC) $(CFLAGS) -c $< -o $@
+			@$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
 clean:
 	@$(RM) $(OBJ_PATH)
