@@ -1,6 +1,7 @@
 #include <iostream>
+#include <cstdlib>
 #include "srcs/LogManager/LogManager.hpp"
-#include "Config.hpp"
+#include "srcs/Config/Config.hpp"
 
 int main(int ac, char **av)
 {
