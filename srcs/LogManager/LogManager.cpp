@@ -35,35 +35,35 @@ void LogManager::initialize()
  * @param level Le niveau du message
  * @param message Le message à enregistrer
  */
-// void LogManager::log(LogManager::LogLevel level, const char *message, ...)
-// {
-//     // Vérifier si le log est activé
-//     if (LogManager::getLogStatus() == false || (level == DEBUG && LogManager::getLogConsoleStatus() == false))
-//     {
-//         return;
-//     }
+void LogManager::log(LogManager::LogLevel level, const char *message, ...)
+{
+    // Vérifier si le log est activé
+    if (LogManager::getLogStatus() == false || (level == DEBUG && LogManager::getLogConsoleStatus() == false))
+    {
+        return;
+    }
 
-//     // Formater le message de log
-//     va_list args;
-//     va_start(args, message);
-//     char buffer[1024];
-//     vsnprintf(buffer, sizeof(buffer), message, args);
-//     va_end(args);
+    // Formater le message de log
+    va_list args;
+    va_start(args, message);
+    char buffer[1024];
+    vsnprintf(buffer, sizeof(buffer), message, args);
+    va_end(args);
 
-//     // Obtenir l'heure actuelle
-//     std::time_t now = std::time(0);
-//     char timeStr[20];
-//     std::strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", std::localtime(&now));
+    // Obtenir l'heure actuelle
+    std::time_t now = std::time(0);
+    char timeStr[20];
+    std::strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", std::localtime(&now));
 
-//     // Afficher le message de log dans la console
-//     _printLog(level, buffer, timeStr);
+    // Afficher le message de log dans la console
+    _printLog(level, buffer, timeStr);
 
-//     // Écrire le message de log dans un fichier si activé
-//     if (LogManager::getLogFileStatus())
-//     {
-//         _writeLogInFile(level, buffer, timeStr);
-//     }
-// }
+    // Écrire le message de log dans un fichier si activé
+    if (LogManager::getLogFileStatus())
+    {
+        _writeLogInFile(level, buffer, timeStr);
+    }
+}
 
 /*
  * @brief Récupère l'état du log
@@ -132,24 +132,24 @@ void LogManager::setLogConsoleStatus(bool status)
  * @param msg Le message à afficher
  * @param time L'heure du message
  */
-// void LogManager::_printLog(LogManager::LogLevel level, const char *msg, const char *time)
-// {
-//     std::cout << "[" << time << "] [" << _logLevelStr[level] << "] " << msg << std::endl;
-// }
+void LogManager::_printLog(LogManager::LogLevel level, const char *msg, const char *time)
+{
+    std::cout << "[" << time << "] [" << _logLevelStr[level] << "] " << msg << std::endl;
+}
 
-// /*
-//  * @brief Écrit un message de log dans un fichier
-//  *
-//  * @param level Le niveau du message
-//  * @param msg Le message à écrire
-//  * @param time L'heure du message
-//  */
-// void LogManager::_writeLogInFile(LogManager::LogLevel level, const char *msg, const char *time)
-// {
-//     std::ofstream logFile(_logFileName.c_str(), std::ios_base::app);
-//     if (logFile.is_open())
-//     {
-//         logFile << "[" << time << "] [" << _logLevelStr[level] << "] " << msg << std::endl;
-//         logFile.close();
-//     }
-// }
+/*
+ * @brief Écrit un message de log dans un fichier
+ *
+ * @param level Le niveau du message
+ * @param msg Le message à écrire
+ * @param time L'heure du message
+ */
+void LogManager::_writeLogInFile(LogManager::LogLevel level, const char *msg, const char *time)
+{
+    std::ofstream logFile(_logFileName.c_str(), std::ios_base::app);
+    if (logFile.is_open())
+    {
+        logFile << "[" << time << "] [" << _logLevelStr[level] << "] " << msg << std::endl;
+        logFile.close();
+    }
+}

@@ -15,6 +15,7 @@
 #include "LogManager.hpp"
 
 
+
 enum State
 {
     STOPPED,

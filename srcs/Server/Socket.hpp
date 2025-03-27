@@ -13,7 +13,7 @@
 # include <arpa/inet.h>
 
 # include "LogManager.hpp"
-// #include "BlocServer.hpp"
+# include "BlocServer.hpp"
 //class BlocServer;
 
 class Socket
