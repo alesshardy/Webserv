@@ -34,6 +34,8 @@ int main(int ac, char **av)
         Config config;
         config.parseConfigFile(av[1], config);
         LogManager::log(LogManager::INFO, "Fichier config correct!");
+        // print config ranger
+        config.printConfig();
     }
     catch (const std::exception &e) {
          LogManager::log(LogManager::ERROR, e.what());
