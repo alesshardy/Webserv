@@ -139,6 +139,7 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
     bool inLocBloc = false;
     bool inLocLine = false;
     std::string lastKey;
+    char    lastC;
     // BlocLocation    currentLocation;
     // BlocServer      currentServer;
 
@@ -168,12 +169,15 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
         {
             if (!token.empty()) 
             {
-                if (isKey) {
+                if (isKey) 
+                {
                     std::cout << "Clé trouvé1 : " << token << std::endl;
                     lastKey = token;
                     if (!verifKeyServer(token))
                         throw std::runtime_error("ERREUR : first key must be 'server' ");
-                } else {
+                } 
+                else 
+                {
                     std::cout << "Argument trouvé1 : " << token << std::endl;
                 }
                 // requete doit finir par ';' partie 1
@@ -183,16 +187,15 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                 }
                 token.clear(); // Vider le token à la fin de la ligne
             }
-
             // REGLER CE PUTIN DE PB D"ESPACE DE CON
-            if (semicolonCount != 1 && lastKey != "server" && lastKey != "location")
+            if (semicolonCount != 1 && lastKey != "server" && lastKey != "location" && lastC != '\n' && lastC != '}')
             {
-                std::cout << "SIUUU " << lastKey << "nb "<< semicolonCount << std::endl;//SIUUU
                 throw std::runtime_error("ERREUR : SVPPPP");
             }
-            semicolonCount = 0; // Réinitialiser le compteur pour la nouvelle ligne
+                        semicolonCount = 0; // Réinitialiser le compteur pour la nouvelle ligne
             contentAfterSemicolon = false;
             isKey = true; // Réinitialiser pour la nouvelle ligne
+            lastC = c;
         } 
         // Gestion des blocs
         else if (c == '{') 
@@ -203,6 +206,7 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
             emptyBloc = true;
             if (depth == 2 && inLocBloc == false)
                 throw std::runtime_error("Erreur : bloc de lvl 2 doit etre location") ;
+            lastC = c;
         } 
         else if (c == '}') 
         {
@@ -216,6 +220,7 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                 inLocBloc = false;
             depth--;
             isKey = true; // Réinitialiser pour la fin d'un bloc
+            lastC = c;
         } 
         // Gestion des points-virgules
         else if (c == ';') 
@@ -245,12 +250,12 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                 throw std::runtime_error("Erreur : unexpected ';' ");
             }
             isKey = true; // Réinitialiser pour que le prochain mot soit une clé
+            lastC = c;
         }
         // requete doit finir par ';' partie 2
         else if (semicolonCount == 1 && !isspace(c) && c != '\n')
         {
             throw std::runtime_error("Erreur : ligne requete doit finir par ';2' ");
-            return ;
         }
         // Gestion des espaces
         else if (isspace(c)) 
@@ -283,6 +288,7 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
         {
             emptyBloc = false;
             token += c; // Construire le mot clé
+            lastC = c;
         }
     }
     if (depth != 0)
