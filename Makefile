@@ -1,4 +1,16 @@
 # **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/10/17 14:48:41 by apintus           #+#    #+#              #
+#    Updated: 2025/03/27 14:11:39 by tpassin          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+# **************************************************************************** #
 #                                  VARIABLES                                   #
 # **************************************************************************** #
 
@@ -35,7 +47,16 @@ CFLAGS			+=	-Wall -Wextra -Werror -std=c++98
 # **************************************************************************** #
 
 OBJ_PATH		=	.obj
-
+INC			=	-I./srcs/	\
+				-I./srcs/LogManager	\
+				-I./srcs/Server	\
+				-I./srcs/Request \
+				-I./srcs/Response \
+				-I./srcs/Config \
+				-I./srcs/Utils \
+				-I./srcs/Client \
+				
+				
 # **************************************************************************** #
 #                                   SOURCES                                    #
 # **************************************************************************** #
@@ -46,6 +67,7 @@ SRCS 			=	main.cpp \
 					srcs/Config/BlocServer.cpp \
 					srcs/Config/BlocLocation.cpp \
 					srcs/Utils/Utils.cpp \
+					srcs/Server/Socket.cpp \
 
 OBJS			=	$(SRCS:%.cpp=$(OBJ_PATH)/%.o)
 
@@ -55,16 +77,17 @@ DEPS			=	$(OBJS:.o=.d)
 #                                    RULES                                     #
 # **************************************************************************** #
 
+
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	@$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) $(INC) -o $(NAME)
 	@echo "\n${GREEN}> $(NAME) was successfuly compiled ${END}"
 
 $(OBJ_PATH)/%.o: %.cpp
 			@mkdir -p $(dir $@)
 			@echo "${BLUE}>Generating $(NAME) objects... %-33.33s\r${END}" $@
-			@$(CC) $(CFLAGS) -c $< -o $@
+			@$(CC) $(CFLAGS) $(INC) -c $< -o $@
 
 clean:
 	@$(RM) $(OBJ_PATH)
