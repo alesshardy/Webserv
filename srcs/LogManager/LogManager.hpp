@@ -29,16 +29,20 @@ class LogManager
         static std::map<LogLevel, std::string> _logLevelStr;
         static std::map<LogLevel, std::string> _logLevelColor;
 
-        template<typename T>
-        static void _printLog(LogLevel level, T msg, const char *time);
+        static void _writeLogInFile(LogLevel level, const char *msg, const char *time);
+        static void _printLog(LogManager::LogLevel level, const char *msg, const char *time);
 
-        template<typename T>
-        static void _writeLogInFile(LogLevel level, T msg, const char *time);
+
+        // template<typename T>
+        // static void _printLog(LogLevel level, T msg, const char *time);
+
+        // template<typename T>
+        // static void _writeLogInFile(LogLevel level, T msg, const char *time);
 
     public:
-        template<typename T>
-        static void log(LogLevel level, T msg);
-
+        // template<typename T>
+        // static void log(LogLevel level, T msg);
+        static void log(LogLevel level, const char *message, ...);
         static void initialize();
         static void setLogStatus(bool status);
         static void setLogFileStatus(bool status);
@@ -52,6 +56,6 @@ class LogManager
 };
 
 // Inclure le fichier .tpp ici
-#include "LogManager.tpp"
+// #include "LogManager.tpp"
 
 #endif // LOGMANAGER_HPP
