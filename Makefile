@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kammi <kammi@student.42.fr>                +#+  +:+       +#+         #
+#    By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/17 14:48:41 by apintus           #+#    #+#              #
-#    Updated: 2025/03/26 16:10:29 by kammi            ###   ########.fr        #
+#    Updated: 2025/03/27 14:11:39 by tpassin          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,16 +53,21 @@ INC			=	-I./srcs/	\
 				-I./srcs/Request \
 				-I./srcs/Response \
 				-I./srcs/Config \
-
+				-I./srcs/Utils \
+				-I./srcs/Client \
+				
+				
 # **************************************************************************** #
 #                                   SOURCES                                    #
 # **************************************************************************** #
 
 SRCS 			=	main.cpp \
 					srcs/LogManager/LogManager.cpp \
+					srcs/Config/Config.cpp \
+					srcs/Config/BlocServer.cpp \
+					srcs/Config/BlocLocation.cpp \
+					srcs/Utils/Utils.cpp \
 					srcs/Server/Socket.cpp \
-					
-					
 
 OBJS			=	$(SRCS:%.cpp=$(OBJ_PATH)/%.o)
 
