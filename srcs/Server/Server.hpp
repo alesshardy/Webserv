@@ -41,7 +41,7 @@ class Server
         Server();
         ~Server();
 
-        void                        init();
+        void                        init(int port);
         void                        run();
         void                        stop();
         void                        close_client(int client_fd);
@@ -67,6 +67,6 @@ class Server
 
 
 
-}
+};
 
 #endif // SERVER_HPP

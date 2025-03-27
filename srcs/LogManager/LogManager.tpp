@@ -1,13 +1,5 @@
 #include "LogManager.hpp"
 
-
-/**
- * @brief 
- * 
- * @tparam T Type du message à afficher
- * @param level niveau de log
- * @param msg   message à afficher
- */
 template<typename T>
 void LogManager::log(LogLevel level, T msg)
 {

@@ -3,7 +3,7 @@
 #include "Socket.hpp"
 #include <cstdlib> 
 #include <csignal>
-
+#include <Config.hpp>
 
 bool running = true;
 
@@ -15,19 +15,30 @@ void signalHandler(int signum)
     running = false;
 }
 
-int main(int /*ac*/, char **/*av*/)
+int main(int ac, char **av)
 {
-    // if (ac != 2) 
-    // {
-    //     std::cerr << "Usage:./webserv [configuration file] " << std::endl;
-    //     return (EXIT_FAILURE);
-    // }
-
-    //ignorer **av[1] pour le moment
-
+    // A enlever plus tard car config par default acceptable si pas de file
+    if (ac != 2) 
+    {
+        std::cerr << "Usage:./webserv [configuration file] " << std::endl;
+        return (EXIT_FAILURE);
+    }
+    
+    // INIT LOGGER
     LogManager::setLogStatus(true);
     LogManager::setLogFileStatus(true);
     LogManager::setLogConsoleStatus(true);
+
+    //parsing fichier config (validation et recuperation des données)
+    try {
+        Config config;
+        config.parseConfigFile(av[1], config);
+        LogManager::log(LogManager::INFO, "Fichier config correct!");
+    }
+    catch (const std::exception &e) {
+         LogManager::log(LogManager::ERROR, e.what());
+        return (EXIT_FAILURE);
+    }
 
     LogManager::log(LogManager::DEBUG, "Server is starting...");
 
