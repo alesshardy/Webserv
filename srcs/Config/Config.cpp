@@ -101,7 +101,6 @@ std::string Config::findFirstWord(std::string line)
 //     }
 // }
 
-
 bool    Config::verifKeyServer(std::string token)
 {
     if (token == "server")
@@ -122,7 +121,8 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
 {
     (void)config;
     std::ifstream file(filePath.c_str());
-    if (!file) {
+    if (!file) 
+    {
         throw std::runtime_error("Erreur : impossible d'ouvrir le fichier ");
         return;
     }
@@ -138,16 +138,17 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
     bool    emptyBloc = true;
     bool inLocBloc = false;
     bool inLocLine = false;
-
-
+    std::string lastKey;
     // BlocLocation    currentLocation;
     // BlocServer      currentServer;
 
-
-    while (file.get(c)) {
+    while (file.get(c)) 
+    {
         // Gestion des commentaires
-        if (inComment) {
-            if (c == '\n') {
+        if (inComment)
+        {
+            if (c == '\n')
+            {
                 inComment = false; // Fin du commentaire
                 semicolonCount = 0; // Réinitialiser le compteur pour la nouvelle ligne
                 contentAfterSemicolon = false; // SERT A RIEN CETTE MERDRE ????
@@ -156,16 +157,20 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
             continue;
         }
 
-        if (c == '#') {
+        if (c == '#')
+        {
             inComment = true; // Début d’un commentaire
             continue;
         }
 
         // Gestion des sauts de ligne
-        if (c == '\n') {
-            if (!token.empty()) {
+        if (c == '\n') 
+        {
+            if (!token.empty()) 
+            {
                 if (isKey) {
                     std::cout << "Clé trouvé1 : " << token << std::endl;
+                    lastKey = token;
                     if (!verifKeyServer(token))
                         throw std::runtime_error("ERREUR : first key must be 'server' ");
                 } else {
@@ -174,24 +179,33 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                 // requete doit finir par ';' partie 1
                 if (semicolonCount != 1 && token != "server")
                 {
-                    std::cout << "SIUUU " << token << std::endl;//SIUUU
                     throw std::runtime_error("ERREUR : ligne requete doit finir par ';' OU premier bloc doit etre server ");
                 }
                 token.clear(); // Vider le token à la fin de la ligne
+            }
+
+            // REGLER CE PUTIN DE PB D"ESPACE DE CON
+            if (semicolonCount != 1 && lastKey != "server" && lastKey != "location")
+            {
+                std::cout << "SIUUU " << lastKey << "nb "<< semicolonCount << std::endl;//SIUUU
+                throw std::runtime_error("ERREUR : SVPPPP");
             }
             semicolonCount = 0; // Réinitialiser le compteur pour la nouvelle ligne
             contentAfterSemicolon = false;
             isKey = true; // Réinitialiser pour la nouvelle ligne
         } 
         // Gestion des blocs
-        else if (c == '{') {
+        else if (c == '{') 
+        {
             std::cout << "Début de bloc" << std::endl;
             depth++;
             isKey = true; // Réinitialiser pour le début d'un bloc
             emptyBloc = true;
             if (depth == 2 && inLocBloc == false)
                 throw std::runtime_error("Erreur : bloc de lvl 2 doit etre location") ;
-        } else if (c == '}') {
+        } 
+        else if (c == '}') 
+        {
             std::cout << "Fin de bloc" << std::endl;
             // gerer les blocs vides
             if (emptyBloc)
@@ -204,17 +218,24 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
             isKey = true; // Réinitialiser pour la fin d'un bloc
         } 
         // Gestion des points-virgules
-        else if (c == ';') {
+        else if (c == ';') 
+        {
             semicolonCount++;
             if (depth == 0)
                 throw std::runtime_error("Erreur : directive 'server' has no opening '{'");
-            if (semicolonCount > 1) {
+            if (semicolonCount > 1) 
+            {
                 throw std::runtime_error("Erreur : plus d'une requête par ligne détectée.");
             }
-            if (!token.empty()) {
-                if (isKey) {
+            if (!token.empty()) 
+            {
+                if (isKey) 
+                {
                     std::cout << "Clé trouvée2 : " << token << std::endl;
-                } else {
+                    lastKey = token;
+                } 
+                else 
+                {
                     std::cout << "Argument trouvé2 : " << token << std::endl;
                 }
                 token.clear(); // Vider le token après un point-virgule
@@ -232,10 +253,14 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
             return ;
         }
         // Gestion des espaces
-        else if (isspace(c)) {
-            if (!token.empty()) {
-                if (isKey && inLocLine == false) {
+        else if (isspace(c)) 
+        {
+            if (!token.empty()) 
+            {
+                if (isKey && inLocLine == false) 
+                {
                     std::cout << "Clé trouvée3 : " << token << std::endl;
+                    lastKey = token;
                     isKey = false; // Le prochain mot sera un argument
                     if (token == "location")
                     {
@@ -244,7 +269,9 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                     }
                     if (!verifKeyOther(token))
                         throw std::runtime_error("ERREUR : key unknown ");
-                } else {
+                } 
+                else 
+                {
                     std::cout << "Argument trouvé3 : " << token << std::endl;
                     inLocLine = false;
                 }
@@ -252,7 +279,8 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
             }
         } 
         // Construction des mots-clés
-        else {
+        else 
+        {
             emptyBloc = false;
             token += c; // Construire le mot clé
         }
