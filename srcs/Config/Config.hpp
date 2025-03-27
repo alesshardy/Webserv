@@ -8,9 +8,11 @@
 # include <fstream>
 # include <sstream>
 # include "BlocServer.hpp"
+# include "BlocLocation.hpp"
 # include "Utils.hpp"
 
 class BlocServer;
+class BlocLocation;
 
 class Config
 {
@@ -40,6 +42,13 @@ class Config
             std::string findFirstWord(std::string line);
             bool        verifKeyServer(std::string token);
             bool        verifKeyOther(std::string token);
+            
+            // Remplir les class
+            void        addArgToServerBloc(std::string token, std::string lastKey, BlocServer &current);
+            void        addArgToLocationBloc(std::string token, std::string lastKey, BlocLocation &current);
+
+            // print
+            void        printConfig()const;
 };
 
 #endif
