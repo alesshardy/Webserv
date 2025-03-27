@@ -117,6 +117,74 @@ bool    Config::verifKeyOther(std::string token)
     return false;
 }
 
+//TEST AJOUT SIMPLE SANS PARSER
+void        Config::addArgToServerBloc(std::string arg, std::string lastKey, BlocServer &current)
+{
+    if (lastKey == "listen")
+    {
+        current.addListen(arg);
+    }
+    else if (lastKey == "server_name")
+    {
+        current.addServerName(arg);
+    }
+    else if (lastKey == "root")
+    {   
+        if (!current.getRoot().empty())
+            throw std::runtime_error("ERREUR : double root dans bloc server ");    
+        current.setRoot(arg);
+    }
+    else if (lastKey == "index")
+    {
+        current.addIndex(arg);
+    }
+    // bourbier quand plusieur element sur meme ligne
+    // if (lastKey == "error_page")
+    // {
+    //     current.addErrorPage(arg);
+    // }
+    else if (lastKey == "client_max_body_size")
+    {
+        current.setClientMaxBodySize(Utils::ft_stolonglong(arg));
+    }
+    else
+        throw std::runtime_error("ERREUR : pas la bonne cle pour le bloc serveur ");    
+}
+
+void        Config::addArgToLocationBloc(std::string arg, std::string lastKey, BlocLocation &current)
+{
+    if (lastKey == "root")
+    {
+        current.setRoot(arg);
+    }
+    else if (lastKey == "alias")
+    {
+        current.setAlias(arg);
+    }
+    else if (lastKey == "index")
+    {
+        current.addIndex(arg);
+    }
+    else if (lastKey == "allow_methods")
+    {
+        current.addAllowMethod(arg);
+    }
+    else if (lastKey == "upload_path")
+    {
+        current.setUploadPath(arg);
+    }
+    else if (lastKey == "autoindex")
+    {
+        if (arg == "true")
+            current.setAutoIndex(true);
+        current.setAutoIndex(false);
+    }
+    else
+        throw std::runtime_error("ERREUR : pas la bonne cle pour le bloc location ");
+}
+
+
+
 void    Config::parseConfigFile(const std::string &filePath, Config &config) 
 {
     (void)config;
@@ -139,8 +207,10 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
     bool inLocBloc = false;
     bool inLocLine = false;
     std::string lastKey;
-    // BlocLocation    currentLocation;
-    // BlocServer      currentServer;
+    char    lastC;
+    BlocLocation    currentLocation;
+    BlocServer      currentServer;
+    std::string     currentLocationPath;
 
     while (file.get(c)) 
     {
@@ -168,12 +238,16 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
         {
             if (!token.empty()) 
             {
-                if (isKey) {
+                if (isKey) 
+                {
                     std::cout << "Clé trouvé1 : " << token << std::endl;
                     lastKey = token;
                     if (!verifKeyServer(token))
                         throw std::runtime_error("ERREUR : first key must be 'server' ");
-                } else {
+                    currentServer = BlocServer();
+                } 
+                else 
+                {
                     std::cout << "Argument trouvé1 : " << token << std::endl;
                 }
                 // requete doit finir par ';' partie 1
@@ -183,16 +257,15 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                 }
                 token.clear(); // Vider le token à la fin de la ligne
             }
-
             // REGLER CE PUTIN DE PB D"ESPACE DE CON
-            if (semicolonCount != 1 && lastKey != "server" && lastKey != "location")
+            if (semicolonCount != 1 && lastKey != "server" && lastKey != "location" && lastC != '\n' && lastC != '}')
             {
-                std::cout << "SIUUU " << lastKey << "nb "<< semicolonCount << std::endl;//SIUUU
                 throw std::runtime_error("ERREUR : SVPPPP");
             }
-            semicolonCount = 0; // Réinitialiser le compteur pour la nouvelle ligne
+                        semicolonCount = 0; // Réinitialiser le compteur pour la nouvelle ligne
             contentAfterSemicolon = false;
             isKey = true; // Réinitialiser pour la nouvelle ligne
+            lastC = c;
         } 
         // Gestion des blocs
         else if (c == '{') 
@@ -203,6 +276,9 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
             emptyBloc = true;
             if (depth == 2 && inLocBloc == false)
                 throw std::runtime_error("Erreur : bloc de lvl 2 doit etre location") ;
+            if (depth == 3)
+                throw std::runtime_error("Erreur : j'accepte pas les locations imbriquer #inception") ;
+            lastC = c;
         } 
         else if (c == '}') 
         {
@@ -212,10 +288,21 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
             {
                 throw std::runtime_error("Erreur : le fichier ne peux contenir de bloc vide") ;
             }
+            // AJOUT DES BLOC DE CLASS
+            if (depth == 2)
+            {
+                currentServer.addLocation(currentLocationPath, currentLocation);
+                currentLocationPath.clear();
+            }
+            else if (depth == 1)
+            {
+                config.addServer(currentServer);
+            }
             if (inLocBloc == true)
                 inLocBloc = false;
             depth--;
             isKey = true; // Réinitialiser pour la fin d'un bloc
+            lastC = c;
         } 
         // Gestion des points-virgules
         else if (c == ';') 
@@ -237,6 +324,11 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                 else 
                 {
                     std::cout << "Argument trouvé2 : " << token << std::endl;
+                    //AJOUT AU CLASS
+                    if (depth == 1 && lastKey != "location")
+                         addArgToServerBloc(token, lastKey, currentServer);
+                     else if (depth == 2)
+                         addArgToLocationBloc(token, lastKey, currentLocation);
                 }
                 token.clear(); // Vider le token après un point-virgule
             }
@@ -245,12 +337,12 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                 throw std::runtime_error("Erreur : unexpected ';' ");
             }
             isKey = true; // Réinitialiser pour que le prochain mot soit une clé
+            lastC = c;
         }
         // requete doit finir par ';' partie 2
         else if (semicolonCount == 1 && !isspace(c) && c != '\n')
         {
             throw std::runtime_error("Erreur : ligne requete doit finir par ';2' ");
-            return ;
         }
         // Gestion des espaces
         else if (isspace(c)) 
@@ -269,11 +361,22 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                     }
                     if (!verifKeyOther(token))
                         throw std::runtime_error("ERREUR : key unknown ");
+                    
                 } 
                 else 
                 {
                     std::cout << "Argument trouvé3 : " << token << std::endl;
                     inLocLine = false;
+                    //AJOUT AU CLASS
+                    if (depth == 1 && lastKey != "location")
+                        addArgToServerBloc(token, lastKey, currentServer);
+                    else if (depth == 1 && lastKey == "location")
+                    {
+                        currentLocation = BlocLocation();
+                        currentLocationPath = token;
+                    }
+                    else if (depth == 2)
+                        addArgToLocationBloc(token, lastKey, currentLocation);
                 }
                 token.clear();
             }
@@ -283,10 +386,101 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
         {
             emptyBloc = false;
             token += c; // Construire le mot clé
+            lastC = c;
         }
     }
     if (depth != 0)
         throw std::runtime_error("Erreur : fermeture de bloc incorrect!");
 
     file.close();
+}
+
+/******************************************PRINT********************************************* */
+
+void Config::printConfig() const
+{
+    std::cout << "========== Configuration ==========" << std::endl;
+
+    for (size_t i = 0; i < _server.size(); ++i)
+    {
+        const BlocServer &server = _server[i];
+        std::cout << "Server " << i + 1 << ":" << std::endl;
+
+        // Afficher les directives du serveur
+        std::cout << "  Listen: ";
+        for (size_t j = 0; j < server.getListen().size(); ++j)
+        {
+            std::cout << server.getListen()[j];
+            if (j < server.getListen().size() - 1)
+                std::cout << ", ";
+        }
+        std::cout << std::endl;
+
+        std::cout << "  Server Names: ";
+        for (size_t j = 0; j < server.getServerName().size(); ++j)
+        {
+            std::cout << server.getServerName()[j];
+            if (j < server.getServerName().size() - 1)
+                std::cout << ", ";
+        }
+        std::cout << std::endl;
+
+        std::cout << "  Root: " << server.getRoot() << std::endl;
+
+        std::cout << "  Index: ";
+        for (size_t j = 0; j < server.getIndex().size(); ++j)
+        {
+            std::cout << server.getIndex()[j];
+            if (j < server.getIndex().size() - 1)
+                std::cout << ", ";
+        }
+        std::cout << std::endl;
+
+        std::cout << "  Error Pages: ";
+        for (std::map<int, std::string>::const_iterator it = server.getErrorPage().begin(); it != server.getErrorPage().end(); ++it)
+        {
+            std::cout << it->first << " -> " << it->second << "; ";
+        }
+        std::cout << std::endl;
+
+        std::cout << "  Client Max Body Size: " << server.getClientMaxBodySize() << std::endl;
+
+        // Afficher les locations
+        std::cout << "  Locations:" << std::endl;
+        for (std::map<std::string, BlocLocation>::const_iterator it = server.getLocation().begin(); it != server.getLocation().end(); ++it)
+        {
+            const BlocLocation &location = it->second;
+            std::cout << "    Path: " << it->first << std::endl;
+            std::cout << "      Root: " << location.getRoot() << std::endl;
+            std::cout << "      Alias: " << location.getAlias() << std::endl;
+
+            std::cout << "      Index: ";
+            for (size_t j = 0; j < location.getIndex().size(); ++j)
+            {
+                std::cout << location.getIndex()[j];
+                if (j < location.getIndex().size() - 1)
+                    std::cout << ", ";
+            }
+            std::cout << std::endl;
+
+            std::cout << "      Allow Methods: ";
+            for (std::set<std::string>::const_iterator methodIt = location.getAllowMethod().begin();
+                 methodIt != location.getAllowMethod().end(); ++methodIt)
+            {
+                std::cout << *methodIt;
+                std::set<std::string>::const_iterator nextIt = methodIt;
+                ++nextIt; // Incrémenter manuellement l'itérateur
+                if (nextIt != location.getAllowMethod().end())
+                    std::cout << ", ";
+            }
+            std::cout << std::endl;
+
+            std::cout << "      Upload Path: " << location.getUploadPath() << std::endl;
+            std::cout << "      Auto Index: " << (location.getAutoIndex() ? "on" : "off") << std::endl;
+        }
+
+        std::cout << "-----------------------------------" << std::endl;
+    }
+
+    std::cout << "===================================" << std::endl;
 }

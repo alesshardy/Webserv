@@ -257,3 +257,75 @@
 [2025-03-27 14:12:36] [INFO] Server is shutting down...
 [2025-03-27 14:15:58] [ERROR] ERREUR : SVPPPP
 [2025-03-27 14:17:15] [ERROR] ERREUR : SVPPPP
+[2025-03-27 15:18:00] [] ERREUR : SVPPPP
+[2025-03-27 15:20:01] [] ERREUR : SVPPPP
+[2025-03-27 15:20:47] [] Fichier config correct!
+[2025-03-27 15:20:47] [] Server is starting...
+[2025-03-27 15:20:47] [] Socket created successfully
+[2025-03-27 15:20:47] [] Socket is listening on port 7070
+[2025-03-27 15:20:51] [] Interrupt signal received, shutting down...
+[2025-03-27 15:20:51] [] Server is shutting down...
+[2025-03-27 15:23:13] [] Fichier config correct!
+[2025-03-27 15:26:05] [] ERREUR : SVPPPP
+[2025-03-27 15:28:04] [] Fichier config correct!
+[2025-03-27 15:30:51] [] ERREUR : SVPPPP
+[2025-03-27 15:34:32] [] ERREUR : SVPPPP
+[2025-03-27 15:35:45] [] ERREUR : SVPPPP
+[2025-03-27 15:36:14] [ERROR] ERREUR : SVPPPP
+[2025-03-27 15:37:14] [INFO] Fichier config correct!
+[2025-03-27 15:37:37] [INFO] Fichier config correct!
+[2025-03-27 15:37:42] [ERROR] ERREUR : SVPPPP
+[2025-03-27 15:38:08] [ERROR] ERREUR : SVPPPP
+[2025-03-27 15:38:48] [ERROR] ERREUR : SVPPPP
+[2025-03-27 15:39:16] [ERROR] ERREUR : SVPPPP
+[2025-03-27 15:40:00] [ERROR] ERREUR : SVPPPP
+[2025-03-27 15:42:20] [ERROR] ERREUR : SVPPPP
+[2025-03-27 15:42:34] [ERROR] ERREUR : SVPPPP
+[2025-03-27 15:42:46] [ERROR] ERREUR : SVPPPP
+[2025-03-27 15:43:01] [ERROR] ERREUR : SVPPPP
+[2025-03-27 15:45:23] [INFO] Fichier config correct!
+[2025-03-27 15:47:01] [ERROR] ERREUR : SVPPPP
+[2025-03-27 15:51:46] [ERROR] ERREUR : SVPPPP
+[2025-03-27 15:52:54] [ERROR] ERREUR : SVPPPP
+[2025-03-27 16:01:05] [ERROR] ERREUR : SVPPPP
+[2025-03-27 16:01:17] [ERROR] ERREUR : SVPPPP
+[2025-03-27 16:01:27] [ERROR] ERREUR : SVPPPP
+[2025-03-27 16:02:47] [ERROR] ERREUR : SVPPPP
+[2025-03-27 16:02:54] [ERROR] ERREUR : SVPPPP
+[2025-03-27 16:03:31] [ERROR] ERREUR : SVPPPP
+[2025-03-27 16:04:13] [INFO] Fichier config correct!
+[2025-03-27 16:04:28] [INFO] Fichier config correct!
+[2025-03-27 16:04:32] [ERROR] ERREUR : ligne requete doit finir par ';' OU premier bloc doit etre server 
+[2025-03-27 16:04:38] [ERROR] ERREUR : SVPPPP
+[2025-03-27 16:04:48] [INFO] Fichier config correct!
+[2025-03-27 16:04:52] [INFO] Fichier config correct!
+[2025-03-27 16:05:05] [ERROR] ERREUR : SVPPPP
+[2025-03-27 16:05:09] [ERROR] ERREUR : ligne requete doit finir par ';' OU premier bloc doit etre server 
+[2025-03-27 16:05:18] [ERROR] ERREUR : ligne requete doit finir par ';' OU premier bloc doit etre server 
+[2025-03-27 16:05:28] [ERROR] ERREUR : ligne requete doit finir par ';' OU premier bloc doit etre server 
+[2025-03-27 16:06:14] [ERROR] ERREUR : SVPPPP
+[2025-03-27 16:06:24] [ERROR] ERREUR : ligne requete doit finir par ';' OU premier bloc doit etre server 
+[2025-03-27 16:06:28] [ERROR] ERREUR : ligne requete doit finir par ';' OU premier bloc doit etre server 
+[2025-03-27 16:06:30] [ERROR] ERREUR : ligne requete doit finir par ';' OU premier bloc doit etre server 
+[2025-03-27 16:06:34] [ERROR] ERREUR : ligne requete doit finir par ';' OU premier bloc doit etre server 
+[2025-03-27 16:06:39] [INFO] Fichier config correct!
+[2025-03-27 16:08:25] [INFO] Fichier config correct!
+[2025-03-27 16:08:47] [INFO] Fichier config correct!
+[2025-03-27 16:09:04] [INFO] Fichier config correct!
+[2025-03-27 16:11:17] [INFO] Fichier config correct!
+[2025-03-27 16:11:33] [INFO] Fichier config correct!
+[2025-03-27 16:14:40] [INFO] Fichier config correct!
+[2025-03-27 16:19:12] [INFO] Fichier config correct!
+[2025-03-27 16:26:56] [ERROR] ERREUR : first key must be 'server' 
+[2025-03-27 16:27:12] [ERROR] ERREUR : first key must be 'server' 
+[2025-03-27 16:27:17] [INFO] Fichier config correct!
+[2025-03-27 16:38:42] [INFO] Fichier config correct!
+[2025-03-27 17:15:40] [INFO] Fichier config correct!
+[2025-03-27 17:18:34] [INFO] Fichier config correct!
+[2025-03-27 17:22:28] [INFO] Fichier config correct!
+[2025-03-27 18:08:55] [ERROR] ERREUR : pas la bonne cle pour le bloc serveur 
+[2025-03-27 18:09:56] [ERROR] ERREUR : pas la bonne cle pour le bloc location 
+[2025-03-27 18:10:52] [ERROR] ERREUR : pas la bonne cle pour le bloc location 
+[2025-03-27 18:11:28] [INFO] Fichier config correct!
+[2025-03-27 18:19:02] [INFO] Fichier config correct!
+[2025-03-27 18:38:25] [INFO] Fichier config correct!
