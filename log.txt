@@ -329,3 +329,86 @@
 [2025-03-27 18:11:28] [INFO] Fichier config correct!
 [2025-03-27 18:19:02] [INFO] Fichier config correct!
 [2025-03-27 18:38:25] [INFO] Fichier config correct!
+[2025-03-28 12:55:29] [INFO] Fichier config correct!
+[2025-03-28 12:56:28] [INFO] Fichier config correct!
+[2025-03-28 13:07:33] [ERROR] ERREUR : pas la bonne cle pour le bloc serveur 
+[2025-03-28 13:07:39] [ERROR] ERREUR : pas la bonne cle pour le bloc serveur 
+[2025-03-28 13:08:45] [ERROR] ERREUR : pas la bonne cle pour le bloc serveur 
+[2025-03-28 13:09:03] [ERROR] ERREUR : pas la bonne cle pour le bloc serveur 
+[2025-03-28 13:09:51] [ERROR] ERREUR : pas la bonne cle pour le bloc serveur 
+[2025-03-28 13:10:13] [INFO] Fichier config correct!
+[2025-03-28 13:20:35] [INFO] Fichier config correct!
+[2025-03-28 13:21:59] [INFO] Fichier config correct!
+[2025-03-28 13:22:43] [ERROR] ERREUR : bad argument for autoindex key
+[2025-03-28 13:22:50] [ERROR] ERREUR : bad argument for autoindex key
+[2025-03-28 13:22:57] [INFO] Fichier config correct!
+[2025-03-28 13:23:28] [INFO] Fichier config correct!
+[2025-03-28 13:34:41] [INFO] Fichier config correct!
+[2025-03-28 13:35:00] [INFO] Fichier config correct!
+[2025-03-28 13:35:15] [INFO] Fichier config correct!
+[2025-03-28 13:35:30] [INFO] Fichier config correct!
+[2025-03-28 13:42:28] [ERROR] ERREUR :too many argument for autoindex key
+[2025-03-28 13:43:07] [INFO] Fichier config correct!
+[2025-03-28 13:44:49] [INFO] Fichier config correct!
+[2025-03-28 13:45:14] [ERROR] ERREUR :too many argument for autoindex key
+[2025-03-28 13:45:46] [INFO] Fichier config correct!
+[2025-03-28 13:46:16] [INFO] Fichier config correct!
+[2025-03-28 13:47:54] [INFO] Fichier config correct!
+[2025-03-28 13:49:01] [ERROR] ERREUR : too many argument for root key
+[2025-03-28 13:49:11] [INFO] Fichier config correct!
+[2025-03-28 13:49:14] [INFO] Fichier config correct!
+[2025-03-28 14:01:31] [ERROR] ERREUR : bad argumeny for allow_methods key
+[2025-03-28 14:01:44] [ERROR] ERREUR : bad argumeny for allow_methods key
+[2025-03-28 14:01:51] [INFO] Fichier config correct!
+[2025-03-28 14:01:57] [INFO] Fichier config correct!
+[2025-03-28 15:01:46] [ERROR] ERREUR : Method 'POST' already define
+[2025-03-28 15:03:15] [ERROR] ERREUR : bad argument for allow_methods key
+[2025-03-28 15:03:23] [ERROR] ERREUR : Method 'GET' already define
+[2025-03-28 15:04:03] [INFO] Fichier config correct!
+[2025-03-28 15:16:36] [ERROR] ERREUR : root must be an absolute path
+[2025-03-28 15:16:54] [ERROR] ERREUR : root must be an absolute path
+[2025-03-28 15:17:07] [ERROR] ERREUR : root must be an absolute path
+[2025-03-28 15:17:19] [ERROR] ERREUR : root must be an absolute path
+[2025-03-28 15:17:37] [ERROR] ERREUR : root must be an absolute path
+[2025-03-28 15:17:43] [ERROR] ERREUR : root must be an absolute path
+[2025-03-28 15:21:19] [ERROR] ERREUR : root must be an absolute path
+[2025-03-28 15:21:25] [ERROR] ERREUR : root must be an absolute path
+[2025-03-28 15:21:51] [ERROR] ERREUR : root must be an absolute path
+[2025-03-28 15:22:03] [ERROR] ERREUR : root must be an absolute path
+[2025-03-28 15:22:41] [ERROR] ERREUR : root must be an absolute path
+[2025-03-28 15:22:45] [ERROR] ERREUR : root must be an absolute path
+[2025-03-28 15:22:57] [ERROR] ERREUR : root must be an absolute path
+[2025-03-28 15:23:21] [INFO] Fichier config correct!
+[2025-03-28 15:23:28] [INFO] Fichier config correct!
+[2025-03-28 15:23:33] [INFO] Fichier config correct!
+[2025-03-28 15:23:40] [ERROR] ERREUR : root must be an absolute path
+[2025-03-28 15:23:48] [INFO] Fichier config correct!
+[2025-03-28 15:27:50] [INFO] Fichier config correct!
+[2025-03-28 15:31:40] [INFO] Fichier config correct!
+[2025-03-28 16:28:58] [INFO] Fichier config correct!
+[2025-03-28 16:30:51] [INFO] Fichier config correct!
+[2025-03-28 16:31:18] [ERROR] ERREUR : too many arg for error_page
+[2025-03-28 16:31:24] [INFO] Fichier config correct!
+[2025-03-28 16:33:44] [INFO] Fichier config correct!
+[2025-03-28 16:34:16] [INFO] Fichier config correct!
+[2025-03-28 16:49:07] [INFO] Fichier config correct!
+[2025-03-28 16:50:47] [INFO] Fichier config correct!
+[2025-03-28 16:50:58] [INFO] Fichier config correct!
+[2025-03-28 16:51:57] [INFO] Fichier config correct!
+[2025-03-28 16:52:14] [INFO] Fichier config correct!
+[2025-03-28 16:52:50] [INFO] Fichier config correct!
+[2025-03-28 16:53:01] [ERROR] stoi
+[2025-03-28 16:54:05] [INFO] Fichier config correct!
+[2025-03-28 16:59:53] [INFO] Fichier config correct!
+[2025-03-28 17:00:05] [ERROR] ERREUR : wrong error_page code
+[2025-03-28 17:02:53] [ERROR] ERREUR : wrong error_page code must be between 300 && 599
+[2025-03-28 17:05:26] [INFO] Fichier config correct!
+[2025-03-28 17:05:37] [ERROR] ERROR : SVPPPP
+[2025-03-28 17:05:43] [ERROR] ERROR : line request must end by ';' OR first bloc must be server 
+[2025-03-28 17:05:55] [ERROR] ERROR : first key must be 'server' 
+[2025-03-28 17:06:09] [INFO] Fichier config correct!
+[2025-03-28 17:06:29] [ERROR] ERROR : line request must end by ';' OR first bloc must be server 
+[2025-03-28 17:06:34] [ERROR] ERROR : line request must end by ';'
+[2025-03-28 17:09:35] [ERROR] ERROR : line request must end by ';'
+[2025-03-28 17:09:41] [INFO] Fichier config correct!
+[2025-03-28 18:00:50] [INFO] Fichier config correct!
