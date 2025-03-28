@@ -134,7 +134,8 @@ void LogManager::setLogConsoleStatus(bool status)
  */
 void LogManager::_printLog(LogManager::LogLevel level, const char *msg, const char *time)
 {
-    std::cout << "[" << time << "] [" << _logLevelStr[level] << "] " << msg << std::endl;
+    initialize();
+    std::cout << "[" << time << "] [" << _logLevelColor[level] << _logLevelStr[level] << "\033[0m] " << msg << std::endl;
 }
 
 /*
