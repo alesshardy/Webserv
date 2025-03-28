@@ -11,6 +11,8 @@
 # include "BlocLocation.hpp"
 # include "Utils.hpp"
 
+#include <sys/stat.h>
+
 class BlocServer;
 class BlocLocation;
 
@@ -44,8 +46,12 @@ class Config
             bool        verifKeyOther(std::string token);
             
             // Remplir les class
-            void        addArgToServerBloc(std::string token, std::string lastKey, BlocServer &current);
-            void        addArgToLocationBloc(std::string token, std::string lastKey, BlocLocation &current);
+            void        addArgToServerBloc(std::string token, std::string lastKey, BlocServer &current, int argNb);
+            void        addArgToLocationBloc(std::string token, std::string lastKey, BlocLocation &current, int argNb);
+
+            // VErif les arg
+            bool        isValidRoot(const std::string &path);
+            
 
             // print
             void        printConfig()const;

@@ -19,6 +19,10 @@ class BlocServer
             std::map<int, std::string>  _errorPage;
             unsigned long long                   _clientMaxBodySize;
             std::map<std::string, BlocLocation> _location;
+
+            // pour stocker error_page
+            int _tmpErrorCode;
+            bool _hasTmpErrorCode;
     
     public:
             BlocServer();
@@ -47,6 +51,12 @@ class BlocServer
 
             //Validation
             bool    validateServer() const;
+
+            //pour stocker error_page
+            void        setTmpErrorCode(int code) {_tmpErrorCode = code; _hasTmpErrorCode = true;};
+            int         getTmpErrorCode() const {return _tmpErrorCode;};
+            bool        hasTmpErrorCode() const {return _hasTmpErrorCode;};
+            void        clearTmpErrorCode() {_hasTmpErrorCode = false;};
 
             //Print
 };
