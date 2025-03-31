@@ -3,6 +3,7 @@
 #include "Socket.hpp"
 #include <cstdlib> 
 #include <csignal>
+#include "./includes/Webserv.hpp"
 #include "Config.hpp"
 #include "Server.hpp"
 
@@ -128,23 +129,33 @@ int main(int ac, char **av)
 
         // Lancer le serveur
         server.run();
+        LogManager::log(LogManager::DEBUG, "fin de run");
 
         // Maintenir le programme en cours d'exécution pour tester les sockets
-        while (running)
-        {
-            const std::map<int, Client*> &clients = server.get_clients_map();
-            LogManager::log(LogManager::INFO, "Number of connected clients: %d", clients.size());
+        // while (running)
+        // {
+        //     const std::map<int, Client*> &clients = server.get_clients_map();
+        //     LogManager::log(LogManager::INFO, "Number of connected clients: %d", clients.size());
 
-            for (std::map<int, Client*>::const_iterator it = clients.begin(); it != clients.end(); ++it)
-            {
-                LogManager::log(LogManager::INFO, "Client FD: %d", it->first);
-            }
-            // Simuler une boucle principale (vous pouvez ajouter des fonctionnalités ici plus tard)
-            usleep(100000); // Pause de 100ms pour éviter une boucle trop rapide
-        }
+        //     for (std::map<int, Client*>::const_iterator it = clients.begin(); it != clients.end(); ++it)
+        //     {
+        //         LogManager::log(LogManager::INFO, "Client FD: %d", it->first);
+        //     }
+        //     // Simuler une boucle principale (vous pouvez ajouter des fonctionnalités ici plus tard)
+        //     usleep(100000); // Pause de 100ms pour éviter une boucle trop rapide
+        // }
+
 
         // Arrêter le serveur
         server.stop();
+       
+
+        // Vérifiez si le programme doit quitter
+        if (!running)
+        {
+            LogManager::log(LogManager::INFO, "Exiting program...");
+            return EXIT_SUCCESS;
+        }
     }
     catch (const std::exception &e)
     {
@@ -156,5 +167,5 @@ int main(int ac, char **av)
     
     LogManager::log(LogManager::INFO, "Server is shutting down...");
     
-    return (0);
+    return (EXIT_SUCCESS);
 }

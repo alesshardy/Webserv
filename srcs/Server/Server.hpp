@@ -13,6 +13,7 @@
 #include "Socket.hpp"
 #include "BlocServer.hpp"
 #include "LogManager.hpp"
+#include "../includes/Webserv.hpp"
 
 class   Client;
 
@@ -50,6 +51,7 @@ class Server
         void                        close_client(int client_fd);
         void                        close_socket(int socket_fd);
         void                        close_all();
+        void                        remove_from_epoll(int fd);
 
 
         // Getters
