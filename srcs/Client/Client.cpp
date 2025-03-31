@@ -13,7 +13,8 @@ Client::Client(int client_fd, Socket* client_socket)
 
 Client::~Client()
 {
-    delete _client_socket;
+    LogManager::log(LogManager::DEBUG, "Destroying client %d", _client_fd);
+    // Ne pas supprimer _client_socket ici, il est géré par Server
     // delete _request;
     // delete _response;
 }

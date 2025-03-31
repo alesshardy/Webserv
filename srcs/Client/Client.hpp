@@ -26,6 +26,7 @@ class Client
         Socket*              _client_socket;
         // Request*             _request;
         // Response*            _response;
+        
 
 
 
