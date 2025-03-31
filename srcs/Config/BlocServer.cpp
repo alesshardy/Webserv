@@ -43,3 +43,7 @@ bool BlocServer::validateServer() const
     return (!_listen.empty());
 }
 
+bool BlocServer::locationExists(const std::string &locationPath) const
+{
+    return _location.find(locationPath) != _location.end();
+}
