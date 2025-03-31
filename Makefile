@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+         #
+#    By: kammi <kammi@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/17 14:48:41 by apintus           #+#    #+#              #
-#    Updated: 2025/03/27 14:11:39 by tpassin          ###   ########.fr        #
+#    Updated: 2025/03/28 15:27:39 by kammi            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -68,6 +68,8 @@ SRCS 			=	main.cpp \
 					srcs/Config/BlocLocation.cpp \
 					srcs/Utils/Utils.cpp \
 					srcs/Server/Socket.cpp \
+					srcs/Server/Server.cpp \
+					srcs/Client/Client.cpp \
 
 OBJS			=	$(SRCS:%.cpp=$(OBJ_PATH)/%.o)
 
