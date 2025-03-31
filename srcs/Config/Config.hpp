@@ -10,11 +10,13 @@
 # include "BlocServer.hpp"
 # include "BlocLocation.hpp"
 # include "Utils.hpp"
+# include "Listen.hpp"
 
 #include <sys/stat.h>
 
 class BlocServer;
 class BlocLocation;
+class Listen;
 
 class Config
 {
@@ -44,6 +46,7 @@ class Config
             std::string findFirstWord(std::string line);
             bool        verifKeyServer(std::string token);
             bool        verifKeyOther(std::string token);
+
             
             // Remplir les class
             void        addArgToServerBloc(std::string token, std::string lastKey, BlocServer &current, int argNb);
@@ -51,7 +54,7 @@ class Config
 
             // VErif les arg
             bool        isValidRoot(const std::string &path);
-            
+            bool        isValidIPv4(const std::string &ip);
 
             // print
             void        printConfig()const;

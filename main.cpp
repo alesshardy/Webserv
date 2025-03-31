@@ -38,6 +38,7 @@ int main(int ac, char **av)
         config.printConfig();
     }
     catch (const std::exception &e) {
+        std::cerr << "CaughHt exception: " << e.what() << std::endl; // Affiche l'exception originale
          LogManager::log(LogManager::ERROR, e.what());
         return (EXIT_FAILURE);
     }
@@ -102,3 +103,4 @@ int main(int ac, char **av)
     
     return (0);
 }
+

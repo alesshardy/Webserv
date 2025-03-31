@@ -129,17 +129,77 @@ bool    Config::verifKeyOther(std::string token)
  */
 bool        Config::isValidRoot(const std::string &path)
 {
-    struct stat info;
-    return (stat(path.c_str(), &info) == 0 && S_ISDIR(info.st_mode));
+    // struct stat info;
+    // return (stat(path.c_str(), &info) == 0 && S_ISDIR(info.st_mode));
+    (void)path;
+    return true;
 }
 
+bool Config::isValidIPv4(const std::string &ip)
+{
+    std::istringstream iss(ip);
+    std::string segment;
+    int count = 0;
+
+    while (std::getline(iss, segment, '.'))
+    {
+        count++;
+        if (count > 4) // Trop de segments
+            return false;
+
+        if (segment.empty() || segment.size() > 3) // Segment vide ou trop long
+            return false;
+
+        // Vérifier que chaque caractère est un chiffre
+        for (std::string::size_type i = 0; i < segment.size(); ++i)
+        {
+            if (!std::isdigit(segment[i]))
+                return false;
+        }
+
+        // Convertir le segment en entier
+        int value;
+        std::istringstream segmentStream(segment);
+        segmentStream >> value;
+
+        if (value < 0 || value > 255) // Hors plage
+            return false;
+    }
+
+    return count == 4; // Doit avoir exactement 4 segments
+}
 
 //TEST AJOUT SIMPLE SANS PARSER
 void        Config::addArgToServerBloc(std::string arg, std::string lastKey, BlocServer &current, int argNb)
 {
     if (lastKey == "listen")
     {
-        current.addListen(arg);
+        size_t colonPos = arg.find(':');
+        std::string ip = "0.0.0.0"; 
+        int port;
+        if (colonPos != std::string::npos)
+        {
+            ip = arg.substr(0, colonPos);
+            try { port = Utils::ft_stoi(arg.substr(colonPos + 1));
+            }
+            catch (const std::exception &e){
+                throw std::runtime_error("ERROR : arg Listen not correct");// WTF PK ca display le msg que je veux
+            }
+        }
+        else
+        {
+            try {
+                port = Utils::ft_stoi(arg);
+            }
+            catch (const std::exception &e){
+                throw std::runtime_error("ERROR : arg Listen not correct");// WTF PK ca display le msg que je veux
+            }
+        }
+        if (port < 1 || port > 65535)
+            throw std::runtime_error("ERROR : Invalid port number in listen directive.");
+        if (!isValidIPv4(ip))
+            throw std::runtime_error("ERROR : Invalid ip: "+ ip + " in listen directive.");
+        current.addListen(Listen(ip, port));
     }
     else if (lastKey == "server_name")
     {
@@ -150,7 +210,7 @@ void        Config::addArgToServerBloc(std::string arg, std::string lastKey, Blo
         if (argNb > 1)
             throw std::runtime_error("ERROR : too many argument for root key");
         if (!current.getRoot().empty())
-            throw std::runtime_error("ERROR : double root in server bloc");
+            throw std::runtime_error("ERROR : double Root in server bloc");
         if (!isValidRoot(arg))
             throw std::runtime_error("ERROR : root must be an absolute path");   
         current.setRoot(arg);
@@ -192,7 +252,7 @@ void        Config::addArgToServerBloc(std::string arg, std::string lastKey, Blo
         current.setClientMaxBodySize(Utils::ft_stolonglong(arg));
     }
     else
-        throw std::runtime_error("ERROR : bad key for server bloc ");    
+        throw std::runtime_error("ERROR : bad key " + lastKey + " for server bloc ");    
 }
 
 void        Config::addArgToLocationBloc(std::string arg, std::string lastKey, BlocLocation &current, int argNb)
@@ -203,12 +263,18 @@ void        Config::addArgToLocationBloc(std::string arg, std::string lastKey, B
             throw std::runtime_error("ERROR : too many argument for root key");
         if (!current.getRoot().empty())
             throw std::runtime_error("ERROR : double root in location bloc");
+        if (!current.getAlias().empty())
+            throw std::runtime_error("ERROR : can't have a root if already an alias");
         if (!isValidRoot(arg))
             throw std::runtime_error("ERROR : root must be an absolute path");
         current.setRoot(arg);
     }
     else if (lastKey == "alias")
-    {
+    {  
+        if (!current.getAlias().empty())
+            throw std::runtime_error("ERROR : double alias in location bloc");
+        if (!current.getRoot().empty())
+            throw std::runtime_error("ERROR : can't have a alias if already an root");
         current.setAlias(arg);
     }
     else if (lastKey == "index")
@@ -305,7 +371,10 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                     lastKey = token;
                     if (!verifKeyServer(token))
                         throw std::runtime_error("ERROR : first key must be 'server' ");
-                    currentServer = BlocServer();
+                    // FIX
+                    if (depth != 0)
+                        throw std::runtime_error("ERROR : server key inside a server bloc ");
+                    currentServer = BlocServer(); //SIUUU
                 } 
                 else 
                 {
@@ -320,7 +389,7 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                 token.clear(); // Vider le token à la fin de la ligne
             }
             // REGLER CE PUTIN DE PB D"ESPACE DE CON
-            if (semicolonCount != 1 && lastKey != "server" && lastKey != "location" && lastC != '\n' && lastC != '}')
+            if (semicolonCount != 1 && lastKey != "server" && lastKey != "location" && lastC != '\n' && lastC != '}' && lastKey != "")
             {
                 throw std::runtime_error("ERROR : line request must end by ';'");
             }
@@ -337,6 +406,14 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
             depth++;
             isKey = true; // Réinitialiser pour le début d'un bloc
             emptyBloc = true;
+            //FIX
+            if (verifKeyServer(token))
+            {
+                std::cout << "Cle trouvee4 : "<< token << std::endl;
+                lastKey = token;
+                token.clear();
+            }
+
             if (depth == 2 && inLocBloc == false)
                 throw std::runtime_error("ERROR : bloc of lvl 2 must be location") ;
             if (depth == 3)
@@ -354,12 +431,15 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
             // AJOUT DES BLOC DE CLASS
             if (depth == 2)
             {
+                if (currentServer.locationExists(currentLocationPath))
+                    throw std::runtime_error("ERROR : Location path '" + currentLocationPath + "' already exists in the server block.");
                 currentServer.addLocation(currentLocationPath, currentLocation);
                 currentLocationPath.clear();
             }
             else if (depth == 1)
             {
                 config.addServer(currentServer);
+                currentServer = BlocServer();
             }
             if (inLocBloc == true)
                 inLocBloc = false;
@@ -416,6 +496,10 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                 if (isKey && inLocLine == false) 
                 {
                     std::cout << "Clé trouvée3 : " << token << std::endl;
+                    // FIX location sans {
+                    if (lastKey == "location" && depth != 2)
+                        throw std::runtime_error("ERROR : if location key must open a bloc");
+
                     lastKey = token;
                     isKey = false; // Le prochain mot sera un argument
                     if (token == "location")
@@ -423,9 +507,15 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                         inLocBloc = true;
                         inLocLine = true;
                     }
+                    // FIX
+                    if (verifKeyServer(token) && depth == 0)
+                    {
+                        token.clear();
+                        continue;
+                    }
+
                     if (!verifKeyOther(token))
                         throw std::runtime_error("ERROR : key unknown ");
-                    
                 } 
                 else 
                 {
@@ -475,7 +565,8 @@ void Config::printConfig() const
         std::cout << "  Listen: ";
         for (size_t j = 0; j < server.getListen().size(); ++j)
         {
-            std::cout << server.getListen()[j];
+            const Listen &listen = server.getListen()[j];
+            std::cout << listen.getIp() << ":" << listen.getPort();
             if (j < server.getListen().size() - 1)
                 std::cout << ", ";
         }
