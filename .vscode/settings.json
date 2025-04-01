@@ -110,6 +110,13 @@
     "sstream": "cpp",
     "stdexcept": "cpp",
     "streambuf": "cpp",
-    "typeinfo": "cpp"
+    "typeinfo": "cpp",
+    "chrono": "cpp",
+    "codecvt": "cpp",
+    "ratio": "cpp",
+    "iomanip": "cpp",
+    "stop_token": "cpp",
+    "thread": "cpp",
+    "semaphore": "cpp"
   }
 }
