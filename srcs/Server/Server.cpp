@@ -48,11 +48,11 @@ void Server::init()
     for (size_t i = 0; i < servers.size(); i++)
     {
         const BlocServer &server = servers[i];
-        const std::vector<int> &ports = server.getListen();
+        const std::vector<std::string> &ports = server.getListen();
 
         for (size_t j = 0; j < ports.size(); j++)
         {
-            int port = ports[j];
+            int port = Utils::ft_stoi(ports[j]);
             try
             {
                 // Créer un socket pour chaque port (utilisation de new)
