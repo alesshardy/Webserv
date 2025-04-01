@@ -103,15 +103,15 @@ int main(int ac, char **av)
 
         // Ajouter un premier serveur
         BlocServer server1;
-        server1.addListen(8080); // Ajouter un port
-        server1.addListen(9090); // Ajouter un autre port
+        server1.addListen("8080"); // Ajouter un port
+        server1.addListen("9090"); // Ajouter un autre port
         server1.setRoot("/var/www/html");
         server1.addIndex("index.html");
         config.addServer(server1);
 
         // Ajouter un deuxième serveur
         BlocServer server2;
-        server2.addListen(7070); // Ajouter un port
+        server2.addListen("7070"); // Ajouter un port
         server2.setRoot("/var/www/another");
         server2.addIndex("home.html");
         config.addServer(server2);
