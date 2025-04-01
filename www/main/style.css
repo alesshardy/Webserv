@@ -1,0 +1,392 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* Palette de couleurs */
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --background-color: #ecf0f1;
+    --text-color: #333;
+    --light-color: #fff;
+    --accent-color: #e74c3c;
+}
+
+/* Global styles */
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: var(--light-color);
+    text-align: center;
+    padding: 20px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+header .logo-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
+header .logo {
+    width: 50px;
+    height: auto;
+    animation: fadeIn 2s ease-in-out;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    animation: slideInFromTop 1s ease-in-out;
+}
+
+header p {
+    margin: 10px 0 0;
+    font-size: 1.2rem;
+    animation: fadeIn 2s ease-in-out;
+}
+
+main {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: var(--light-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+section h2 {
+    margin-top: 0;
+    color: var(--primary-color);
+}
+
+/* Authors Section */
+.authors .author-box {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.authors .author {
+    text-align: center;
+    background-color: var(--light-color);
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 150px;
+}
+
+.authors .author:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.authors .author img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.authors .author p {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* Fonctionnalités Section */
+.features .feature-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-around;
+}
+
+.features .feature {
+    text-align: center;
+    background-color: var(--secondary-color);
+    color: var(--light-color);
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 150px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeIn 1.5s ease-in-out;
+}
+
+.features .feature:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.features .feature h3 {
+    margin: 0 0 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.features .feature p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromTop {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+/* Effet de flou et agrandissement */
+section {
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+section:hover {
+    transform: scale(1.05); /* Agrandit la section survolée */
+    z-index: 10; /* Assure que la section survolée est au-dessus des autres */
+}
+
+section.dimmed {
+    filter: blur(3px); /* Floute les sections non survolées */
+    opacity: 0.6; /* Réduit légèrement l'opacité */
+}
+
+/******************************************************************************************/
+
+/* Palette de couleurs */
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --background-color: #ecf0f1;
+    --text-color: #333;
+    --highlight-color: #e74c3c;
+    --light-color: #fff;
+}
+
+/* Global styles */
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    text-align: center;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: var(--light-color);
+    padding: 20px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+}
+
+header .highlight {
+    color: var(--highlight-color);
+}
+
+main {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: var(--light-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+section h2 {
+    margin-top: 0;
+    color: var(--primary-color);
+}
+
+button {
+    background-color: var(--secondary-color);
+    color: var(--light-color);
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: var(--highlight-color);
+    transform: scale(1.05);
+}
+
+.result-box {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: var(--background-color);
+    border: 1px solid var(--secondary-color);
+    border-radius: 5px;
+    font-size: 1rem;
+    color: var(--primary-color);
+}
+
+.gif-container img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+
+/******************************************************************************************/
+
+/* Palette de couleurs */
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #e67e22;
+    --background-color: #ecf0f1;
+    --text-color: #333;
+    --highlight-color: #e74c3c;
+    --light-color: #fff;
+}
+
+/* Global styles */
+body {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    text-align: center;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: var(--light-color);
+    padding: 20px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+}
+
+header .highlight {
+    color: var(--highlight-color);
+}
+
+main {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: var(--light-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+section h2 {
+    margin-top: 0;
+    color: var(--primary-color);
+}
+
+/* Formulaire POST */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+form label {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+form input, form textarea {
+    padding: 10px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+form button {
+    background-color: var(--secondary-color);
+    color: var(--light-color);
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+form button:hover {
+    background-color: var(--highlight-color);
+    transform: scale(1.05);
+}
+
+.result-box {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: var(--background-color);
+    border: 1px solid var(--secondary-color);
+    border-radius: 5px;
+    font-size: 1rem;
+    color: var(--primary-color);
+}
+
+.gif-container img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
