@@ -31,16 +31,20 @@ int main(int ac, char **av)
     //LogManager::setLogFileStatus(true);
     LogManager::setLogConsoleStatus(true);
 
+    
     //parsing fichier config (validation et recuperation des données)
-    try {
-        Config config;
-        config.parseConfigFile(av[1], config);
-        LogManager::log(LogManager::INFO, "Fichier config correct!");
-    }
-    catch (const std::exception &e) {
-         LogManager::log(LogManager::ERROR, e.what());
-        return (EXIT_FAILURE);
-    }
+    // try {
+    //     Config config;
+    //     config.parseConfigFile(av[1], config);
+    //     LogManager::log(LogManager::INFO, "Fichier config correct!");
+    //     // print config ranger
+    //     config.printConfig();
+    // }
+    // catch (const std::exception &e) {
+    //     std::cerr << "CaughHt exception: " << e.what() << std::endl; // Affiche l'exception originale
+    //      LogManager::log(LogManager::ERROR, e.what());
+    //     return (EXIT_FAILURE);
+    // }
 
     // LogManager::log(LogManager::DEBUG, "Server is starting...");
 
@@ -98,23 +102,28 @@ int main(int ac, char **av)
 
     try
     {
-        // Créer une configuration valide
         Config config;
+        config.parseConfigFile(av[1], config);
+        LogManager::log(LogManager::INFO, "Fichier config correct!");
+        // print config ranger
+        config.printConfig();
+        // Créer une configuration valide
+        //Config config;
 
         // Ajouter un premier serveur
-        BlocServer server1;
-        server1.addListen("8080"); // Ajouter un port
-        server1.addListen("9090"); // Ajouter un autre port
-        server1.setRoot("/var/www/html");
-        server1.addIndex("index.html");
-        config.addServer(server1);
+        // BlocServer server1;
+        // server1.addListen("8080"); // Ajouter un port
+        // server1.addListen("9090"); // Ajouter un autre port
+        // server1.setRoot("/var/www/html");
+        // server1.addIndex("index.html");
+        // config.addServer(server1);
 
-        // Ajouter un deuxième serveur
-        BlocServer server2;
-        server2.addListen("7070"); // Ajouter un port
-        server2.setRoot("/var/www/another");
-        server2.addIndex("home.html");
-        config.addServer(server2);
+        // // Ajouter un deuxième serveur
+        // BlocServer server2;
+        // server2.addListen("7070"); // Ajouter un port
+        // server2.setRoot("/var/www/another");
+        // server2.addIndex("home.html");
+        // config.addServer(server2);
 
         // Initialiser le serveur
         Server server;
@@ -169,3 +178,4 @@ int main(int ac, char **av)
     
     return (EXIT_SUCCESS);
 }
+
