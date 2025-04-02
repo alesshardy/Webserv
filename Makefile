@@ -1,16 +1,4 @@
 # **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: apintus <apintus@student.42.fr>            +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/10/17 14:48:41 by apintus           #+#    #+#              #
-#    Updated: 2025/03/31 18:39:27 by apintus          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
-# **************************************************************************** #
 #                                  VARIABLES                                   #
 # **************************************************************************** #
 
@@ -66,9 +54,9 @@ SRCS 			=	main.cpp \
 					srcs/Config/Config.cpp \
 					srcs/Config/BlocServer.cpp \
 					srcs/Config/BlocLocation.cpp \
+					srcs/Config/Listen.cpp \
 					srcs/Utils/Utils.cpp \
 					srcs/Server/Socket.cpp \
-					srcs/Config/Listen.cpp \
 
 OBJS			=	$(SRCS:%.cpp=$(OBJ_PATH)/%.o)
 
