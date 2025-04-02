@@ -54,6 +54,7 @@ SRCS 			=	main.cpp \
 					srcs/Config/Config.cpp \
 					srcs/Config/BlocServer.cpp \
 					srcs/Config/BlocLocation.cpp \
+					srcs/Config/Listen.cpp \
 					srcs/Utils/Utils.cpp \
 					srcs/Server/Socket.cpp \
 
