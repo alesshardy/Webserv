@@ -2676,3 +2676,55 @@
 [2025-04-02 16:53:09] [DEBUG] Argument trouvé3 : /tmp
 [2025-04-02 16:53:09] [DEBUG] Argument trouvé2 : dwq
 [2025-04-02 16:53:09] [ERROR] ERROR : too many argument for root key
+[2025-04-02 17:53:11] [DEBUG] Clé trouvé1 : server
+[2025-04-02 17:53:11] [DEBUG] Début de bloc
+[2025-04-02 17:53:11] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 17:53:11] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 17:53:11] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 17:53:11] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 17:53:11] [DEBUG] Clé trouvée3 : location
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé3 : /
+[2025-04-02 17:53:11] [DEBUG] Début de bloc
+[2025-04-02 17:53:11] [DEBUG] Clé trouvée3 : root
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé3 : /tmp
+[2025-04-02 17:53:11] [DEBUG] Clé trouvée3 : index
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 17:53:11] [DEBUG] Clé trouvée3 : index
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 17:53:11] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé2 : on
+[2025-04-02 17:53:11] [DEBUG] Fin de bloc
+[2025-04-02 17:53:11] [DEBUG] Clé trouvée3 : location
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 17:53:11] [DEBUG] Début de bloc
+[2025-04-02 17:53:11] [DEBUG] Clé trouvée3 : alias
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé2 : /home/apintus/
+[2025-04-02 17:53:11] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 17:53:11] [DEBUG] Clé trouvée3 : index
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 17:53:11] [DEBUG] Fin de bloc
+[2025-04-02 17:53:11] [DEBUG] Fin de bloc
+[2025-04-02 17:53:11] [DEBUG] Clé trouvé1 : server
+[2025-04-02 17:53:11] [DEBUG] Début de bloc
+[2025-04-02 17:53:11] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 17:53:11] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 17:53:11] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé3 : 1048576m
+[2025-04-02 17:53:11] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 17:53:11] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 17:53:11] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 17:53:11] [DEBUG] Fin de bloc
+[2025-04-02 17:53:11] [INFO] Fichier config correct!
+[2025-04-02 17:53:11] [DEBUG] PRINT PARSE CONFIGURATION :
