@@ -14,7 +14,7 @@ class Listen;
 class BlocServer
 {
     private:
-            std::vector<Listen>            _listen;
+            std::vector<Listen>         _listen;
             std::vector<std::string>    _serverName;
             std::string                 _root;
             std::vector<std::string>    _index;

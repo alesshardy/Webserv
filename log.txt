@@ -642,3 +642,2037 @@
 [2025-03-31 19:34:02] [ERROR] ERROR : arg Listen not correct
 [2025-03-31 19:34:20] [ERROR] ERROR : wrong error_page code
 [2025-03-31 19:34:26] [INFO] Fichier config correct!
+[2025-04-02 11:51:23] [INFO] Fichier config correct!
+[2025-04-02 11:51:36] [ERROR] ERROR : arg Listen not correct
+[2025-04-02 11:51:49] [INFO] Fichier config correct!
+[2025-04-02 11:52:02] [INFO] Fichier config correct!
+[2025-04-02 11:52:09] [ERROR] ERROR : Invalid port number in listen directive.
+[2025-04-02 11:52:26] [INFO] Fichier config correct!
+[2025-04-02 11:54:08] [ERROR] ERROR : Invalid ip: 1.2.3.4.. in listen directive.
+[2025-04-02 11:54:37] [ERROR] ERROR : arg Listen not correct
+[2025-04-02 11:54:45] [ERROR] ERROR : arg Listen not correct
+[2025-04-02 11:54:54] [ERROR] ERROR : Invalid ip: 1.2.3.4... in listen directive.
+[2025-04-02 11:55:00] [INFO] Fichier config correct!
+[2025-04-02 11:55:08] [ERROR] ERROR : Invalid ip: 1.2.3. in listen directive.
+[2025-04-02 11:55:13] [ERROR] ERROR : Invalid ip: 1.2.3.. in listen directive.
+[2025-04-02 11:55:23] [INFO] Fichier config correct!
+[2025-04-02 12:04:20] [ERROR] ERROR : Invalid ip: 127.0.0.1 in listen directive.
+[2025-04-02 12:09:39] [ERROR] ERROR : Invalid ip: 127.0.0.1 in listen directive.
+[2025-04-02 12:11:23] [ERROR] ERROR : Invalid ip: 1.2.3.4. in listen directive.
+[2025-04-02 12:11:35] [INFO] Fichier config correct!
+[2025-04-02 12:11:40] [ERROR] ERROR : Invalid ip: 1.2.3.4.. in listen directive.
+[2025-04-02 12:11:48] [ERROR] ERROR : arg Listen not correct
+[2025-04-02 12:11:55] [ERROR] ERROR : arg Listen not correct
+[2025-04-02 12:12:02] [ERROR] ERROR : arg Listen not correct
+[2025-04-02 12:12:08] [ERROR] ERROR : arg Listen not correct
+[2025-04-02 12:12:18] [ERROR] ERROR : Invalid ip: 1.2.3 in listen directive.
+[2025-04-02 12:12:29] [ERROR] ERROR : Invalid ip: .... in listen directive.
+[2025-04-02 12:12:34] [ERROR] ERROR : Invalid ip: ... in listen directive.
+[2025-04-02 12:12:39] [ERROR] ERROR : Invalid ip:  in listen directive.
+[2025-04-02 12:12:43] [INFO] Fichier config correct!
+[2025-04-02 12:18:44] [DEBUG] Clé trouvé1 : 
+[2025-04-02 12:18:44] [DEBUG] Clé trouvé1 : 
+[2025-04-02 12:18:44] [INFO] Fichier config correct!
+[2025-04-02 12:20:34] [DEBUG] Clé trouvé1 : server
+[2025-04-02 12:20:34] [DEBUG] Clé trouvé1 : server
+[2025-04-02 12:20:34] [INFO] Fichier config correct!
+[2025-04-02 12:26:01] [DEBUG] Clé trouvé1 : server
+[2025-04-02 12:26:01] [DEBUG] Début de bloc
+[2025-04-02 12:26:01] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 12:26:01] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 12:26:01] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 12:26:01] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 12:26:01] [DEBUG] Clé trouvée3 : location
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé3 : /
+[2025-04-02 12:26:01] [DEBUG] Début de bloc
+[2025-04-02 12:26:01] [DEBUG] Clé trouvée3 : root
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 12:26:01] [DEBUG] Clé trouvée3 : index
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 12:26:01] [DEBUG] Clé trouvée3 : index
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 12:26:01] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé2 : on
+[2025-04-02 12:26:01] [DEBUG] Fin de bloc
+[2025-04-02 12:26:01] [DEBUG] Clé trouvée3 : location
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 12:26:01] [DEBUG] Début de bloc
+[2025-04-02 12:26:01] [DEBUG] Clé trouvée3 : root
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 12:26:01] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 12:26:01] [DEBUG] Clé trouvée3 : index
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 12:26:01] [DEBUG] Fin de bloc
+[2025-04-02 12:26:01] [DEBUG] Fin de bloc
+[2025-04-02 12:26:01] [DEBUG] Clé trouvé1 : server
+[2025-04-02 12:26:01] [DEBUG] Début de bloc
+[2025-04-02 12:26:01] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 12:26:01] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 12:26:01] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé2 : 19898498499
+[2025-04-02 12:26:01] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 12:26:01] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 12:26:01] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 12:26:01] [DEBUG] Fin de bloc
+[2025-04-02 12:26:01] [INFO] Fichier config correct!
+[2025-04-02 12:26:01] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 15:30:48] [DEBUG] Clé trouvé1 : server
+[2025-04-02 15:30:48] [DEBUG] Début de bloc
+[2025-04-02 15:30:48] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 15:30:48] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 15:30:48] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 15:30:48] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 15:30:48] [DEBUG] Clé trouvée3 : location
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé3 : /
+[2025-04-02 15:30:48] [DEBUG] Début de bloc
+[2025-04-02 15:30:48] [DEBUG] Clé trouvée3 : root
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 15:30:48] [DEBUG] Clé trouvée3 : index
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 15:30:48] [DEBUG] Clé trouvée3 : index
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 15:30:48] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé2 : on
+[2025-04-02 15:30:48] [DEBUG] Fin de bloc
+[2025-04-02 15:30:48] [DEBUG] Clé trouvée3 : location
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 15:30:48] [DEBUG] Début de bloc
+[2025-04-02 15:30:48] [DEBUG] Clé trouvée3 : root
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 15:30:48] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 15:30:48] [DEBUG] Clé trouvée3 : index
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 15:30:48] [DEBUG] Fin de bloc
+[2025-04-02 15:30:48] [DEBUG] Fin de bloc
+[2025-04-02 15:30:48] [DEBUG] Clé trouvé1 : server
+[2025-04-02 15:30:48] [DEBUG] Début de bloc
+[2025-04-02 15:30:48] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 15:30:48] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 15:30:48] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé2 : 19898498499
+[2025-04-02 15:30:48] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 15:30:48] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 15:30:48] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 15:30:48] [DEBUG] Fin de bloc
+[2025-04-02 15:30:48] [INFO] Fichier config correct!
+[2025-04-02 15:30:48] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 15:31:09] [DEBUG] Clé trouvé1 : server
+[2025-04-02 15:31:09] [DEBUG] Début de bloc
+[2025-04-02 15:31:09] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 15:31:09] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 15:31:09] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 15:31:09] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 15:31:09] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 15:31:09] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 15:31:09] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 15:31:09] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 15:31:09] [DEBUG] Clé trouvée3 : location
+[2025-04-02 15:31:09] [DEBUG] Argument trouvé3 : /
+[2025-04-02 15:31:09] [DEBUG] Début de bloc
+[2025-04-02 15:31:09] [DEBUG] Clé trouvée3 : root
+[2025-04-02 15:31:09] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 15:31:09] [DEBUG] Clé trouvée3 : index
+[2025-04-02 15:31:09] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 15:31:09] [DEBUG] Clé trouvée3 : index
+[2025-04-02 15:31:09] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 15:31:09] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 15:31:09] [DEBUG] Argument trouvé2 : on
+[2025-04-02 15:31:09] [DEBUG] Fin de bloc
+[2025-04-02 15:31:09] [DEBUG] Clé trouvée3 : location
+[2025-04-02 15:31:09] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 15:31:09] [DEBUG] Début de bloc
+[2025-04-02 15:31:09] [DEBUG] Clé trouvée3 : root
+[2025-04-02 15:31:09] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 15:31:09] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 15:31:09] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 15:31:09] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 15:31:09] [DEBUG] Clé trouvée3 : index
+[2025-04-02 15:31:09] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 15:31:09] [DEBUG] Fin de bloc
+[2025-04-02 15:31:09] [DEBUG] Fin de bloc
+[2025-04-02 15:31:09] [DEBUG] Clé trouvé1 : server
+[2025-04-02 15:31:09] [DEBUG] Début de bloc
+[2025-04-02 15:31:09] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 15:31:09] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 15:31:09] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 15:31:09] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 15:31:09] [DEBUG] Argument trouvé2 : 1.1.1.1.1.:2727
+[2025-04-02 15:31:09] [ERROR] ERROR : Invalid ip: 1.1.1.1.1. in listen directive.
+[2025-04-02 15:34:47] [DEBUG] Clé trouvé1 : server
+[2025-04-02 15:34:47] [DEBUG] Début de bloc
+[2025-04-02 15:34:47] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 15:34:47] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 15:34:47] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 15:34:47] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 15:34:47] [DEBUG] Clé trouvée3 : location
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé3 : /
+[2025-04-02 15:34:47] [DEBUG] Début de bloc
+[2025-04-02 15:34:47] [DEBUG] Clé trouvée3 : root
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 15:34:47] [DEBUG] Clé trouvée3 : index
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 15:34:47] [DEBUG] Clé trouvée3 : index
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 15:34:47] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé2 : on
+[2025-04-02 15:34:47] [DEBUG] Fin de bloc
+[2025-04-02 15:34:47] [DEBUG] Clé trouvée3 : location
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 15:34:47] [DEBUG] Début de bloc
+[2025-04-02 15:34:47] [DEBUG] Clé trouvée3 : root
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 15:34:47] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 15:34:47] [DEBUG] Clé trouvée3 : index
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 15:34:47] [DEBUG] Fin de bloc
+[2025-04-02 15:34:47] [DEBUG] Fin de bloc
+[2025-04-02 15:34:47] [DEBUG] Clé trouvé1 : server
+[2025-04-02 15:34:47] [DEBUG] Début de bloc
+[2025-04-02 15:34:47] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 15:34:47] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 15:34:47] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé2 : 19898498499
+[2025-04-02 15:34:47] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 15:34:47] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 15:34:47] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 15:34:47] [DEBUG] Fin de bloc
+[2025-04-02 15:34:47] [INFO] Fichier config correct!
+[2025-04-02 15:34:47] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 15:39:53] [DEBUG] Clé trouvé1 : server
+[2025-04-02 15:39:53] [DEBUG] Début de bloc
+[2025-04-02 15:39:53] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 15:39:53] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 15:39:53] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 15:39:53] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 15:39:53] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 15:39:53] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 15:39:54] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 15:39:54] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 15:39:54] [DEBUG] Clé trouvée3 : location
+[2025-04-02 15:39:54] [DEBUG] Argument trouvé3 : /
+[2025-04-02 15:39:54] [DEBUG] Début de bloc
+[2025-04-02 15:39:54] [DEBUG] Clé trouvée3 : root
+[2025-04-02 15:39:54] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 15:39:54] [DEBUG] Clé trouvée3 : index
+[2025-04-02 15:39:54] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 15:39:54] [DEBUG] Clé trouvée3 : index
+[2025-04-02 15:39:54] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 15:39:54] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 15:39:54] [DEBUG] Argument trouvé2 : on
+[2025-04-02 15:39:54] [DEBUG] Fin de bloc
+[2025-04-02 15:39:54] [DEBUG] Clé trouvée3 : location
+[2025-04-02 15:39:54] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 15:39:54] [DEBUG] Début de bloc
+[2025-04-02 15:39:54] [DEBUG] Clé trouvée3 : root
+[2025-04-02 15:39:54] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 15:39:54] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 15:39:54] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 15:39:54] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 15:39:54] [DEBUG] Clé trouvée3 : index
+[2025-04-02 15:39:54] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 15:39:54] [DEBUG] Fin de bloc
+[2025-04-02 15:39:54] [DEBUG] Fin de bloc
+[2025-04-02 15:39:54] [DEBUG] Clé trouvé1 : server
+[2025-04-02 15:39:54] [DEBUG] Début de bloc
+[2025-04-02 15:39:54] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 15:39:54] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 15:39:54] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 15:39:54] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 15:39:54] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 15:39:54] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 15:39:54] [DEBUG] Argument trouvé2 : 19898498499
+[2025-04-02 15:39:54] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 15:39:54] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 15:39:54] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 15:39:54] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 15:39:54] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 15:39:54] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 15:39:54] [DEBUG] Fin de bloc
+[2025-04-02 15:39:54] [INFO] Fichier config correct!
+[2025-04-02 15:39:54] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 15:40:10] [DEBUG] Clé trouvé1 : server
+[2025-04-02 15:40:11] [DEBUG] Début de bloc
+[2025-04-02 15:40:11] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 15:40:11] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 15:40:11] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 15:40:11] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 15:40:11] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 15:40:11] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 15:40:11] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 15:40:11] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 15:40:11] [DEBUG] Clé trouvée3 : location
+[2025-04-02 15:40:11] [DEBUG] Argument trouvé3 : /
+[2025-04-02 15:40:11] [DEBUG] Début de bloc
+[2025-04-02 15:40:11] [DEBUG] Clé trouvée3 : root
+[2025-04-02 15:40:11] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 15:40:11] [DEBUG] Clé trouvée3 : root
+[2025-04-02 15:40:11] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 15:40:11] [ERROR] ERROR : too many argument for root key
+[2025-04-02 15:40:24] [DEBUG] Clé trouvé1 : server
+[2025-04-02 15:40:24] [DEBUG] Début de bloc
+[2025-04-02 15:40:24] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 15:40:24] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 15:40:24] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 15:40:24] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 15:40:24] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 15:40:24] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 15:40:24] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 15:40:24] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 15:40:24] [DEBUG] Clé trouvée3 : location
+[2025-04-02 15:40:24] [DEBUG] Argument trouvé3 : /
+[2025-04-02 15:40:24] [DEBUG] Début de bloc
+[2025-04-02 15:40:24] [DEBUG] Clé trouvée3 : root
+[2025-04-02 15:40:24] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 15:40:24] [DEBUG] Clé trouvée3 : index
+[2025-04-02 15:40:24] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 15:40:24] [DEBUG] Clé trouvée3 : index
+[2025-04-02 15:40:24] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 15:40:24] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 15:40:24] [DEBUG] Argument trouvé2 : on
+[2025-04-02 15:40:24] [DEBUG] Fin de bloc
+[2025-04-02 15:40:24] [DEBUG] Clé trouvée3 : location
+[2025-04-02 15:40:24] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 15:40:24] [DEBUG] Début de bloc
+[2025-04-02 15:40:24] [DEBUG] Clé trouvée3 : root
+[2025-04-02 15:40:24] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 15:40:24] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 15:40:24] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 15:40:24] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 15:40:24] [DEBUG] Clé trouvée3 : index
+[2025-04-02 15:40:24] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 15:40:24] [DEBUG] Fin de bloc
+[2025-04-02 15:40:24] [DEBUG] Fin de bloc
+[2025-04-02 15:40:25] [DEBUG] Clé trouvé1 : server
+[2025-04-02 15:40:25] [DEBUG] Début de bloc
+[2025-04-02 15:40:25] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 15:40:25] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 15:40:25] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 15:40:25] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 15:40:25] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 15:40:25] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 15:40:25] [DEBUG] Argument trouvé2 : 19898498499
+[2025-04-02 15:40:25] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 15:40:25] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 15:40:25] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 15:40:25] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 15:40:25] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 15:40:25] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 15:40:25] [DEBUG] Fin de bloc
+[2025-04-02 15:40:25] [INFO] Fichier config correct!
+[2025-04-02 15:40:25] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 16:28:23] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:28:23] [DEBUG] Début de bloc
+[2025-04-02 16:28:23] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:28:23] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:28:23] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:28:23] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:28:23] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:28:23] [DEBUG] Début de bloc
+[2025-04-02 16:28:23] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:28:23] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:28:23] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:28:23] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:28:23] [DEBUG] Fin de bloc
+[2025-04-02 16:28:23] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:28:23] [DEBUG] Début de bloc
+[2025-04-02 16:28:23] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:28:23] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:28:23] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:28:23] [DEBUG] Fin de bloc
+[2025-04-02 16:28:23] [DEBUG] Fin de bloc
+[2025-04-02 16:28:23] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:28:23] [DEBUG] Début de bloc
+[2025-04-02 16:28:23] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:28:23] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:28:23] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé2 : 19898498499
+[2025-04-02 16:28:23] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 16:28:23] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:28:23] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 16:28:23] [DEBUG] Fin de bloc
+[2025-04-02 16:28:23] [INFO] Fichier config correct!
+[2025-04-02 16:28:23] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 16:28:38] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:28:39] [DEBUG] Début de bloc
+[2025-04-02 16:28:39] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:28:39] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:28:39] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:28:39] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:28:39] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:28:39] [DEBUG] Début de bloc
+[2025-04-02 16:28:39] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:28:39] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:28:39] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:28:39] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:28:39] [DEBUG] Fin de bloc
+[2025-04-02 16:28:39] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:28:39] [DEBUG] Début de bloc
+[2025-04-02 16:28:39] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:28:39] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:28:39] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:28:39] [DEBUG] Fin de bloc
+[2025-04-02 16:28:39] [DEBUG] Fin de bloc
+[2025-04-02 16:28:39] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:28:39] [DEBUG] Début de bloc
+[2025-04-02 16:28:39] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:28:39] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:28:39] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé2 : 1k
+[2025-04-02 16:28:39] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 16:28:39] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:28:39] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 16:28:39] [DEBUG] Fin de bloc
+[2025-04-02 16:28:39] [INFO] Fichier config correct!
+[2025-04-02 16:28:39] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 16:28:49] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:28:49] [DEBUG] Début de bloc
+[2025-04-02 16:28:49] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:28:49] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:28:49] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:28:49] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:28:49] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:28:49] [DEBUG] Début de bloc
+[2025-04-02 16:28:49] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:28:49] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:28:49] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:28:49] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:28:49] [DEBUG] Fin de bloc
+[2025-04-02 16:28:49] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:28:49] [DEBUG] Début de bloc
+[2025-04-02 16:28:49] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:28:49] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:28:49] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:28:49] [DEBUG] Fin de bloc
+[2025-04-02 16:28:49] [DEBUG] Fin de bloc
+[2025-04-02 16:28:49] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:28:49] [DEBUG] Début de bloc
+[2025-04-02 16:28:49] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:28:49] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:28:49] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé2 : 10m
+[2025-04-02 16:28:49] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 16:28:49] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:28:49] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 16:28:49] [DEBUG] Fin de bloc
+[2025-04-02 16:28:49] [INFO] Fichier config correct!
+[2025-04-02 16:28:49] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 16:29:02] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:29:02] [DEBUG] Début de bloc
+[2025-04-02 16:29:02] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:29:02] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:29:02] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:29:02] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:29:02] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:29:02] [DEBUG] Début de bloc
+[2025-04-02 16:29:02] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:29:02] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:29:02] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:29:02] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:29:02] [DEBUG] Fin de bloc
+[2025-04-02 16:29:02] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:29:02] [DEBUG] Début de bloc
+[2025-04-02 16:29:02] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:29:02] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:29:02] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:29:02] [DEBUG] Fin de bloc
+[2025-04-02 16:29:02] [DEBUG] Fin de bloc
+[2025-04-02 16:29:02] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:29:02] [DEBUG] Début de bloc
+[2025-04-02 16:29:02] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:29:02] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:29:02] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé2 : 2g
+[2025-04-02 16:29:02] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 16:29:02] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:29:02] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 16:29:02] [DEBUG] Fin de bloc
+[2025-04-02 16:29:02] [INFO] Fichier config correct!
+[2025-04-02 16:29:02] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 16:29:19] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:29:19] [DEBUG] Début de bloc
+[2025-04-02 16:29:19] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:29:19] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:29:19] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:29:19] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:29:19] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:29:19] [DEBUG] Début de bloc
+[2025-04-02 16:29:19] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:29:19] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:29:19] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:29:19] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:29:19] [DEBUG] Fin de bloc
+[2025-04-02 16:29:19] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:29:19] [DEBUG] Début de bloc
+[2025-04-02 16:29:19] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:29:19] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:29:19] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:29:19] [DEBUG] Fin de bloc
+[2025-04-02 16:29:19] [DEBUG] Fin de bloc
+[2025-04-02 16:29:19] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:29:19] [DEBUG] Début de bloc
+[2025-04-02 16:29:19] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:29:19] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:29:19] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé2 : 1048576
+[2025-04-02 16:29:19] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 16:29:19] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:29:19] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 16:29:19] [DEBUG] Fin de bloc
+[2025-04-02 16:29:19] [INFO] Fichier config correct!
+[2025-04-02 16:29:19] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 16:29:27] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:29:27] [DEBUG] Début de bloc
+[2025-04-02 16:29:27] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:29:27] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:29:27] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:29:27] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:29:27] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:29:27] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:29:27] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:29:27] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:29:27] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:29:27] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:29:27] [DEBUG] Début de bloc
+[2025-04-02 16:29:27] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:29:27] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:29:27] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:29:27] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:29:27] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:29:27] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:29:27] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:29:27] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:29:27] [DEBUG] Fin de bloc
+[2025-04-02 16:29:27] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:29:27] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:29:27] [DEBUG] Début de bloc
+[2025-04-02 16:29:27] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:29:27] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:29:27] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:29:27] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:29:27] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:29:27] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:29:27] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:29:27] [DEBUG] Fin de bloc
+[2025-04-02 16:29:27] [DEBUG] Fin de bloc
+[2025-04-02 16:29:27] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:29:27] [DEBUG] Début de bloc
+[2025-04-02 16:29:27] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:29:27] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:29:27] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:29:27] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:29:27] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:29:27] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:29:27] [DEBUG] Argument trouvé2 : -1
+[2025-04-02 16:29:27] [ERROR] stoLONlong
+[2025-04-02 16:32:38] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:32:38] [DEBUG] Début de bloc
+[2025-04-02 16:32:38] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:32:38] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:32:38] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:32:38] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:32:38] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:32:38] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:32:38] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:32:38] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:32:38] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:32:38] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:32:38] [DEBUG] Début de bloc
+[2025-04-02 16:32:38] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:32:38] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:32:38] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:32:38] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:32:38] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:32:38] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:32:38] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:32:38] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:32:38] [DEBUG] Fin de bloc
+[2025-04-02 16:32:38] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:32:38] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:32:38] [DEBUG] Début de bloc
+[2025-04-02 16:32:38] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:32:38] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:32:38] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:32:38] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:32:38] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:32:38] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:32:38] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:32:38] [DEBUG] Fin de bloc
+[2025-04-02 16:32:38] [DEBUG] Fin de bloc
+[2025-04-02 16:32:38] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:32:38] [DEBUG] Début de bloc
+[2025-04-02 16:32:38] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:32:38] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:32:38] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:32:38] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:32:38] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:32:38] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:32:38] [DEBUG] Argument trouvé2 : -1
+[2025-04-02 16:32:38] [ERROR] ERROR : client_max_body_size key incompatible value
+[2025-04-02 16:32:55] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:32:56] [DEBUG] Début de bloc
+[2025-04-02 16:32:56] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:32:56] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:32:56] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:32:56] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:32:56] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:32:56] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:32:56] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:32:56] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:32:56] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:32:56] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:32:56] [DEBUG] Début de bloc
+[2025-04-02 16:32:56] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:32:56] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:32:56] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:32:56] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:32:56] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:32:56] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:32:56] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:32:56] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:32:56] [DEBUG] Fin de bloc
+[2025-04-02 16:32:56] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:32:56] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:32:56] [DEBUG] Début de bloc
+[2025-04-02 16:32:56] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:32:56] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:32:56] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:32:56] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:32:56] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:32:56] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:32:56] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:32:56] [DEBUG] Fin de bloc
+[2025-04-02 16:32:56] [DEBUG] Fin de bloc
+[2025-04-02 16:32:56] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:32:56] [DEBUG] Début de bloc
+[2025-04-02 16:32:56] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:32:56] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:32:56] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:32:56] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:32:56] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:32:56] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:32:56] [DEBUG] Argument trouvé2 : 10x
+[2025-04-02 16:32:56] [ERROR] ERROR : invalid unit for client_max_body_size (accepted: k, m, g)
+[2025-04-02 16:33:05] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:33:05] [DEBUG] Début de bloc
+[2025-04-02 16:33:05] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:33:05] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:33:05] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:33:05] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:33:05] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:33:05] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:33:05] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:33:05] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:33:05] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:33:05] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:33:05] [DEBUG] Début de bloc
+[2025-04-02 16:33:05] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:33:05] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:33:05] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:33:05] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:33:05] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:33:05] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:33:05] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:33:05] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:33:05] [DEBUG] Fin de bloc
+[2025-04-02 16:33:05] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:33:05] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:33:05] [DEBUG] Début de bloc
+[2025-04-02 16:33:05] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:33:05] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:33:05] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:33:05] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:33:05] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:33:05] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:33:05] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:33:05] [DEBUG] Fin de bloc
+[2025-04-02 16:33:05] [DEBUG] Fin de bloc
+[2025-04-02 16:33:05] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:33:05] [DEBUG] Début de bloc
+[2025-04-02 16:33:05] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:33:05] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:33:05] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:33:05] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:33:05] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:33:05] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:33:05] [DEBUG] Argument trouvé2 : abc
+[2025-04-02 16:33:05] [ERROR] ERROR : client_max_body_size key incompatible value
+[2025-04-02 16:33:27] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:33:27] [DEBUG] Début de bloc
+[2025-04-02 16:33:27] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:33:27] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:33:27] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:33:27] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:33:27] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:33:27] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:33:27] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:33:27] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:33:27] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:33:27] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:33:27] [DEBUG] Début de bloc
+[2025-04-02 16:33:27] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:33:27] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:33:27] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:33:27] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:33:27] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:33:27] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:33:27] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:33:27] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:33:27] [DEBUG] Fin de bloc
+[2025-04-02 16:33:27] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:33:27] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:33:27] [DEBUG] Début de bloc
+[2025-04-02 16:33:27] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:33:27] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:33:27] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:33:27] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:33:27] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:33:27] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:33:27] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:33:27] [DEBUG] Fin de bloc
+[2025-04-02 16:33:27] [DEBUG] Fin de bloc
+[2025-04-02 16:33:27] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:33:27] [DEBUG] Début de bloc
+[2025-04-02 16:33:27] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:33:27] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:33:27] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:33:27] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:33:27] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:33:27] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:33:27] [DEBUG] Argument trouvé2 : 999999999999999999999999999
+[2025-04-02 16:33:27] [ERROR] ERROR : client_max_body_size key incompatible value
+[2025-04-02 16:33:46] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:33:47] [DEBUG] Début de bloc
+[2025-04-02 16:33:47] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:33:47] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:33:47] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:33:47] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:33:47] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:33:47] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:33:47] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:33:47] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:33:47] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:33:47] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:33:47] [DEBUG] Début de bloc
+[2025-04-02 16:33:47] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:33:47] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:33:47] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:33:47] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:33:47] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:33:47] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:33:47] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:33:47] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:33:47] [DEBUG] Fin de bloc
+[2025-04-02 16:33:47] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:33:47] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:33:47] [DEBUG] Début de bloc
+[2025-04-02 16:33:47] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:33:47] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:33:47] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:33:47] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:33:47] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:33:47] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:33:47] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:33:47] [DEBUG] Fin de bloc
+[2025-04-02 16:33:47] [DEBUG] Fin de bloc
+[2025-04-02 16:33:47] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:33:47] [DEBUG] Début de bloc
+[2025-04-02 16:33:47] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:33:47] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:33:47] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:33:47] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:33:47] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:33:47] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:33:47] [DEBUG] Argument trouvé2 : 92233372036854775808
+[2025-04-02 16:33:47] [ERROR] ERROR : client_max_body_size key incompatible value
+[2025-04-02 16:33:54] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:33:54] [DEBUG] Début de bloc
+[2025-04-02 16:33:54] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:33:54] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:33:54] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:33:54] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:33:54] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:33:54] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:33:54] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:33:54] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:33:54] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:33:54] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:33:54] [DEBUG] Début de bloc
+[2025-04-02 16:33:54] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:33:54] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:33:54] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:33:54] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:33:54] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:33:54] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:33:54] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:33:54] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:33:54] [DEBUG] Fin de bloc
+[2025-04-02 16:33:54] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:33:54] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:33:54] [DEBUG] Début de bloc
+[2025-04-02 16:33:54] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:33:54] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:33:54] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:33:54] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:33:54] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:33:54] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:33:54] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:33:54] [DEBUG] Fin de bloc
+[2025-04-02 16:33:54] [DEBUG] Fin de bloc
+[2025-04-02 16:33:54] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:33:54] [DEBUG] Début de bloc
+[2025-04-02 16:33:54] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:33:54] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:33:54] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:33:54] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:33:54] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:33:54] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:33:54] [DEBUG] Argument trouvé2 : 92233372036854775807
+[2025-04-02 16:33:54] [ERROR] ERROR : client_max_body_size key incompatible value
+[2025-04-02 16:34:01] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:34:01] [DEBUG] Début de bloc
+[2025-04-02 16:34:01] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:34:01] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:34:01] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:34:01] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:34:01] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:34:01] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:34:01] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:34:01] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:34:01] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:34:01] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:34:01] [DEBUG] Début de bloc
+[2025-04-02 16:34:01] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:34:01] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:34:01] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:34:01] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:34:01] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:34:01] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:34:01] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:34:01] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:34:01] [DEBUG] Fin de bloc
+[2025-04-02 16:34:01] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:34:01] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:34:01] [DEBUG] Début de bloc
+[2025-04-02 16:34:01] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:34:01] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:34:01] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:34:01] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:34:01] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:34:01] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:34:01] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:34:01] [DEBUG] Fin de bloc
+[2025-04-02 16:34:01] [DEBUG] Fin de bloc
+[2025-04-02 16:34:01] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:34:01] [DEBUG] Début de bloc
+[2025-04-02 16:34:01] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:34:01] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:34:01] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:34:01] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:34:01] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:34:01] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:34:01] [DEBUG] Argument trouvé2 : 92233372036854775806
+[2025-04-02 16:34:01] [ERROR] ERROR : client_max_body_size key incompatible value
+[2025-04-02 16:34:36] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:34:36] [DEBUG] Début de bloc
+[2025-04-02 16:34:36] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:34:36] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:34:36] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:34:36] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:34:36] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:34:36] [DEBUG] Début de bloc
+[2025-04-02 16:34:36] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:34:36] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:34:36] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:34:36] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:34:36] [DEBUG] Fin de bloc
+[2025-04-02 16:34:36] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:34:36] [DEBUG] Début de bloc
+[2025-04-02 16:34:36] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:34:36] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:34:36] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:34:36] [DEBUG] Fin de bloc
+[2025-04-02 16:34:36] [DEBUG] Fin de bloc
+[2025-04-02 16:34:36] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:34:36] [DEBUG] Début de bloc
+[2025-04-02 16:34:36] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:34:36] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:34:36] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé2 : 9223372036854775807
+[2025-04-02 16:34:36] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 16:34:36] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:34:36] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 16:34:36] [DEBUG] Fin de bloc
+[2025-04-02 16:34:36] [INFO] Fichier config correct!
+[2025-04-02 16:34:36] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 16:34:44] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:34:44] [DEBUG] Début de bloc
+[2025-04-02 16:34:44] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:34:44] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:34:44] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:34:44] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:34:44] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:34:44] [DEBUG] Début de bloc
+[2025-04-02 16:34:44] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:34:44] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:34:44] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:34:44] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:34:44] [DEBUG] Fin de bloc
+[2025-04-02 16:34:44] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:34:44] [DEBUG] Début de bloc
+[2025-04-02 16:34:44] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:34:44] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:34:44] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:34:44] [DEBUG] Fin de bloc
+[2025-04-02 16:34:44] [DEBUG] Fin de bloc
+[2025-04-02 16:34:44] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:34:44] [DEBUG] Début de bloc
+[2025-04-02 16:34:44] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:34:44] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:34:44] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé2 : 9223372036854775808
+[2025-04-02 16:34:44] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 16:34:44] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:34:44] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 16:34:44] [DEBUG] Fin de bloc
+[2025-04-02 16:34:44] [INFO] Fichier config correct!
+[2025-04-02 16:34:44] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 16:35:02] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:35:02] [DEBUG] Début de bloc
+[2025-04-02 16:35:02] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:35:02] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:35:02] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:35:02] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:35:02] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:35:02] [DEBUG] Début de bloc
+[2025-04-02 16:35:02] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:35:02] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:35:02] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:35:02] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:35:02] [DEBUG] Fin de bloc
+[2025-04-02 16:35:02] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:35:02] [DEBUG] Début de bloc
+[2025-04-02 16:35:02] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:35:02] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:35:02] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:35:02] [DEBUG] Fin de bloc
+[2025-04-02 16:35:02] [DEBUG] Fin de bloc
+[2025-04-02 16:35:02] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:35:02] [DEBUG] Début de bloc
+[2025-04-02 16:35:02] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:35:02] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:35:02] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé2 : 9223372036854775809
+[2025-04-02 16:35:02] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 16:35:02] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:35:02] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 16:35:02] [DEBUG] Fin de bloc
+[2025-04-02 16:35:02] [INFO] Fichier config correct!
+[2025-04-02 16:35:02] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 16:36:05] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:36:05] [DEBUG] Début de bloc
+[2025-04-02 16:36:05] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:36:05] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:36:05] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:36:05] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:36:05] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:36:05] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:36:05] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:36:05] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:36:05] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:36:05] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:36:05] [DEBUG] Début de bloc
+[2025-04-02 16:36:05] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:36:05] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:36:05] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:36:05] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:36:05] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:36:05] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:36:05] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:36:05] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:36:05] [DEBUG] Fin de bloc
+[2025-04-02 16:36:05] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:36:05] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:36:05] [DEBUG] Début de bloc
+[2025-04-02 16:36:05] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:36:05] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:36:05] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:36:05] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:36:05] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:36:05] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:36:05] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:36:05] [DEBUG] Fin de bloc
+[2025-04-02 16:36:05] [DEBUG] Fin de bloc
+[2025-04-02 16:36:05] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:36:05] [DEBUG] Début de bloc
+[2025-04-02 16:36:05] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:36:05] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:36:05] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:36:05] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:36:05] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:36:05] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:36:05] [DEBUG] Argument trouvé2 : 9223372036854775808
+[2025-04-02 16:36:05] [ERROR] ERROR : client_max_body_size must be a positive value
+[2025-04-02 16:36:16] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:36:16] [DEBUG] Début de bloc
+[2025-04-02 16:36:16] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:36:16] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:36:16] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:36:16] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:36:16] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:36:16] [DEBUG] Début de bloc
+[2025-04-02 16:36:16] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:36:16] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:36:16] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:36:16] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:36:16] [DEBUG] Fin de bloc
+[2025-04-02 16:36:16] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:36:16] [DEBUG] Début de bloc
+[2025-04-02 16:36:16] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:36:16] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:36:16] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:36:16] [DEBUG] Fin de bloc
+[2025-04-02 16:36:16] [DEBUG] Fin de bloc
+[2025-04-02 16:36:16] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:36:16] [DEBUG] Début de bloc
+[2025-04-02 16:36:16] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:36:16] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:36:16] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé2 : 9223372036854775807
+[2025-04-02 16:36:16] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 16:36:16] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:36:16] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 16:36:16] [DEBUG] Fin de bloc
+[2025-04-02 16:36:16] [INFO] Fichier config correct!
+[2025-04-02 16:36:16] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 16:36:24] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:36:24] [DEBUG] Début de bloc
+[2025-04-02 16:36:24] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:36:24] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:36:24] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:36:24] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:36:24] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:36:24] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:36:24] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:36:24] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:36:24] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:36:24] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:36:24] [DEBUG] Début de bloc
+[2025-04-02 16:36:24] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:36:24] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:36:24] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:36:24] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:36:24] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:36:24] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:36:24] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:36:24] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:36:24] [DEBUG] Fin de bloc
+[2025-04-02 16:36:24] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:36:24] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:36:24] [DEBUG] Début de bloc
+[2025-04-02 16:36:24] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:36:24] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:36:24] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:36:24] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:36:24] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:36:24] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:36:24] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:36:24] [DEBUG] Fin de bloc
+[2025-04-02 16:36:24] [DEBUG] Fin de bloc
+[2025-04-02 16:36:24] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:36:24] [DEBUG] Début de bloc
+[2025-04-02 16:36:24] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:36:24] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:36:24] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:36:24] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:36:24] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:36:24] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:36:24] [DEBUG] Argument trouvé2 : 9223372036854775809
+[2025-04-02 16:36:24] [ERROR] ERROR : client_max_body_size must be a positive value
+[2025-04-02 16:36:34] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:36:34] [DEBUG] Début de bloc
+[2025-04-02 16:36:34] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:36:34] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:36:34] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:36:34] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:36:34] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:36:34] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:36:34] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:36:34] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:36:34] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:36:34] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:36:34] [DEBUG] Début de bloc
+[2025-04-02 16:36:34] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:36:34] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:36:34] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:36:34] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:36:34] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:36:34] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:36:34] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:36:34] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:36:34] [DEBUG] Fin de bloc
+[2025-04-02 16:36:34] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:36:34] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:36:34] [DEBUG] Début de bloc
+[2025-04-02 16:36:34] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:36:34] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:36:34] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:36:34] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:36:34] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:36:34] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:36:34] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:36:34] [DEBUG] Fin de bloc
+[2025-04-02 16:36:34] [DEBUG] Fin de bloc
+[2025-04-02 16:36:34] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:36:34] [DEBUG] Début de bloc
+[2025-04-02 16:36:34] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:36:34] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:36:34] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:36:34] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:36:34] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:36:34] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:36:34] [DEBUG] Argument trouvé2 : 9223372036854775807m
+[2025-04-02 16:36:34] [ERROR] ERROR : client_max_body_size value is too large (overflow)
+[2025-04-02 16:36:51] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:36:51] [DEBUG] Début de bloc
+[2025-04-02 16:36:51] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:36:51] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:36:51] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:36:51] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:36:51] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:36:51] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:36:52] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:36:52] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:36:52] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:36:52] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:36:52] [DEBUG] Début de bloc
+[2025-04-02 16:36:52] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:36:52] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:36:52] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:36:52] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:36:52] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:36:52] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:36:52] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:36:52] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:36:52] [DEBUG] Fin de bloc
+[2025-04-02 16:36:52] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:36:52] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:36:52] [DEBUG] Début de bloc
+[2025-04-02 16:36:52] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:36:52] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:36:52] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:36:52] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:36:52] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:36:52] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:36:52] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:36:52] [DEBUG] Fin de bloc
+[2025-04-02 16:36:52] [DEBUG] Fin de bloc
+[2025-04-02 16:36:52] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:36:52] [DEBUG] Début de bloc
+[2025-04-02 16:36:52] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:36:52] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:36:52] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:36:52] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:36:52] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:36:52] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:36:52] [DEBUG] Argument trouvé2 : 1048576mm
+[2025-04-02 16:36:52] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:36:52] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:36:52] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 16:36:52] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:36:52] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:36:52] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 16:36:52] [DEBUG] Fin de bloc
+[2025-04-02 16:36:52] [INFO] Fichier config correct!
+[2025-04-02 16:36:52] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 16:37:00] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:37:00] [DEBUG] Début de bloc
+[2025-04-02 16:37:00] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:37:00] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:37:00] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:37:00] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:37:00] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:37:00] [DEBUG] Début de bloc
+[2025-04-02 16:37:00] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:37:00] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:37:00] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:37:00] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:37:00] [DEBUG] Fin de bloc
+[2025-04-02 16:37:00] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:37:00] [DEBUG] Début de bloc
+[2025-04-02 16:37:00] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:37:00] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:37:00] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:37:00] [DEBUG] Fin de bloc
+[2025-04-02 16:37:00] [DEBUG] Fin de bloc
+[2025-04-02 16:37:00] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:37:00] [DEBUG] Début de bloc
+[2025-04-02 16:37:00] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:37:00] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:37:00] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé2 : 1048576m
+[2025-04-02 16:37:00] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 16:37:00] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:37:00] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 16:37:00] [DEBUG] Fin de bloc
+[2025-04-02 16:37:00] [INFO] Fichier config correct!
+[2025-04-02 16:37:00] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 16:39:10] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:39:10] [DEBUG] Début de bloc
+[2025-04-02 16:39:10] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:39:10] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:39:10] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:39:10] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:39:10] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:39:10] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:39:10] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:39:10] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:39:10] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:39:10] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:39:10] [DEBUG] Début de bloc
+[2025-04-02 16:39:10] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:39:10] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:39:10] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:39:10] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:39:10] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:39:10] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:39:10] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:39:10] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:39:10] [DEBUG] Fin de bloc
+[2025-04-02 16:39:10] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:39:10] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:39:10] [DEBUG] Début de bloc
+[2025-04-02 16:39:10] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:39:10] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:39:10] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:39:10] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:39:10] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:39:10] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:39:10] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:39:10] [DEBUG] Fin de bloc
+[2025-04-02 16:39:10] [DEBUG] Fin de bloc
+[2025-04-02 16:39:10] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:39:10] [DEBUG] Début de bloc
+[2025-04-02 16:39:10] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:39:10] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:39:10] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:39:10] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:39:10] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:39:10] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:39:10] [DEBUG] Argument trouvé2 : 1048576mm
+[2025-04-02 16:39:10] [ERROR] ERROR : client_max_body_size character after unit
+[2025-04-02 16:39:20] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:39:20] [DEBUG] Début de bloc
+[2025-04-02 16:39:20] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:39:20] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:39:20] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:39:20] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:39:20] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:39:20] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:39:20] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:39:20] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:39:20] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:39:20] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:39:20] [DEBUG] Début de bloc
+[2025-04-02 16:39:20] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:39:20] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:39:20] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:39:20] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:39:20] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:39:20] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:39:20] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:39:20] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:39:20] [DEBUG] Fin de bloc
+[2025-04-02 16:39:20] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:39:20] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:39:20] [DEBUG] Début de bloc
+[2025-04-02 16:39:20] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:39:20] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:39:20] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:39:20] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:39:20] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:39:20] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:39:20] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:39:20] [DEBUG] Fin de bloc
+[2025-04-02 16:39:20] [DEBUG] Fin de bloc
+[2025-04-02 16:39:20] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:39:20] [DEBUG] Début de bloc
+[2025-04-02 16:39:20] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:39:20] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:39:20] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:39:20] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:39:20] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:39:20] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:39:20] [DEBUG] Argument trouvé2 : 1048576m
+[2025-04-02 16:39:20] [ERROR] ERROR : client_max_body_size character after unit
+[2025-04-02 16:39:26] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:39:26] [DEBUG] Début de bloc
+[2025-04-02 16:39:27] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:39:27] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:39:27] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:39:27] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:39:27] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:39:27] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:39:27] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:39:27] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:39:27] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:39:27] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:39:27] [DEBUG] Début de bloc
+[2025-04-02 16:39:27] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:39:27] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:39:27] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:39:27] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:39:27] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:39:27] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:39:27] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:39:27] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:39:27] [DEBUG] Fin de bloc
+[2025-04-02 16:39:27] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:39:27] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:39:27] [DEBUG] Début de bloc
+[2025-04-02 16:39:27] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:39:27] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:39:27] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:39:27] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:39:27] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:39:27] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:39:27] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:39:27] [DEBUG] Fin de bloc
+[2025-04-02 16:39:27] [DEBUG] Fin de bloc
+[2025-04-02 16:39:27] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:39:27] [DEBUG] Début de bloc
+[2025-04-02 16:39:27] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:39:27] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:39:27] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:39:27] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:39:27] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:39:27] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:39:27] [DEBUG] Argument trouvé3 : 1048576m
+[2025-04-02 16:39:27] [ERROR] ERROR : client_max_body_size character after unit
+[2025-04-02 16:39:52] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:39:52] [DEBUG] Début de bloc
+[2025-04-02 16:39:52] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:39:52] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:39:52] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:39:52] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:39:52] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:39:52] [DEBUG] Début de bloc
+[2025-04-02 16:39:52] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:39:52] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:39:52] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:39:52] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:39:52] [DEBUG] Fin de bloc
+[2025-04-02 16:39:52] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:39:52] [DEBUG] Début de bloc
+[2025-04-02 16:39:52] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:39:52] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:39:52] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:39:52] [DEBUG] Fin de bloc
+[2025-04-02 16:39:52] [DEBUG] Fin de bloc
+[2025-04-02 16:39:52] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:39:52] [DEBUG] Début de bloc
+[2025-04-02 16:39:52] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:39:52] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:39:52] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé3 : 1048576m
+[2025-04-02 16:39:52] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 16:39:52] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:39:52] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 16:39:52] [DEBUG] Fin de bloc
+[2025-04-02 16:39:52] [INFO] Fichier config correct!
+[2025-04-02 16:39:52] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 16:39:59] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:39:59] [DEBUG] Début de bloc
+[2025-04-02 16:39:59] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:39:59] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:39:59] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:39:59] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:39:59] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:39:59] [DEBUG] Début de bloc
+[2025-04-02 16:39:59] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:39:59] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:39:59] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:39:59] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:39:59] [DEBUG] Fin de bloc
+[2025-04-02 16:39:59] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:39:59] [DEBUG] Début de bloc
+[2025-04-02 16:39:59] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:39:59] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:39:59] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:39:59] [DEBUG] Fin de bloc
+[2025-04-02 16:39:59] [DEBUG] Fin de bloc
+[2025-04-02 16:39:59] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:39:59] [DEBUG] Début de bloc
+[2025-04-02 16:39:59] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:39:59] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:39:59] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé2 : 1048576m
+[2025-04-02 16:39:59] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 16:39:59] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:39:59] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 16:39:59] [DEBUG] Fin de bloc
+[2025-04-02 16:39:59] [INFO] Fichier config correct!
+[2025-04-02 16:39:59] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 16:40:04] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:40:04] [DEBUG] Début de bloc
+[2025-04-02 16:40:04] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:40:04] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:40:04] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:40:04] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:40:04] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:40:04] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:40:04] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:40:04] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:40:04] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:40:04] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:40:04] [DEBUG] Début de bloc
+[2025-04-02 16:40:04] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:40:04] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:40:04] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:40:04] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:40:04] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:40:04] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:40:04] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:40:04] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:40:04] [DEBUG] Fin de bloc
+[2025-04-02 16:40:04] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:40:04] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:40:04] [DEBUG] Début de bloc
+[2025-04-02 16:40:04] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:40:04] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:40:04] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:40:04] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:40:04] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:40:04] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:40:04] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:40:04] [DEBUG] Fin de bloc
+[2025-04-02 16:40:04] [DEBUG] Fin de bloc
+[2025-04-02 16:40:04] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:40:04] [DEBUG] Début de bloc
+[2025-04-02 16:40:04] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:40:04] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:40:04] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:40:04] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:40:04] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:40:04] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:40:04] [DEBUG] Argument trouvé2 : 1048576mm
+[2025-04-02 16:40:04] [ERROR] ERROR : client_max_body_size character after unit
+[2025-04-02 16:40:44] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:40:44] [DEBUG] Début de bloc
+[2025-04-02 16:40:44] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:40:44] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:40:44] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:40:44] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:40:44] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:40:44] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:40:44] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:40:44] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:40:44] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:40:44] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:40:44] [DEBUG] Début de bloc
+[2025-04-02 16:40:44] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:40:44] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:40:44] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:40:44] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:40:44] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:40:44] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:40:44] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:40:44] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:40:44] [DEBUG] Fin de bloc
+[2025-04-02 16:40:44] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:40:44] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:40:44] [DEBUG] Début de bloc
+[2025-04-02 16:40:44] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:40:44] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:40:44] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:40:44] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:40:44] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:40:44] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:40:44] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:40:44] [DEBUG] Fin de bloc
+[2025-04-02 16:40:44] [DEBUG] Fin de bloc
+[2025-04-02 16:40:44] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:40:44] [DEBUG] Début de bloc
+[2025-04-02 16:40:44] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:40:44] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:40:44] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:40:44] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:40:44] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:40:44] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:40:44] [DEBUG] Argument trouvé2 : 1048576mm
+[2025-04-02 16:40:44] [ERROR] ERROR : client_max_body_size character after unit
+[2025-04-02 16:40:57] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:40:58] [DEBUG] Début de bloc
+[2025-04-02 16:40:58] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:40:58] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:40:58] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:40:58] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:40:58] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:40:58] [DEBUG] Début de bloc
+[2025-04-02 16:40:58] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:40:58] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:40:58] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:40:58] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:40:58] [DEBUG] Fin de bloc
+[2025-04-02 16:40:58] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:40:58] [DEBUG] Début de bloc
+[2025-04-02 16:40:58] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:40:58] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:40:58] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:40:58] [DEBUG] Fin de bloc
+[2025-04-02 16:40:58] [DEBUG] Fin de bloc
+[2025-04-02 16:40:58] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:40:58] [DEBUG] Début de bloc
+[2025-04-02 16:40:58] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:40:58] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:40:58] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé3 : 1048576m
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé2 : 105
+[2025-04-02 16:40:58] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 16:40:58] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:40:58] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 16:40:58] [DEBUG] Fin de bloc
+[2025-04-02 16:40:58] [INFO] Fichier config correct!
+[2025-04-02 16:40:58] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 16:43:39] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:43:39] [DEBUG] Début de bloc
+[2025-04-02 16:43:39] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:43:39] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:43:39] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:43:39] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:43:39] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:43:39] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:43:39] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:43:39] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:43:39] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:43:39] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:43:39] [DEBUG] Début de bloc
+[2025-04-02 16:43:39] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:43:39] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:43:39] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:43:39] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:43:39] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:43:39] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:43:39] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:43:39] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:43:39] [DEBUG] Fin de bloc
+[2025-04-02 16:43:39] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:43:39] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:43:39] [DEBUG] Début de bloc
+[2025-04-02 16:43:39] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:43:39] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:43:39] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:43:39] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:43:39] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:43:39] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:43:39] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:43:39] [DEBUG] Fin de bloc
+[2025-04-02 16:43:39] [DEBUG] Fin de bloc
+[2025-04-02 16:43:39] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:43:39] [DEBUG] Début de bloc
+[2025-04-02 16:43:39] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:43:39] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:43:39] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:43:39] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:43:39] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:43:39] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:43:39] [DEBUG] Argument trouvé3 : 1048576m
+[2025-04-02 16:43:39] [DEBUG] Argument trouvé2 : 105
+[2025-04-02 16:43:39] [ERROR] ERROR : invalid number of arguments in client_max_body_size directive
+[2025-04-02 16:43:53] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:43:53] [DEBUG] Début de bloc
+[2025-04-02 16:43:53] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:43:53] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:43:53] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:43:53] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:43:53] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:43:53] [DEBUG] Début de bloc
+[2025-04-02 16:43:53] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:43:53] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:43:53] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:43:53] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:43:53] [DEBUG] Fin de bloc
+[2025-04-02 16:43:53] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:43:53] [DEBUG] Début de bloc
+[2025-04-02 16:43:53] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:43:53] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:43:53] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:43:53] [DEBUG] Fin de bloc
+[2025-04-02 16:43:53] [DEBUG] Fin de bloc
+[2025-04-02 16:43:53] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:43:53] [DEBUG] Début de bloc
+[2025-04-02 16:43:53] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:43:53] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:43:53] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé3 : 1048576m
+[2025-04-02 16:43:53] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 16:43:53] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:43:53] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 16:43:53] [DEBUG] Fin de bloc
+[2025-04-02 16:43:53] [INFO] Fichier config correct!
+[2025-04-02 16:43:53] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 16:45:21] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:45:21] [DEBUG] Début de bloc
+[2025-04-02 16:45:21] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:45:21] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:45:21] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:45:21] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:45:21] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:45:21] [DEBUG] Début de bloc
+[2025-04-02 16:45:21] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:45:21] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:45:21] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:45:21] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:45:21] [DEBUG] Fin de bloc
+[2025-04-02 16:45:21] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:45:21] [DEBUG] Début de bloc
+[2025-04-02 16:45:21] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:45:21] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:45:21] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:45:21] [DEBUG] Fin de bloc
+[2025-04-02 16:45:21] [DEBUG] Fin de bloc
+[2025-04-02 16:45:21] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:45:21] [DEBUG] Début de bloc
+[2025-04-02 16:45:21] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:45:21] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:45:21] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé3 : 1048576m
+[2025-04-02 16:45:21] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 16:45:21] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:45:21] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 16:45:21] [DEBUG] Fin de bloc
+[2025-04-02 16:45:21] [INFO] Fichier config correct!
+[2025-04-02 16:45:21] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 16:52:23] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:52:23] [DEBUG] Début de bloc
+[2025-04-02 16:52:23] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:52:23] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:52:23] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:52:23] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:52:23] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:52:23] [DEBUG] Début de bloc
+[2025-04-02 16:52:23] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:52:23] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:52:23] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:52:23] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:52:23] [DEBUG] Fin de bloc
+[2025-04-02 16:52:23] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:52:23] [DEBUG] Début de bloc
+[2025-04-02 16:52:23] [DEBUG] Clé trouvée3 : alias
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:52:23] [DEBUG] Clé trouvée3 : allow_methods
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé3 : GET
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé3 : POST
+[2025-04-02 16:52:23] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé2 : apintus.html
+[2025-04-02 16:52:23] [DEBUG] Fin de bloc
+[2025-04-02 16:52:23] [DEBUG] Fin de bloc
+[2025-04-02 16:52:23] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:52:23] [DEBUG] Début de bloc
+[2025-04-02 16:52:23] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé3 : main.com
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé2 : www.main.com
+[2025-04-02 16:52:23] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé2 : 2727
+[2025-04-02 16:52:23] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé3 : 1048576m
+[2025-04-02 16:52:23] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/404.html
+[2025-04-02 16:52:23] [DEBUG] Clé trouvée3 : error_page
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé3 : 404
+[2025-04-02 16:52:23] [DEBUG] Argument trouvé2 : ./www/main/customErrorPages/403.html
+[2025-04-02 16:52:23] [DEBUG] Fin de bloc
+[2025-04-02 16:52:24] [INFO] Fichier config correct!
+[2025-04-02 16:52:24] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-04-02 16:52:40] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:52:40] [DEBUG] Début de bloc
+[2025-04-02 16:52:40] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:52:40] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:52:40] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:52:40] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:52:40] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:52:40] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:52:40] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:52:40] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:52:40] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:52:40] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:52:40] [DEBUG] Début de bloc
+[2025-04-02 16:52:40] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:52:40] [DEBUG] Argument trouvé2 : /tmp
+[2025-04-02 16:52:40] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:52:40] [DEBUG] Argument trouvé2 : index.html
+[2025-04-02 16:52:40] [DEBUG] Clé trouvée3 : index
+[2025-04-02 16:52:40] [DEBUG] Argument trouvé2 : index2.html
+[2025-04-02 16:52:40] [DEBUG] Clé trouvée3 : autoindex
+[2025-04-02 16:52:40] [DEBUG] Argument trouvé2 : on
+[2025-04-02 16:52:40] [DEBUG] Fin de bloc
+[2025-04-02 16:52:40] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:52:40] [DEBUG] Argument trouvé3 : /apintus
+[2025-04-02 16:52:40] [DEBUG] Début de bloc
+[2025-04-02 16:52:40] [DEBUG] Clé trouvée3 : alias
+[2025-04-02 16:52:40] [DEBUG] Argument trouvé3 : /home/apintus/
+[2025-04-02 16:52:40] [DEBUG] Argument trouvé2 : asd
+[2025-04-02 16:52:41] [ERROR] ERROR : double alias in location bloc
+[2025-04-02 16:53:09] [DEBUG] Clé trouvé1 : server
+[2025-04-02 16:53:09] [DEBUG] Début de bloc
+[2025-04-02 16:53:09] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:53:09] [DEBUG] Argument trouvé3 : 127.0.0.1:4343
+[2025-04-02 16:53:09] [DEBUG] Clé trouvée3 : listen
+[2025-04-02 16:53:09] [DEBUG] Argument trouvé3 : 8080
+[2025-04-02 16:53:09] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:53:09] [DEBUG] Argument trouvé2 : server1
+[2025-04-02 16:53:09] [DEBUG] Clé trouvée3 : server_name
+[2025-04-02 16:53:09] [DEBUG] Argument trouvé2 : server2
+[2025-04-02 16:53:09] [DEBUG] Clé trouvée3 : location
+[2025-04-02 16:53:09] [DEBUG] Argument trouvé3 : /
+[2025-04-02 16:53:09] [DEBUG] Début de bloc
+[2025-04-02 16:53:09] [DEBUG] Clé trouvée3 : root
+[2025-04-02 16:53:09] [DEBUG] Argument trouvé3 : /tmp
+[2025-04-02 16:53:09] [DEBUG] Argument trouvé2 : dwq
+[2025-04-02 16:53:09] [ERROR] ERROR : too many argument for root key
