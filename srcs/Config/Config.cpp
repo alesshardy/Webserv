@@ -40,66 +40,7 @@ const std::vector<BlocServer> &Config::getServers() const
     return (_server);
 }
 
-
 //Parsing
-
-/**
- * @brief supprime les espaces au debut et a la fin d'une ligne
- * 
- * @param line 
- */
-void    Config::eraseWhiteSpace(std::string line)
-{
-    line.erase(0, line.find_first_not_of(" \t"));
-    line.erase(line.find_last_not_of(" \t") + 1);
-}
-/**
- * @brief permet de recuperer le premier mot d'une ligne en la lisant dans un flux
- * 
- * @param line 
- * @return std::string 
- */
-std::string Config::findFirstWord(std::string line)
-{
-        std::istringstream flux(line);
-        std::string word;
-        flux >> word;
-        return word;
-}
-
-// void    Config::parseConfigFile(const std::string &filePath, Config &config)
-// {
-//     // verif si fichier existe
-//     std::ifstream   file(filePath.c_str());
-//     if (!file.is_open())
-//     {
-//         throw ("Error: Impossible to open file!");
-//     }
-//     if (file.peek() == EOF)
-//     {
-//         // gerer plus tard fichier par default car vide
-//     }
-
-//     std::string line;
-//     std::string param;
-//     bool    inServBloc = false;
-//     bool    inLocBloc  = false;
-//     bool    isOpen = false;
-
-//     //Boucle principale
-//     while (std::getline(file, line))
-//     {
-//         //supp les white space inutile
-//         eraseWhiteSpace(line);
-//         // ignorer les lignes vides et les commentaires
-//         if (line.empty() || line[0] == '#')
-//             continue;
-//         //
-//         while(line)
-
-        
-//     }
-// }
 
 // VERIF KEY
 bool    Config::verifKeyServer(std::string token)
@@ -118,8 +59,7 @@ bool    Config::verifKeyOther(std::string token)
     return false;
 }
 
-//VERIF ARG
-
+// FONCTION UTILS AU VERIF DE L'ARG
 /**
  * @brief verifie si un chemin donne est un repertoire valid sur le systeme de fichier
  * 
@@ -127,7 +67,7 @@ bool    Config::verifKeyOther(std::string token)
  * @return true 
  * @return false 
  */
-bool        Config::isValidRoot(const std::string &path)
+bool        Config::isValidRoot(const std::string &path) // enlever com pour l'utiliser
 {
     // struct stat info;
     // return (stat(path.c_str(), &info) == 0 && S_ISDIR(info.st_mode));
@@ -146,17 +86,14 @@ bool Config::isValidIPv4(const std::string &ip)
         count++;
         if (count > 4) // Trop de segments
             return false;
-
         if (segment.empty() || segment.size() > 3) // Segment vide ou trop long
             return false;
-
         // Vérifier que chaque caractère est un chiffre
         for (std::string::size_type i = 0; i < segment.size(); ++i)
         {
             if (!std::isdigit(segment[i]))
                 return false;
         }
-
         // Convertir le segment en entier
         int value;
         std::istringstream segmentStream(segment);
@@ -165,16 +102,17 @@ bool Config::isValidIPv4(const std::string &ip)
         if (value < 0 || value > 255) // Hors plage
             return false;
     }
+    // Vérifier qu'il y a exactement 4 segments et pas de point final
+    if (count != 4 || ip[ip.size() - 1] == '.')
+        return false;
 
     return count == 4; // Doit avoir exactement 4 segments
 }
 
-//TEST AJOUT SIMPLE SANS PARSER
-void        Config::addArgToServerBloc(std::string arg, std::string lastKey, BlocServer &current, int argNb)
+// SOUS FONCTION D'AJOUT AU BLOC SERVEUR && DE PARSING DE L'ARGUMENT DE CHAQUE KEY
+void    Config::handleListen(const std::string &arg, BlocServer &current)
 {
-    if (lastKey == "listen")
-    {
-        size_t colonPos = arg.find(':');
+    size_t colonPos = arg.find(':');
         std::string ip = "0.0.0.0"; 
         int port;
         if (colonPos != std::string::npos)
@@ -183,7 +121,7 @@ void        Config::addArgToServerBloc(std::string arg, std::string lastKey, Blo
             try { port = Utils::ft_stoi(arg.substr(colonPos + 1));
             }
             catch (const std::exception &e){
-                throw std::runtime_error("ERROR : arg Listen not correct");// WTF PK ca display le msg que je veux
+                throw std::runtime_error("ERROR : arg Listen not correct");
             }
         }
         else
@@ -192,7 +130,7 @@ void        Config::addArgToServerBloc(std::string arg, std::string lastKey, Blo
                 port = Utils::ft_stoi(arg);
             }
             catch (const std::exception &e){
-                throw std::runtime_error("ERROR : arg Listen not correct");// WTF PK ca display le msg que je veux
+                throw std::runtime_error("ERROR : arg Listen not correct");
             }
         }
         if (port < 1 || port > 65535)
@@ -200,57 +138,185 @@ void        Config::addArgToServerBloc(std::string arg, std::string lastKey, Blo
         if (!isValidIPv4(ip))
             throw std::runtime_error("ERROR : Invalid ip: "+ ip + " in listen directive.");
         current.addListen(Listen(ip, port));
-    }
-    else if (lastKey == "server_name")
+}
+
+void    Config::handleServerName(const std::string &arg, BlocServer &current)
+{
+    current.addServerName(arg);
+}
+
+void    Config::handleRootBlocServer(const std::string &arg, BlocServer &current, int argNb)
+{
+    if (argNb > 1)
+        throw std::runtime_error("ERROR : too many argument for root key");
+    if (!current.getRoot().empty())
+        throw std::runtime_error("ERROR : double Root in server bloc");
+    if (!isValidRoot(arg))
+        throw std::runtime_error("ERROR : root must be an absolute path");   
+    current.setRoot(arg);
+}
+
+void    Config::handleIndexBlocServer(const std::string &arg, BlocServer &current)
+{
+    current.addIndex(arg);
+}
+
+void    Config::handleErrorPage(const std::string &arg, BlocServer &current, int argNb)
+{
+    //Choisi d'ecraser si plusieurs code erreur car nginx accepte doublon
+    if (argNb == 1)
     {
-        current.addServerName(arg);
-    }
-    else if (lastKey == "root")
-    {
-        if (argNb > 1)
-            throw std::runtime_error("ERROR : too many argument for root key");
-        if (!current.getRoot().empty())
-            throw std::runtime_error("ERROR : double Root in server bloc");
-        if (!isValidRoot(arg))
-            throw std::runtime_error("ERROR : root must be an absolute path");   
-        current.setRoot(arg);
-    }
-    else if (lastKey == "index")
-    {
-        current.addIndex(arg);
-    }
-    //choisi d'ecraser si plusieur code erreur car nginx accepte doublon
-    else if (lastKey == "error_page")
-    {
-        if (argNb == 1)
-        {
-            int code ;
-            try {
-                code = Utils::ft_stoi(arg);
-            }
-            catch (const std::exception &e){
-                throw std::runtime_error("ERROR : wrong error_page code");   
-            }
-            if (code >= 300 && code <= 599)
-                current.setTmpErrorCode(code);
-            else
-                throw std::runtime_error("ERROR : wrong error_page code must be between 300 && 599");   
+        int code ;
+        try {
+            code = Utils::ft_stoi(arg);
         }
-        else if (argNb == 2)
-        {
-            if (!current.hasTmpErrorCode())
-                throw std::runtime_error("ERROR : no code define before arg");
-            int code = current.getTmpErrorCode();
-            current.addErrorPage(code, arg);
-            current.clearTmpErrorCode();
+        catch (const std::exception &e){
+            throw std::runtime_error("ERROR : wrong error_page code");   
         }
+        if (code >= 300 && code <= 599)
+            current.setTmpErrorCode(code);
         else
-            throw std::runtime_error("ERROR : too many arg for error_page");   
+            throw std::runtime_error("ERROR : wrong error_page code must be between 300 && 599");   
     }
-    else if (lastKey == "client_max_body_size")
+    else if (argNb == 2)
     {
-        current.setClientMaxBodySize(Utils::ft_stolonglong(arg));
+        if (!current.hasTmpErrorCode())
+            throw std::runtime_error("ERROR : no code define before arg");
+        int code = current.getTmpErrorCode();
+        current.addErrorPage(code, arg);
+        current.clearTmpErrorCode();
     }
+    else
+        throw std::runtime_error("ERROR : too many arg for error_page");   
+}
+
+void Config::handleClientMaxBodySize(const std::string &arg, BlocServer &current, int argNb)
+{
+    std::string numberPart;
+    char unit = '\0';
+    
+    if (argNb > 1)
+        throw std::runtime_error("ERROR : invalid number of arguments in client_max_body_size directive");
+    
+    for (size_t i = 0; i < arg.size(); ++i)
+    {
+        if (std::isdigit(arg[i]))
+            numberPart += arg[i];
+        else
+        {
+            unit = arg[i];
+            // ajout verif si caractere apres l'unit
+            if (arg[++i] != '\0')
+                throw std::runtime_error("ERROR : client_max_body_size character after unit");
+            break;
+        }   
+    }
+
+    long long value;
+    try {
+        value = Utils::ft_stolonglong(numberPart);
+    }
+    catch (const std::exception &e){
+        throw std::runtime_error("ERROR : client_max_body_size key incompatible value");
+    }
+
+    if (unit == 'k' || unit == 'K')
+    {
+        if (value > LLONG_MAX / 1024)
+            throw std::runtime_error("ERROR : client_max_body_size value is too large (overflow)");
+        value *= 1024;
+    }
+    else if (unit == 'm' || unit == 'M')
+    {
+        if (value > LLONG_MAX / (1024 * 1024))
+            throw std::runtime_error("ERROR : client_max_body_size value is too large (overflow)");
+        value *= 1024 * 1024;
+    }
+    else if (unit == 'g' || unit == 'G')
+    {
+        if (value > LLONG_MAX / (1024 * 1024 * 1024))
+            throw std::runtime_error("ERROR : client_max_body_size value is too large (overflow)");
+        value *= 1024 * 1024 * 1024;
+    }
+    else if (unit != '\0')
+        throw std::runtime_error("ERROR : invalid unit for client_max_body_size (accepted: k, m, g)");
+    if (value <= 0)
+            throw std::runtime_error("ERROR : client_max_body_size must be a positive value");
+    current.setClientMaxBodySize(value);
+}
+// SOUS FONCTION D'AJOUT AU BLOC LOCATION && DE PARSING DE L'ARGUMENT DE CHAQUE KEY
+void    Config::handleRootBlocLocation(const std::string &arg, BlocLocation &current, int argNb)
+{
+    if (argNb > 1)
+        throw std::runtime_error("ERROR : too many argument for root key");
+    if (!current.getRoot().empty())
+        throw std::runtime_error("ERROR : double root in location bloc");
+    if (!current.getAlias().empty())
+        throw std::runtime_error("ERROR : can't have a root if already an alias");
+    if (!isValidRoot(arg))
+        throw std::runtime_error("ERROR : root must be an absolute path");
+    current.setRoot(arg);
+}
+
+void    Config::handleAlias(const std::string &arg, BlocLocation &current, int argNb)
+{
+    if (argNb > 1)
+        throw std::runtime_error("ERROR : too many argument for alias key");
+    if (!current.getAlias().empty())
+        throw std::runtime_error("ERROR : double alias in location bloc");
+    if (!current.getRoot().empty())
+        throw std::runtime_error("ERROR : can't have a alias if already an root");
+    current.setAlias(arg);
+}
+
+void    Config::handleIndexBlocLocation(const std::string &arg, BlocLocation &current)
+{
+    current.addIndex(arg);
+}
+
+void    Config::handleAllowMethods(const std::string &arg, BlocLocation &current)
+{
+    const std::set<std::string> &methods = current.getAllowMethod();
+    if (methods.find(arg) != methods.end())
+        throw std::runtime_error("ERROR : Method '" + arg + "' already define");
+    if (arg == "GET" || arg == "POST" || arg == "DELETE")
+        current.addAllowMethod(arg);
+    else
+        throw std::runtime_error("ERROR : bad argument for allow_methods key");
+}
+
+void    Config::handleUploadPath(const std::string &arg, BlocLocation &current)
+{
+    current.setUploadPath(arg);
+}
+
+void    Config::handleAutoIndex(const std::string &arg, BlocLocation &current, int argNb)
+{
+    if (argNb > 1)
+            throw std::runtime_error("ERROR :too many argument for autoindex key");
+    if (arg == "on")
+        current.setAutoIndex(true);
+    else if (arg == "off")
+        current.setAutoIndex(false);
+    else 
+        throw std::runtime_error("ERROR : bad argument for autoindex key");
+}
+
+// MAIN FONCTION D'AJOUT AU BLOC SERVEUR
+void        Config::addArgToServerBloc(std::string arg, std::string lastKey, BlocServer &current, int argNb)
+{
+    if (lastKey == "listen")
+        handleListen(arg, current);
+    else if (lastKey == "server_name")
+        handleServerName(arg, current);
+    else if (lastKey == "root")
+        handleRootBlocServer(arg, current, argNb);
+    else if (lastKey == "index")
+        handleIndexBlocServer(arg, current);
+    else if (lastKey == "error_page")
+        handleErrorPage(arg, current, argNb);
+    else if (lastKey == "client_max_body_size")
+        handleClientMaxBodySize(arg, current, argNb);
     else
         throw std::runtime_error("ERROR : bad key " + lastKey + " for server bloc ");    
 }
@@ -258,54 +324,17 @@ void        Config::addArgToServerBloc(std::string arg, std::string lastKey, Blo
 void        Config::addArgToLocationBloc(std::string arg, std::string lastKey, BlocLocation &current, int argNb)
 {
     if (lastKey == "root")
-    {
-        if (argNb > 1)
-            throw std::runtime_error("ERROR : too many argument for root key");
-        if (!current.getRoot().empty())
-            throw std::runtime_error("ERROR : double root in location bloc");
-        if (!current.getAlias().empty())
-            throw std::runtime_error("ERROR : can't have a root if already an alias");
-        if (!isValidRoot(arg))
-            throw std::runtime_error("ERROR : root must be an absolute path");
-        current.setRoot(arg);
-    }
+        handleRootBlocLocation(arg, current, argNb);
     else if (lastKey == "alias")
-    {  
-        if (!current.getAlias().empty())
-            throw std::runtime_error("ERROR : double alias in location bloc");
-        if (!current.getRoot().empty())
-            throw std::runtime_error("ERROR : can't have a alias if already an root");
-        current.setAlias(arg);
-    }
+        handleAlias(arg, current, argNb);
     else if (lastKey == "index")
-    {
-        current.addIndex(arg);
-    }
+        handleIndexBlocLocation(arg, current);
     else if (lastKey == "allow_methods")
-    {
-        const std::set<std::string> &methods = current.getAllowMethod();
-        if (methods.find(arg) != methods.end())
-            throw std::runtime_error("ERROR : Method '" + arg + "' already define");
-        if (arg == "GET" || arg == "POST" || arg == "DELETE")
-            current.addAllowMethod(arg);
-        else
-            throw std::runtime_error("ERROR : bad argument for allow_methods key");
-    }
+        handleAllowMethods(arg, current);
     else if (lastKey == "upload_path")
-    {
-        current.setUploadPath(arg);
-    }
+        handleUploadPath(arg, current);
     else if (lastKey == "autoindex")
-    {   
-        if (argNb > 1)
-            throw std::runtime_error("ERROR :too many argument for autoindex key");
-        if (arg == "on")
-            current.setAutoIndex(true);
-        else if (arg == "off")
-            current.setAutoIndex(false);
-        else 
-            throw std::runtime_error("ERROR : bad argument for autoindex key");
-    }
+        handleAutoIndex(arg, current, argNb);
     else
         throw std::runtime_error("ERROR : bad key for location bloc");
 }
@@ -326,7 +355,6 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
     bool inComment = false;
     int depth = 0; // Niveau d'imbrication
     int semicolonCount = 0; // Compteur de points-virgules par ligne
-    bool contentAfterSemicolon = false; // Indique si du contenu suit un point-virgule sur la même ligne
     bool isKey = true; // Indique si le mot actuel est une clé (premier mot d'une ligne ou d'un bloc)
 
     bool    emptyBloc = true;
@@ -348,7 +376,6 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
             {
                 inComment = false; // Fin du commentaire
                 semicolonCount = 0; // Réinitialiser le compteur pour la nouvelle ligne
-                contentAfterSemicolon = false; // SERT A RIEN CETTE MERDRE ????
                 isKey = true; // Réinitialiser pour la nouvelle ligne
             }
             continue;
@@ -367,7 +394,7 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
             {
                 if (isKey) 
                 {
-                    std::cout << "Clé trouvé1 : " << token << std::endl;
+                    LogManager::log(LogManager::DEBUG, ("Clé trouvé1 : " + token).c_str());
                     lastKey = token;
                     if (!verifKeyServer(token))
                         throw std::runtime_error("ERROR : first key must be 'server' ");
@@ -378,7 +405,7 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                 } 
                 else 
                 {
-                    std::cout << "Argument trouvé1 : " << token << std::endl;
+                    LogManager::log(LogManager::DEBUG, ("Argument trouvé1 : " + token).c_str());
                     argNb++;
                 }
                 // requete doit finir par ';' partie 1
@@ -394,7 +421,6 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                 throw std::runtime_error("ERROR : line request must end by ';'");
             }
             semicolonCount = 0; // Réinitialiser le compteur pour la nouvelle ligne
-            contentAfterSemicolon = false;
             isKey = true; // Réinitialiser pour la nouvelle ligne
             argNb = 0;
             lastC = c;
@@ -402,14 +428,14 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
         // Gestion des blocs
         else if (c == '{') 
         {
-            std::cout << "Début de bloc" << std::endl;
+            LogManager::log(LogManager::DEBUG, ("Début de bloc"));
             depth++;
             isKey = true; // Réinitialiser pour le début d'un bloc
             emptyBloc = true;
             //FIX
             if (verifKeyServer(token))
             {
-                std::cout << "Cle trouvee4 : "<< token << std::endl;
+                LogManager::log(LogManager::DEBUG, ("Cle trouvee4 : " + token).c_str());
                 lastKey = token;
                 token.clear();
             }
@@ -422,7 +448,7 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
         } 
         else if (c == '}') 
         {
-            std::cout << "Fin de bloc" << std::endl;
+            LogManager::log(LogManager::DEBUG, ("Fin de bloc"));
             // gerer les blocs vides
             if (emptyBloc)
             {
@@ -461,12 +487,12 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
             {
                 if (isKey) 
                 {
-                    std::cout << "Clé trouvée2 : " << token << std::endl;
+                    LogManager::log(LogManager::DEBUG, ("Clé trouvée2 : " + token).c_str());
                     lastKey = token;
                 } 
                 else 
                 {
-                    std::cout << "Argument trouvé2 : " << token << std::endl;
+                    LogManager::log(LogManager::DEBUG, ("Argument trouvé2 : " + token).c_str());
                     //AJOUT AU CLASS
                     argNb++;
                     if (depth == 1 && lastKey != "location")
@@ -495,7 +521,7 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
             {
                 if (isKey && inLocLine == false) 
                 {
-                    std::cout << "Clé trouvée3 : " << token << std::endl;
+                    LogManager::log(LogManager::DEBUG, ("Clé trouvée3 : " + token).c_str());
                     // FIX location sans {
                     if (lastKey == "location" && depth != 2)
                         throw std::runtime_error("ERROR : if location key must open a bloc");
@@ -519,7 +545,7 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                 } 
                 else 
                 {
-                    std::cout << "Argument trouvé3 : " << token << std::endl;
+                    LogManager::log(LogManager::DEBUG, ("Argument trouvé3 : " + token).c_str());
                     inLocLine = false;
                     //AJOUT AU CLASS
                     argNb++;
@@ -554,6 +580,7 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
 
 void Config::printConfig() const
 {
+    LogManager::log(LogManager::DEBUG, ("PRINT PARSE CONFIGURATION :"));
     std::cout << "========== Configuration ==========" << std::endl;
 
     for (size_t i = 0; i < _server.size(); ++i)
