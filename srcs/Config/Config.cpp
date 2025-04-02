@@ -415,12 +415,10 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                 }
                 token.clear(); // Vider le token à la fin de la ligne
             }
-
             // REGLER CE PUTIN DE PB D"ESPACE DE CON
-            if (semicolonCount != 1 && lastKey != "server" && lastKey != "location" && lastC != '\n' && lastC != '}')
+            if (semicolonCount != 1 && lastKey != "server" && lastKey != "location" && lastC != '\n' && lastC != '}' && lastKey != "")
             {
-                std::cout << "SIUUU " << lastKey << "nb "<< semicolonCount << std::endl;//SIUUU
-                throw std::runtime_error("ERREUR : SVPPPP");
+                throw std::runtime_error("ERROR : line request must end by ';'");
             }
             semicolonCount = 0; // Réinitialiser le compteur pour la nouvelle ligne
             isKey = true; // Réinitialiser pour la nouvelle ligne
