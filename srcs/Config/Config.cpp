@@ -336,7 +336,7 @@ void        Config::addArgToLocationBloc(std::string arg, std::string lastKey, B
     else if (lastKey == "autoindex")
         handleAutoIndex(arg, current, argNb);
     else
-        throw std::runtime_error("ERROR : bad key for location bloc");
+        throw std::runtime_error("ERROR : bad key " + lastKey + " for location bloc");
 }
 
 //A decouper fonction principale pour verifier que le fichier config est correct
