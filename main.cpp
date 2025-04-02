@@ -3,7 +3,9 @@
 #include "Socket.hpp"
 #include <cstdlib> 
 #include <csignal>
-#include <Config.hpp>
+#include "./includes/Webserv.hpp"
+#include "Config.hpp"
+#include "Server.hpp"
 
 bool running = true;
 
@@ -26,7 +28,7 @@ int main(int ac, char **av)
     
     // INIT LOGGER
     LogManager::setLogStatus(true);
-    LogManager::setLogFileStatus(true);
+    //LogManager::setLogFileStatus(true);
     LogManager::setLogConsoleStatus(true);
 
     //parsing fichier config (validation et recuperation des données)
@@ -96,10 +98,77 @@ int main(int ac, char **av)
     //     return EXIT_FAILURE;
     // }
 
+    // try
+    // {
+    //     // Créer une configuration valide
+    //     Config config;
+
+    //     // Ajouter un premier serveur
+    //     BlocServer server1;
+    //     server1.addListen(8080); // Ajouter un port
+    //     server1.addListen(9090); // Ajouter un autre port
+    //     server1.setRoot("/var/www/html");
+    //     server1.addIndex("index.html");
+    //     config.addServer(server1);
+
+    //     // Ajouter un deuxième serveur
+    //     BlocServer server2;
+    //     server2.addListen(7070); // Ajouter un port
+    //     server2.setRoot("/var/www/another");
+    //     server2.addIndex("home.html");
+    //     config.addServer(server2);
+
+    //     // Initialiser le serveur
+    //     Server server;
+    //     server.set_config(config); // Assigner la configuration au serveur
+    //     server.init();             // Initialiser le serveur
+
+    //     LogManager::log(LogManager::INFO, "Server initialized successfully %d", server.get_socket());
+
+    //     // Capturer les signaux pour arrêter proprement le serveur
+    //     signal(SIGINT, signalHandler);
+    //     signal(SIGTERM, signalHandler);
+
+    //     // Lancer le serveur
+    //     server.run();
+    //     LogManager::log(LogManager::DEBUG, "fin de run");
+
+    //     // Maintenir le programme en cours d'exécution pour tester les sockets
+    //     // while (running)
+    //     // {
+    //     //     const std::map<int, Client*> &clients = server.get_clients_map();
+    //     //     LogManager::log(LogManager::INFO, "Number of connected clients: %d", clients.size());
+
+    //     //     for (std::map<int, Client*>::const_iterator it = clients.begin(); it != clients.end(); ++it)
+    //     //     {
+    //     //         LogManager::log(LogManager::INFO, "Client FD: %d", it->first);
+    //     //     }
+    //     //     // Simuler une boucle principale (vous pouvez ajouter des fonctionnalités ici plus tard)
+    //     //     usleep(100000); // Pause de 100ms pour éviter une boucle trop rapide
+    //     // }
+
+
+    //     // Arrêter le serveur
+    //     server.stop();
+       
+
+    //     // Vérifiez si le programme doit quitter
+    //     if (!running)
+    //     {
+    //         LogManager::log(LogManager::INFO, "Exiting program...");
+    //         return EXIT_SUCCESS;
+    //     }
+    // }
+    // catch (const std::exception &e)
+    // {
+    //     LogManager::log(LogManager::ERROR, e.what());
+    //     return EXIT_FAILURE;
+    // }
+
     // //fermeture du serveur
     
     // LogManager::log(LogManager::INFO, "Server is shutting down...");
     
-    return (0);
+    return (EXIT_SUCCESS);
 }
 
