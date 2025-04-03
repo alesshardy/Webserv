@@ -54,7 +54,8 @@ bool    Config::verifKeyOther(std::string token)
 {
     if (token == "location" || token == "listen" || token == "server_name" || token == "root"
     || token == "index" || token == "error_page" || token == "client_max_body_size" 
-    || token == "alias" || token == "allow_methods" || token == "upload_path" || token == "autoindex")
+    || token == "alias" || token == "allow_methods" || token == "upload_path" || token == "autoindex"
+    || token == "cgi_extension")
         return true;
     return false;
 }
@@ -302,6 +303,26 @@ void    Config::handleAutoIndex(const std::string &arg, BlocLocation &current, i
         throw std::runtime_error("ERROR : bad argument for autoindex key");
 }
 
+void    Config::handleCgiExtension(const std::string &arg, BlocLocation &current, int argNb)
+{
+    if (argNb == 1)
+    {
+        if (arg.size() > 4 || arg.size() <= 1 || arg[0] != '.')
+            throw std::runtime_error("ERROR : CgiExtension bad format");
+        current.setTmpCgiExtension(arg);
+    }
+    else if (argNb == 2)
+    {
+        if (!current.hasTmpCgiExtension())
+            throw std::runtime_error("ERROR : no extension define before path");
+        std::string extension = current.getTmpCgiExtension();
+        current.addCgiExtension(extension, arg);
+        current.clearTmpCgiExtension();
+    }
+    else
+        throw std::runtime_error("ERROR :too many argument for CgiExtension key");
+}
+
 // MAIN FONCTION D'AJOUT AU BLOC SERVEUR
 void        Config::addArgToServerBloc(std::string arg, std::string lastKey, BlocServer &current, int argNb)
 {
@@ -335,6 +356,8 @@ void        Config::addArgToLocationBloc(std::string arg, std::string lastKey, B
         handleUploadPath(arg, current);
     else if (lastKey == "autoindex")
         handleAutoIndex(arg, current, argNb);
+    else if (lastKey == "cgi_extension")
+        handleCgiExtension(arg, current, argNb);
     else
         throw std::runtime_error("ERROR : bad key " + lastKey + " for location bloc");
 }
@@ -660,6 +683,14 @@ void Config::printConfig() const
 
             std::cout << "      Upload Path: " << location.getUploadPath() << std::endl;
             std::cout << "      Auto Index: " << (location.getAutoIndex() ? "on" : "off") << std::endl;
+
+            std::cout << "      Cgi Extension: ";
+            const std::map<std::string, std::string> &cgiExtensions = location.getCgiExtensions();
+            for (std::map<std::string, std::string>::const_iterator cgiIt = cgiExtensions.begin(); cgiIt != cgiExtensions.end(); ++cgiIt)
+            {
+                std::cout << cgiIt->first << " -> " << cgiIt->second << "; ";
+            }
+            std::cout << std::endl;
         }
 
         std::cout << "-----------------------------------" << std::endl;

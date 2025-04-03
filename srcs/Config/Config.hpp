@@ -64,6 +64,7 @@ class Config
             void        handleAllowMethods(const std::string &arg, BlocLocation &current);
             void        handleUploadPath(const std::string &arg, BlocLocation &current);
             void        handleAutoIndex(const std::string &arg, BlocLocation &current, int argNb);
+            void        handleCgiExtension(const std::string &arg, BlocLocation &current, int argNb);
 
             // VErif les arg
             bool        isValidRoot(const std::string &path);
