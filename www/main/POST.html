@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Test de la requête POST</title>
+</head>
+<body>
+    <header>
+        <h1>Test de la requête <span class="highlight">POST</span></h1>
+        <p>Envoyez des données au serveur avec style !</p>
+    </header>
+    <main>
+        <section class="post-intro">
+            <h2>Qu'est-ce qu'une requête POST ?</h2>
+            <p>Une requête POST est utilisée pour envoyer des données au serveur. Elle est idéale pour soumettre des formulaires ou télécharger des fichiers.</p>
+        </section>
+        <section class="post-demo">
+            <h2>Essayez une requête POST</h2>
+            <p>Remplissez le formulaire ci-dessous et cliquez sur "Envoyer" pour tester une requête POST :</p>
+            <form id="postForm">
+                <label for="name">Nom :</label>
+                <input type="text" id="name" name="name" placeholder="Entrez votre nom" required>
+                <label for="message">Message :</label>
+                <textarea id="message" name="message" placeholder="Entrez votre message" required></textarea>
+                <button type="submit">Envoyer</button>
+            </form>
+            <div id="postResult" class="result-box">
+                <p>Le résultat de la requête POST apparaîtra ici.</p>
+            </div>
+        </section>
+        <section class="fun-section">
+            <h2>Un peu d'insolite</h2>
+            <p>Voici un GIF aléatoire pour rendre cette page plus amusante :</p>
+            <div class="gif-container">
+                <img id="randomGif" src="https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif" alt="GIF aléatoire">
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 42 Webserv. Tous droits réservés.</p>
+    </footer>
+    <script src="post.js"></script>
+</body>
+</html>

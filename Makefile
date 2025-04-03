@@ -57,6 +57,8 @@ SRCS 			=	main.cpp \
 					srcs/Config/Listen.cpp \
 					srcs/Utils/Utils.cpp \
 					srcs/Server/Socket.cpp \
+					srcs/Server/Server.cpp \
+					srcs/Client/Client.cpp \
 
 OBJS			=	$(SRCS:%.cpp=$(OBJ_PATH)/%.o)
 

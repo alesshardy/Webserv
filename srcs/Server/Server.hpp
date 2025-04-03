@@ -14,6 +14,7 @@
 #include "BlocServer.hpp"
 #include "LogManager.hpp"
 #include "../includes/Webserv.hpp"
+#include "Utils.hpp"
 
 class   Client;
 
