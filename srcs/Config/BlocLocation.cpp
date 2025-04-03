@@ -26,6 +26,7 @@ BlocLocation &BlocLocation::operator=(const BlocLocation &assign)
         _allowMethod = assign._allowMethod;
         _uploadPath = assign._uploadPath;
         _autoIndex = assign._autoIndex;
+        _cgiExtension = assign._cgiExtension;
     }
     return (*this);
 }
