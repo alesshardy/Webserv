@@ -48,15 +48,16 @@ void Server::init()
     for (size_t i = 0; i < servers.size(); i++)
     {
         const BlocServer &server = servers[i];
-        const std::vector<int> &ports = server.getListen();
+        const std::vector<Listen> &listens = server.getListen();
 
-        for (size_t j = 0; j < ports.size(); j++)
+        for (size_t j = 0; j < listens.size(); j++)
         {
-            int port = ports[j];
+            int port = listens[j].getPort();
+            std::string ip = listens[j].getIp();
             try
             {
                 // Créer un socket pour chaque port (utilisation de new)
-                Socket *socket = new Socket(port, "0.0.0.0"); // Écoute sur toutes les interfaces
+                Socket *socket = new Socket(port, ip);
                 LogManager::log(LogManager::INFO, "Socket created for port %d", port);
 
                 // Ajouter le socket à la map des sockets
