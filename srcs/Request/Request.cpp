@@ -6,7 +6,7 @@
 /*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:23:15 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/03 19:39:09 by tpassin          ###   ########.fr       */
+/*   Updated: 2025/04/04 13:17:24 by tpassin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,3 +73,5 @@ const std::string &Request::getQuery() const
 {
     return (this->_query);
 }
+
+void Request::setCode(int const code){this->_statusCode = code;}
