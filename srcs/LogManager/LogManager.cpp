@@ -5,7 +5,7 @@
 // Définition des variables statiques
 bool LogManager::_logStatus = false;
 bool LogManager::_logFileStatus = false;
-bool LogManager::_logConsoleStatus = false;
+bool LogManager::_debugLogStatus = false;
 std::string LogManager::_logFileName = "log.txt";
 std::map<LogManager::LogLevel, std::string> LogManager::_logLevelStr;
 std::map<LogManager::LogLevel, std::string> LogManager::_logLevelColor;
@@ -37,8 +37,8 @@ void LogManager::initialize()
  */
 void LogManager::log(LogManager::LogLevel level, const char *message, ...)
 {
-    // Vérifier si le log est activé
-    if (LogManager::getLogStatus() == false || (level == DEBUG && LogManager::getLogConsoleStatus() == false))
+    // Vérifier si le log est activé pour le niveau DEBUG
+    if (LogManager::getLogStatus() == false || (level == DEBUG && LogManager::getDebugLogStatus() == false))
     {
         return;
     }
@@ -90,9 +90,9 @@ bool LogManager::getLogFileStatus()
  *
  * @return true si le log dans la console est activé, false sinon
  */
-bool LogManager::getLogConsoleStatus()
+bool LogManager::getDebugLogStatus()
 {
-    return _logConsoleStatus;
+    return _debugLogStatus;
 }
 
 /*
@@ -120,9 +120,9 @@ void LogManager::setLogFileStatus(bool status)
  *
  * @param status true pour activer le log dans la console, false pour le désactiver
  */
-void LogManager::setLogConsoleStatus(bool status)
+void LogManager::setDebugLogStatus(bool status)
 {
-    _logConsoleStatus = status;
+    _debugLogStatus = status;
 }
 
 /*
