@@ -13,10 +13,15 @@ class BlocLocation
             std::map<std::string, std::string>  _cgiExtension;
             std::string                         _uploadPath;
             bool                                _autoIndex;
+            std::map<int, std::string>          _returnDirectives;
 
             // pour stocker cgi
             std::string _tmpCgiExtension;
             bool        _hasTmpCgiExtension;
+
+            // pour stocker les return directive
+            int         _tmpReturnDirective;
+            bool        _hasTmpReturnDirective;
 
     public:
             BlocLocation();
@@ -33,6 +38,7 @@ class BlocLocation
             void    addCgiExtension(const std::string &extension, const std::string &path) {_cgiExtension[extension] = path;};
             void    setUploadPath(const std::string &path) {_uploadPath = path;};
             void    setAutoIndex(bool autoIndex) { _autoIndex = autoIndex;};
+            void    addReturnDirectives(int code, const std::string &path) {_returnDirectives[code] = path;};
 
             //Getters
             const std::string                           &getRoot() const {return _root;};
@@ -42,12 +48,20 @@ class BlocLocation
             const std::map<std::string, std::string>    &getCgiExtensions() const {return _cgiExtension;}
             const std::string                           &getUploadPath() const {return _uploadPath;};
             bool                                        getAutoIndex() const {return _autoIndex;};
+            const std::map<int, std::string>            &getReturnDirectives() const {return _returnDirectives;};
+
 
             //pour stocker cgi
             void                setTmpCgiExtension(std::string extension) {_tmpCgiExtension = extension; _hasTmpCgiExtension = true;};
             std::string         getTmpCgiExtension() const {return _tmpCgiExtension;};
             bool                hasTmpCgiExtension() const {return _hasTmpCgiExtension;};
             void                clearTmpCgiExtension() {_hasTmpCgiExtension = false;};
+
+            // pour stocker les return directive
+            void                setTmpReturnDirective(int code) {_tmpReturnDirective = code; _hasTmpReturnDirective = true;};
+            int                 getTmpReturnDirective() const {return _tmpReturnDirective;};
+            bool                hasTmpReturnDirective() const {return _hasTmpReturnDirective;};
+            void                clearTmpReturnDirective() {_hasTmpReturnDirective = false;};
 
             //Validation
             bool    validateLocation() const;
