@@ -6,7 +6,7 @@
 /*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 17:05:33 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/03 19:36:17 by tpassin          ###   ########.fr       */
+/*   Updated: 2025/04/04 13:37:39 by tpassin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,26 @@
 #define REQUEST_HPP
 
 #include "RequestBody.hpp"
+#include "Client.hpp"
 #include <iostream>
 #include <map>
 
 class Request{
     private:
-        std::string _method;
-        std::string _uri;
-        std::string _protocol;
-        std::string _path;
-        std::string _query;
-        // std::string _body; // Class Request ou a gerer comme une string ?
-        std::map<std::string, std::string> _headers;
-        int _statusCode;
-        RequestBody _body;
-        
-    public:
-        Request();
+        std::string                         _method;
+        std::string                         _uri;
+        std::string                         _protocol;
+        std::string                         _path;
+        std::string                         _query;
+        std::map<std::string, std::string>  _headers;
+        int                                 _statusCode;
+        Client                              *_client;
+        Server                              *_server;
+        BlocLocation                        *_location;
+        RequestBody                         _body;
+
+    public:                     
+        Request();                      
         Request(Request const & copy);
         Request & operator=(Request const & rhs);
         ~Request();
@@ -52,7 +55,7 @@ class Request{
         const int                                   &getStatusCode() const;
         const std::map<std::string, std::string>    &getHeaders() const;
         
-        void setCode(int code);
+        void setCode(int const code);
 };
 
 #endif
