@@ -105,6 +105,7 @@ int main(int ac, char **av)
         config.parseConfigFile(av[1], config);
         LogManager::log(LogManager::INFO, "Fichier config correct!");
         // print config ranger
+        // rajouter un if pour afficher que en mode debug
         config.printConfig();
         // Créer une configuration valide
         //Config config;
