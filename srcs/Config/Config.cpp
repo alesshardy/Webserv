@@ -55,7 +55,7 @@ bool    Config::verifKeyOther(std::string token)
     if (token == "location" || token == "listen" || token == "server_name" || token == "root"
     || token == "index" || token == "error_page" || token == "client_max_body_size" 
     || token == "alias" || token == "allow_methods" || token == "upload_path" || token == "autoindex"
-    || token == "cgi_extension")
+    || token == "cgi_extension" || token == "return")
         return true;
     return false;
 }
@@ -167,6 +167,8 @@ void    Config::handleErrorPage(const std::string &arg, BlocServer &current, int
     //Choisi d'ecraser si plusieurs code erreur car nginx accepte doublon
     if (argNb == 1)
     {
+        if (current.hasTmpErrorCode())
+            throw std::runtime_error("ERROR : key error_page without arg");
         int code ;
         try {
             code = Utils::ft_stoi(arg);
@@ -307,7 +309,9 @@ void    Config::handleCgiExtension(const std::string &arg, BlocLocation &current
 {
     if (argNb == 1)
     {
-        if (arg.size() > 4 || arg.size() <= 1 || arg[0] != '.')
+        if (current.hasTmpCgiExtension())
+                    throw std::runtime_error("ERROR : key cgi without arg");
+        if (arg.size() > 4 || arg.size() <= 1 || arg[0] != '.' || arg.find('.', 1) != std::string::npos)
             throw std::runtime_error("ERROR : CgiExtension bad format");
         current.setTmpCgiExtension(arg);
     }
@@ -321,6 +325,37 @@ void    Config::handleCgiExtension(const std::string &arg, BlocLocation &current
     }
     else
         throw std::runtime_error("ERROR :too many argument for CgiExtension key");
+}
+
+void    Config::handleReturnDirective(const std::string &arg, BlocLocation &current, int argNb)
+{
+    //Choisi d'ecraser si plusieurs code erreur car nginx accepte doublon
+    if (argNb == 1)
+    {
+        if (current.hasTmpReturnDirective())
+            throw std::runtime_error("ERROR : key return without arg");
+        int code ;
+        try {
+            code = Utils::ft_stoi(arg);
+        }
+        catch (const std::exception &e){
+            throw std::runtime_error("ERROR : wrong return code");   
+        }
+        if (code >= 1 && code <= 999)
+            current.setTmpReturnDirective(code);
+        else
+            throw std::runtime_error("ERROR : wrong return code must be between 1 && 999");   
+    }
+    else if (argNb == 2)
+    {
+        if (!current.hasTmpReturnDirective())
+            throw std::runtime_error("ERROR : no code define before arg");
+        int code = current.getTmpReturnDirective();
+        current.addReturnDirectives(code, arg);
+        current.clearTmpReturnDirective();
+    }
+    else
+        throw std::runtime_error("ERROR : too many arg for return");   
 }
 
 // MAIN FONCTION D'AJOUT AU BLOC SERVEUR
@@ -358,8 +393,20 @@ void        Config::addArgToLocationBloc(std::string arg, std::string lastKey, B
         handleAutoIndex(arg, current, argNb);
     else if (lastKey == "cgi_extension")
         handleCgiExtension(arg, current, argNb);
+    else if (lastKey == "return")
+        handleReturnDirective(arg, current, argNb);
     else
         throw std::runtime_error("ERROR : bad key " + lastKey + " for location bloc");
+}
+
+// DEfault Config
+void    Config::handleDefaultConfig()
+{
+    BlocServer current = BlocServer();
+    current.addIndex("index.html");
+    current.setRoot("/www/main");
+    current.addListen(Listen("0.0.0.0", 1234));
+    _server.push_back(current);
 }
 
 //A decouper fonction principale pour verifier que le fichier config est correct
@@ -482,11 +529,15 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
             {
                 if (currentServer.locationExists(currentLocationPath))
                     throw std::runtime_error("ERROR : Location path '" + currentLocationPath + "' already exists in the server block.");
+                if (currentLocation.hasTmpCgiExtension())
+                    throw std::runtime_error("ERROR : key cgi without arg");
                 currentServer.addLocation(currentLocationPath, currentLocation);
                 currentLocationPath.clear();
             }
             else if (depth == 1)
             {
+                if (currentServer.hasTmpErrorCode())
+                    throw std::runtime_error("ERROR : key error_page without arg");
                 config.addServer(currentServer);
                 currentServer = BlocServer();
             }
@@ -595,6 +646,9 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
     }
     if (depth != 0)
         throw std::runtime_error("ERROR : a bloc is not close!");
+    //gerer default config
+    if (_server.size() == 0)
+        handleDefaultConfig();
 
     file.close();
 }
@@ -689,6 +743,13 @@ void Config::printConfig() const
             for (std::map<std::string, std::string>::const_iterator cgiIt = cgiExtensions.begin(); cgiIt != cgiExtensions.end(); ++cgiIt)
             {
                 std::cout << cgiIt->first << " -> " << cgiIt->second << "; ";
+            }
+            std::cout << std::endl;
+
+            std::cout << "      Return Directive: ";
+            for (std::map<int, std::string>::const_iterator it = location.getReturnDirectives().begin(); it != location.getReturnDirectives().end(); ++it)
+            {
+                std::cout << it->first << " -> " << it->second << "; ";
             }
             std::cout << std::endl;
         }

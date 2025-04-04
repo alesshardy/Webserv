@@ -65,7 +65,10 @@ class Config
             void        handleUploadPath(const std::string &arg, BlocLocation &current);
             void        handleAutoIndex(const std::string &arg, BlocLocation &current, int argNb);
             void        handleCgiExtension(const std::string &arg, BlocLocation &current, int argNb);
-
+            void        handleReturnDirective(const std::string &arg, BlocLocation &current, int argNb);
+        
+            void        handleDefaultConfig();
+            
             // VErif les arg
             bool        isValidRoot(const std::string &path);
             bool        isValidIPv4(const std::string &ip);
