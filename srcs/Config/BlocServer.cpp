@@ -4,6 +4,7 @@
 BlocServer::BlocServer()
 {
     _clientMaxBodySize = DEFAULT_CLIENT_MAX_BODY_SIZE;
+    _hasTmpErrorCode = false;
 }
 
 BlocServer::BlocServer(const BlocServer &copy)
