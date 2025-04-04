@@ -24,7 +24,7 @@ class LogManager
     private:
         static bool _logStatus;
         static bool _logFileStatus;
-        static bool _logConsoleStatus;
+        static bool _debugLogStatus;
         static std::string _logFileName;
         static std::map<LogLevel, std::string> _logLevelStr;
         static std::map<LogLevel, std::string> _logLevelColor;
@@ -46,10 +46,10 @@ class LogManager
         static void initialize();
         static void setLogStatus(bool status);
         static void setLogFileStatus(bool status);
-        static void setLogConsoleStatus(bool status);
+        static void setDebugLogStatus(bool status);
         static bool getLogStatus();
         static bool getLogFileStatus();
-        static bool getLogConsoleStatus();
+        static bool getDebugLogStatus();
         static std::string getLogFileName();
         static std::string getLogLevelStr(LogLevel level);
         static std::string getLogLevelColor(LogLevel level);
