@@ -43,6 +43,7 @@ INC			=	-I./srcs/	\
 				-I./srcs/Config \
 				-I./srcs/Utils \
 				-I./srcs/Client \
+				-I./srcs/CommandLineParser \
 				
 				
 # **************************************************************************** #
@@ -59,6 +60,7 @@ SRCS 			=	main.cpp \
 					srcs/Server/Socket.cpp \
 					srcs/Server/Server.cpp \
 					srcs/Client/Client.cpp \
+					srcs/CommandLineParser/CommandLineParser.cpp \
 
 OBJS			=	$(SRCS:%.cpp=$(OBJ_PATH)/%.o)
 
