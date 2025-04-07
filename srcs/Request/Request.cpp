@@ -6,13 +6,13 @@
 /*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:23:15 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/04 13:17:24 by tpassin          ###   ########.fr       */
+/*   Updated: 2025/04/07 19:28:31 by tpassin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-Request::Request(): _method(""), _path(""), _query(""), _uri(""), _protocol(""), /*_body("")*/ _statusCode(-1){}
+Request::Request(Client *client): _client(client), _method(""), _uri(""), _protocol(""), _path(""), _query(""), _statusCode(-1){}
 
 Request::Request(Request const & copy)
 {
@@ -27,7 +27,7 @@ Request & Request::operator=(Request const & rhs)
         this->_uri = rhs._uri;
         this->_protocol = rhs._protocol;
         this->_path = rhs._path;
-        this->_body = rhs._body;
+        // this->_body = rhs._body;
         this->_statusCode = rhs._statusCode;
         this->_headers = rhs._headers;   
     }
@@ -36,11 +36,11 @@ Request & Request::operator=(Request const & rhs)
 
 Request::~Request(){}
 
-const std::string &Request::getMethod() const
+const std::string Request::getMethod() const
 {
     std::string tmp;
     
-    tmp += getMethod() + getUri() + getProtocol();
+    tmp += this->_method + getUri() + getProtocol();
     return (tmp);
 }
 
@@ -75,3 +75,9 @@ const std::string &Request::getQuery() const
 }
 
 void Request::setCode(int const code){this->_statusCode = code;}
+
+void Request::parseRequest(std::string str)
+{
+    this->_uri = str;
+    std::cout << this->getUri();
+}

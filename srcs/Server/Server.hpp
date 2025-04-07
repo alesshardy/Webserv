@@ -30,6 +30,9 @@ enum State
 
 class Server
 {
+    friend class Client;
+    friend class Request;
+
     private:
         int                         _state;
         int                         _socket;

@@ -179,6 +179,7 @@ void Server::run()
                     // Lecture des données du client
                     int client_fd = events[n].data.fd;
                     Client *client = _clients_map[client_fd];
+                    // a gerer dans le client bloc en dessous
 
                     // Utilisation temporaire de la variable `client`
                     LogManager::log(LogManager::DEBUG, "Client object address: %p", static_cast<void*>(client));
@@ -200,8 +201,11 @@ void Server::run()
                         LogManager::log(LogManager::INFO, "Client %d disconnected", client_fd);
                         close_client(client_fd);
                     }
+                    // A gerer dans la request partie en dessous (else)
                     else
                     {
+                        std::string str(buffer, bytes);
+                        client->_request->parseRequest(str);
                         // Traiter les données lues
                         buffer[bytes] = '\0';
                         LogManager::log(LogManager::INFO, "Received %d bytes from client %d: %s", bytes, client_fd, buffer);
