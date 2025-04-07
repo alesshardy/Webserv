@@ -1,6 +1,12 @@
 #include "Server.hpp"
 
 
+/**TEST TEMPORAIRE RESPONSE */
+std::string extractFilePath(const std::string &request);
+std::string getContentType(const std::string &filePath);
+/**************** */
+
+
 //Constructeur
 Server::Server()
 {
@@ -35,7 +41,7 @@ Server::~Server()
 void Server::init()
 {
     // Création de l'instance epoll
-    _epoll_fd = epoll_create1(O_CLOEXEC);
+    _epoll_fd = epoll_create1(O_CLOEXEC); // surveiller les événements sur les descripteurs de fichiers.
     if (_epoll_fd == -1)
     {
         LogManager::log(LogManager::ERROR, "Error creating epoll instance");
@@ -74,7 +80,7 @@ void Server::init()
                 ev.events = EPOLLIN; // Surveiller les événements de lecture
                 ev.data.fd = socket->get_socket_fd();
 
-                if (epoll_ctl(_epoll_fd, EPOLL_CTL_ADD, socket->get_socket_fd(), &ev) == -1)
+                if (epoll_ctl(_epoll_fd, EPOLL_CTL_ADD, socket->get_socket_fd(), &ev) == -1) 
                 {
                     LogManager::log(LogManager::ERROR, "Failed to add socket to epoll");
                     throw std::runtime_error("Failed to add socket to epoll");
@@ -93,8 +99,10 @@ void Server::init()
     _state = INITIALIZED;
 }
 
-//Lancer le serveur
-
+/**
+ * @brief Lancer le serveur
+ * 
+ */
 void Server::run()
 {
 
@@ -123,7 +131,7 @@ void Server::run()
     {
         LogManager::log(LogManager::DEBUG, "value of running: %d", running);
         struct epoll_event events[MAX_EVENTS];
-        int nfds = epoll_wait(_epoll_fd, events, MAX_EVENTS, -1);
+        int nfds = epoll_wait(_epoll_fd, events, MAX_EVENTS, -1); 
 
         if (nfds == -1)
         {
@@ -142,7 +150,7 @@ void Server::run()
             if (events[n].events & EPOLLIN)
             {
                 // Nouvelle connexion entrante
-                if (_sockets_map.find(events[n].data.fd) != _sockets_map.end())
+                if (_sockets_map.find(events[n].data.fd) != _sockets_map.end()) // si 
                 {
                     // Accepter la connexion
                     int client_fd = accept(events[n].data.fd, NULL, NULL);
@@ -188,6 +196,7 @@ void Server::run()
                     // Lire les données du client
                     char buffer[1024];
                     int bytes = read(client_fd, buffer, sizeof(buffer));
+                    
 
                     if (bytes == -1)
                     {
@@ -205,6 +214,56 @@ void Server::run()
                         // Traiter les données lues
                         buffer[bytes] = '\0';
                         LogManager::log(LogManager::INFO, "Received %d bytes from client %d: %s", bytes, client_fd, buffer);
+
+                        /***********TEST de reponse en dur******************************************************/
+                        /***************************************************************************************/
+
+                        // Vérifier si c'est une requête GET
+                        if (strncmp(buffer, "GET", 3) == 0)
+                        {
+                            // Extraire le chemin du fichier demandé
+                            std::string filePath = extractFilePath(buffer);
+
+                            // Ouvrir le fichier
+                            std::ifstream file(filePath.c_str(), std::ios::binary); // Utilisation de .c_str()
+                            if (file.is_open())
+                            {
+                                // Lire le contenu du fichier
+                                std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+                                file.close();
+
+                                // Déterminer le type de contenu
+                                std::string contentType = getContentType(filePath);
+
+                                // Construire la réponse HTTP
+                                std::ostringstream oss;
+                                oss << content.size();
+                                std::string response = "HTTP/1.1 200 OK\r\n";
+                                response += "Content-Type: " + contentType + "\r\n";
+                                response += "Content-Length: " + oss.str() + "\r\n";
+                                response += "\r\n";
+                                response += content;
+
+                                // Envoyer la réponse au client
+                                send(client_fd, response.c_str(), response.size(), 0);
+                                LogManager::log(LogManager::INFO, "Response sent to client %d for file %s", client_fd, filePath.c_str());
+                            }
+                            else
+                            {
+                                // Fichier non trouvé
+                                std::string response = "HTTP/1.1 404 Not Found\r\n";
+                                response += "Content-Type: text/html\r\n";
+                                response += "Content-Length: 58\r\n";
+                                response += "\r\n";
+                                response += "<html><body><h1>404 Not Found</h1><p>File not found.</p></body></html>";
+
+                                send(client_fd, response.c_str(), response.size(), 0);
+                                LogManager::log(LogManager::ERROR, "File not found: %s", filePath.c_str());
+                            }
+                        }
+                        /***************************************************************************************/
+                        /***********TEST de reponse en dur******************************************************/
+                        
                     }
                 }
             }
@@ -314,4 +373,52 @@ void Server::remove_from_epoll(int fd)
     {
         LogManager::log(LogManager::WARNING, "Failed to remove FD %d from epoll", fd);
     }
+}
+
+
+
+
+
+//***************TEST DE REPONSE EN DUR TMP */
+
+
+std::string extractFilePath(const std::string &request)
+{
+    size_t start = request.find("GET ") + 4;
+    size_t end = request.find(" ", start);
+    if (start == std::string::npos || end == std::string::npos)
+        return "";
+    std::string path = request.substr(start, end - start);
+    if (path == "/")
+        path = "/index.html"; // Par défaut, servir index.html
+    return "www/main" + path; // Préfixer avec le répertoire racine
+}
+
+bool endsWith(const std::string &str, const std::string &suffix)
+{
+    if (str.length() >= suffix.length())
+    {
+        return str.compare(str.length() - suffix.length(), suffix.length(), suffix) == 0;
+    }
+    return false;
+}
+
+
+std::string getContentType(const std::string &filePath)
+{
+    if (endsWith(filePath, ".html"))
+        return "text/html";
+    if (endsWith(filePath, ".css"))
+        return "text/css";
+    if (endsWith(filePath, ".js"))
+        return "application/javascript";
+    if (endsWith(filePath, ".png"))
+        return "image/png";
+    if (endsWith(filePath, ".jpg") || endsWith(filePath, ".jpeg"))
+        return "image/jpeg";
+    if (endsWith(filePath, ".gif"))
+        return "image/gif";
+    if (endsWith(filePath, ".ico"))
+        return "image/x-icon";
+    return "application/octet-stream"; // Type par défaut
 }
