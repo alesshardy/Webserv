@@ -6,6 +6,10 @@
 #include <vector>
 #include <map>
 #include<sys/epoll.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sstream> 
 
 
 #include "Config.hpp"
