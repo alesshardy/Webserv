@@ -20,9 +20,13 @@
 #include "Response.hpp"
 
 
+class Request;
 
 class Client
 {
+    friend class Request;
+    friend class Server;
+
     private:
         int                 _client_fd;
         Socket*              _client_socket;

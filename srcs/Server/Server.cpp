@@ -207,7 +207,7 @@ void Server::handleEpollEvents()
             // Gérer les événements d'écriture si nécessaire
             LogManager::log(LogManager::DEBUG, "EPOLLOUT event on socket %d", events[n].data.fd);
 
-            if (_clients_map[fd]->getRequest() && _clients_map[fd]->getRequest()->getState() == Request::END)
+            if (_clients_map[fd]->getRequest() && _clients_map[fd]->getRequest()->getState() == END)
             {
                 LogManager::log(LogManager::DEBUG, "Request is complete, sending response");
                 _clients_map[fd]->handleResponse(_epoll_fd);
