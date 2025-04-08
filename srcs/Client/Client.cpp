@@ -34,6 +34,7 @@ void    Client::handleRequest()
 
 void    Client::handleResponse(int epoll_fd)
 {
+    (void)epoll_fd;
     LogManager::log(LogManager::DEBUG, "Handling response for client %d", _client_fd);
     // _response->sendResponse();
 }

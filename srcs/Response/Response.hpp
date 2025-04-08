@@ -13,7 +13,7 @@
 #include "BlocServer.hpp"
 
 
-
+class Request;
 
 class   Response
 {
