@@ -6,6 +6,10 @@
 #include <vector>
 #include <map>
 #include<sys/epoll.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sstream> 
 
 
 #include "Config.hpp"
@@ -15,6 +19,8 @@
 #include "LogManager.hpp"
 #include "../includes/Webserv.hpp"
 #include "Utils.hpp"
+#include "Request.hpp"
+#include "Response.hpp"
 
 class   Client;
 
@@ -30,6 +36,9 @@ enum State
 
 class Server
 {
+    friend class Client;
+    friend class Request;
+
     private:
         int                         _state;
         int                         _socket;
@@ -53,6 +62,14 @@ class Server
         void                        close_socket(int socket_fd);
         void                        close_all();
         void                        remove_from_epoll(int fd);
+
+        //run 
+        void                        handleNewConnection(int socket_fd);
+        void                        handleClientData(int client_fd);
+        void                        handleGetRequest(int client_fd, const char *buffer);
+        void                        handleEpollEvents();
+        void                        checkAndStart();
+        
 
 
         // Getters

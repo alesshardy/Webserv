@@ -6,7 +6,6 @@
 
 #include "LogManager.hpp"
 
-
 #include <vector>
 #include <map>
 
