@@ -6,7 +6,7 @@
 /*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:23:15 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/08 17:00:23 by tpassin          ###   ########.fr       */
+/*   Updated: 2025/04/08 17:46:29 by tpassin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,9 +113,9 @@ void Request::parseRequest(std::string str)
                 // case BODY:
                 //     parseBody(_state, i, str);
                 //     break;
-                case END:
-                    displayValue();
-                    break;
+                // case BODY:
+                //     displayValue();
+                //     break;
                 default:
                     throw std::runtime_error("Invalid state");
             }
@@ -130,21 +130,20 @@ void Request::parseRequest(std::string str)
 
 void Request::parseMethod(int & state, size_t & idx, std::string const & str)
 {
-    LogManager::log(LogManager::DEBUG, "Parse method");
+    LogManager::log(LogManager::DEBUG, "PARSE METHOD");
     if (str.empty())
         throw std::runtime_error("ERROR : empty request");
 
     size_t endLine = str.find("\r\n", idx);
     if (endLine == std::string::npos)
         throw std::runtime_error("ERROR : invalid request format");
-
     while (idx < endLine && str[idx] != ' ')
     {
         _method += str[idx];
         idx++;
     }
 
-    LogManager::log(LogManager::DEBUG, ("HTTP Method: " + _method).c_str());
+    LogManager::log(LogManager::DEBUG, ("HTTP METHOD: " + _method).c_str());
 
     if (_method != "GET" && _method != "POST" && _method != "DELETE" && _method != "PUT")
         throw std::runtime_error("ERROR : unsupported HTTP method");
@@ -160,6 +159,7 @@ void Request::parseMethod(int & state, size_t & idx, std::string const & str)
 
 void Request::parseUri(int & state, size_t & idx, std::string const & str)
 {
+    LogManager::log(LogManager::DEBUG, "PARSE URI");
     while (idx < str.size() && str[idx] == ' ')
         idx++;
 
@@ -181,12 +181,15 @@ void Request::parseUri(int & state, size_t & idx, std::string const & str)
 
     if (idx >= endLine)
         throw std::runtime_error("ERROR: Missing Version after uri");
+    
+    LogManager::log(LogManager::DEBUG, ("HTTP URI: " + _uri).c_str());
 
     state = VERSION;
 }
 
 void Request::parseVersion(int & state, size_t & idx, std::string const & str)
 {
+    LogManager::log(LogManager::DEBUG, "PARSE VERSION");
     size_t endLine = str.find("\r\n", idx);
     if (endLine == std::string::npos)
         throw std::runtime_error("ERROR : invalid request format");
@@ -194,13 +197,19 @@ void Request::parseVersion(int & state, size_t & idx, std::string const & str)
     _version = str.substr(idx, endLine - idx);
 
     idx = endLine + 2; // Passer "\r\n"
-    state = END;
+    if (_version != "HTTP/1.1")
+        throw std::runtime_error("ERROR: Bad Version");
+    LogManager::log(LogManager::DEBUG, ("HTTP VERSION: " + _version).c_str());
+    state = HEADER_KEY;
 }
 
-void    Request::displayValue()
-{
-    std::cout << _method << std::endl;    
-    std::cout << _uri << std::endl;    
-    std::cout << _version << std::endl;
-}
+// void    Request::parseHeader()
+
+// void    Request::displayValue()
+// {
+//     std::cout << _method << std::endl;    
+//     std::cout << _uri << std::endl;    
+//     std::cout << _version << std::endl;
+//     _state = END;
+// }
 
