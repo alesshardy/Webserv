@@ -61,6 +61,7 @@ SRCS 			=	main.cpp \
 					srcs/Server/Server.cpp \
 					srcs/Client/Client.cpp \
 					srcs/CommandLineParser/CommandLineParser.cpp \
+					srcs/Request/Request.cpp \
 
 OBJS			=	$(SRCS:%.cpp=$(OBJ_PATH)/%.o)
 
