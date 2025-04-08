@@ -38,11 +38,9 @@ class   Response
         Response(int client_fd, Socket* client_socket, Request* request, BlocServer* server);
         ~Response();
 
-        void                sendResponse();
-        
-        
 
-
+        int                 buildResponse(int epoll_fd);
+        
         void                setResponseHeader(const std::string& header);
         void                setResponseBody(const std::string& body);
         void                setResponseStatus(const std::string& status);

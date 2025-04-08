@@ -14,12 +14,21 @@ Response::~Response()
     // Destructor logic if needed
 }
 
-void Response::sendResponse()
+int Response::buildResponse(int epoll_fd)
 {
-    // Send the response to the client
-    std::string response = _response_header + "\r\n" + _response_body;
-    send(_client_fd, response.c_str(), response.size(), 0);
-    LogManager::log(LogManager::INFO, "Response sent to client %d", _client_fd);
+    // Build the response based on the request method
+    if (_request->getMethod() == "GET")
+        _handleGet();
+    else if (_request->getMethod() == "POST")
+        _handlePost();
+    else if (_request->getMethod() == "DELETE")
+        _handleDelete();
+    else if (_request->getMethod() == "PUT")
+        _handlePut();
+    else if (_request->getMethod() == "HEAD")
+        _handleHead();
+    else
+        LogManager::log(LogManager::ERROR, "Unsupported HTTP method: %s", _request->getMethod().c_str());
 }
 void Response::setResponseHeader(const std::string& header)
 {

@@ -20,4 +20,15 @@ Client::~Client()
 }
 
 
+void    Client::handleRequest()
+{
+    LogManager::log(LogManager::DEBUG, "Handling request for client %d", _client_fd);
+}
 
+
+
+void    Client::handleResponse(int epoll_fd)
+{
+    LogManager::log(LogManager::DEBUG, "Handling response for client %d", _client_fd);
+    // _response->sendResponse();
+}
