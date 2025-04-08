@@ -188,7 +188,7 @@ void Server::run()
 
                     // Lire les données du client
                     char buffer[1024];
-                    int bytes = read(client_fd, buffer, sizeof(buffer));
+                    int bytes = read(client_fd, buffer, 1);
 
                     if (bytes == -1)
                     {
@@ -205,6 +205,7 @@ void Server::run()
                     else
                     {
                         std::string str(buffer, bytes);
+                        std::cout << str << std::endl;
                         client->_request->parseRequest(str);
                         // Traiter les données lues
                         buffer[bytes] = '\0';
