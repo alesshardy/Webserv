@@ -193,15 +193,11 @@ void Server::handleEpollEvents()
             if (_sockets_map.find(fd) != _sockets_map.end())
             {
                 handleNewConnection(fd);
-                // SIUUUUUUUUUUUUUUUUUU peut etre la solution au crash
-                // int client_fd = _clients_map.rbegin()->first; // Dernier client ajouté à la map
-                // _clients_map[client_fd]->handleRequest();
-                _clients_map[fd]->handleRequest(); 
             }
             else
             {
                 handleClientData(fd);
-
+                _clients_map[fd]->handleRequest();
             }
         }
 
