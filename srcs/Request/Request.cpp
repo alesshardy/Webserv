@@ -6,13 +6,13 @@
 /*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:23:15 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/08 17:46:29 by tpassin          ###   ########.fr       */
+/*   Updated: 2025/04/09 20:01:43 by tpassin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-Request::Request(Client *client): _client(client), _method(""), _uri(""), _version(""), _path(""), _query(""), _statusCode(-1){}
+Request::Request(Client *client): _client(client), _raw(""), _method(""), _uri(""), _version(""), _path(""), _query(""), _currentHeaderKey(""), _statusCode(-1), _state(0){}
 
 Request::Request(Request const & copy)
 {
@@ -27,6 +27,8 @@ Request & Request::operator=(Request const & rhs)
         this->_uri = rhs._uri;
         this->_version = rhs._version;
         this->_path = rhs._path;
+        this->_query = rhs._query;
+        this->_currentHeaderKey = rhs._currentHeaderKey;
         // this->_body = rhs._body;
         this->_statusCode = rhs._statusCode;
         this->_headers = rhs._headers;   
@@ -36,12 +38,9 @@ Request & Request::operator=(Request const & rhs)
 
 Request::~Request(){}
 
-const std::string Request::getMethod() const
+const std::string &Request::getMethod() const
 {
-    std::string tmp;
-    
-    tmp += this->_method + getUri() + getVersion();
-    return (tmp);
+    return (_method);
 }
 
 const std::string &Request::getUri() const
@@ -85,41 +84,22 @@ void Request::parseRequest(std::string str)
 {
     try
     {
-        _state = START;
-        size_t i = 0;
+        this->_raw += str;
+        static size_t i = 0;
 
-        while (str[i] && _state != END && _state != ERROR)
-        {
-            switch (_state)
-            {
-                case START:
-                    parseMethod(_state, i, str);
-                    break;
-                case URI:
-                    parseUri(_state, i, str);
-                    break;
-                // case QUERY:
-                //     parseQuery(_state, i, str);
-                    break;
-                case VERSION:
-                    parseVersion(_state, i, str);
-                    break;
-                // case HEADER_KEY:
-                //     parseHeader(_state, i, str);
-                //     break;
-                // case HEADER_VALUE:
-                //     parseHeader(_state, i, str);
-                //     break;
-                // case BODY:
-                //     parseBody(_state, i, str);
-                //     break;
-                // case BODY:
-                //     displayValue();
-                //     break;
-                default:
-                    throw std::runtime_error("Invalid state");
-            }
-        }
+        if (_state == START) 
+            parseMethod(_state, i, _raw);
+        if (_state == URI) 
+            parseUri(_state, i,_raw);
+        // if (_state == ) QUERY:
+        //     parseQuery(_state, _raw);
+        if (_state == VERSION) 
+            parseVersion(_state, i,_raw);
+        // parse header qui boucle entre key et value jusqu'au body
+        if (_state == HEADER_KEY) 
+            parseHeaderKey(_state, i,_raw);
+        if (_state == HEADER_VALUE) 
+            parseHeaderValue(_state, i,_raw);   
     }
     catch (const std::runtime_error &e)
     {
@@ -130,20 +110,21 @@ void Request::parseRequest(std::string str)
 
 void Request::parseMethod(int & state, size_t & idx, std::string const & str)
 {
-    LogManager::log(LogManager::DEBUG, "PARSE METHOD");
+    LogManager::log(LogManager::DEBUG, "Parse method");
     if (str.empty())
         throw std::runtime_error("ERROR : empty request");
 
     size_t endLine = str.find("\r\n", idx);
     if (endLine == std::string::npos)
-        throw std::runtime_error("ERROR : invalid request format");
+        return ;    
+        // throw std::runtime_error("ERROR : invalid request format");
     while (idx < endLine && str[idx] != ' ')
     {
         _method += str[idx];
         idx++;
     }
 
-    LogManager::log(LogManager::DEBUG, ("HTTP METHOD: " + _method).c_str());
+    LogManager::log(LogManager::DEBUG, ("Http method: " + _method).c_str());
 
     if (_method != "GET" && _method != "POST" && _method != "DELETE" && _method != "PUT")
         throw std::runtime_error("ERROR : unsupported HTTP method");
@@ -159,7 +140,7 @@ void Request::parseMethod(int & state, size_t & idx, std::string const & str)
 
 void Request::parseUri(int & state, size_t & idx, std::string const & str)
 {
-    LogManager::log(LogManager::DEBUG, "PARSE URI");
+    LogManager::log(LogManager::DEBUG, "Parse uri");
     while (idx < str.size() && str[idx] == ' ')
         idx++;
 
@@ -182,14 +163,14 @@ void Request::parseUri(int & state, size_t & idx, std::string const & str)
     if (idx >= endLine)
         throw std::runtime_error("ERROR: Missing Version after uri");
     
-    LogManager::log(LogManager::DEBUG, ("HTTP URI: " + _uri).c_str());
+    LogManager::log(LogManager::DEBUG, ("Http uri: " + _uri).c_str());
 
     state = VERSION;
 }
 
 void Request::parseVersion(int & state, size_t & idx, std::string const & str)
 {
-    LogManager::log(LogManager::DEBUG, "PARSE VERSION");
+    LogManager::log(LogManager::DEBUG, "Parse version");
     size_t endLine = str.find("\r\n", idx);
     if (endLine == std::string::npos)
         throw std::runtime_error("ERROR : invalid request format");
@@ -199,11 +180,66 @@ void Request::parseVersion(int & state, size_t & idx, std::string const & str)
     idx = endLine + 2; // Passer "\r\n"
     if (_version != "HTTP/1.1")
         throw std::runtime_error("ERROR: Bad Version");
-    LogManager::log(LogManager::DEBUG, ("HTTP VERSION: " + _version).c_str());
+    LogManager::log(LogManager::DEBUG, ("Http version: " + _version).c_str());
     state = HEADER_KEY;
 }
 
-// void    Request::parseHeader()
+//ANCIENNE VERSION
+
+// void Request::parseHeaderKey(int & state, size_t & idx, std::string const & str)
+// {
+//     LogManager::log(LogManager::DEBUG, "parse header key");
+
+//     std::cout << str[idx];
+//     size_t endLine = str.find("\r\n", idx);
+//     if (endLine == std::string::npos)
+//         throw std::runtime_error("ERROR : invalid request format (missing CRLF)");
+
+//     size_t colonPos = str.find(':', idx);
+//     if (colonPos == std::string::npos || colonPos > endLine)
+//         throw std::runtime_error("ERROR : invalid header format (missing ':')");
+
+//     // Extraire la clé (header key)
+//     std::string key = str.substr(idx, colonPos - idx);
+//     idx = colonPos + 1; // Passer le ':'
+
+//     // Ignorer les espaces après le ':'
+//     while (idx < endLine && str[idx] == ' ')
+//         idx++;
+
+//     // Ajouter la clé à l'état interne si nécessaire
+//     LogManager::log(LogManager::DEBUG, "Header_key: %s", key.c_str());
+//     _currentHeaderKey = key; // Stocker temporairement la clé
+    
+//     state = HEADER_VALUE;
+// }
+
+// void Request::parseHeaderValue(int & state, size_t & idx, std::string const & str)
+// {
+//     LogManager::log(LogManager::DEBUG, "Parse header value");
+
+//     size_t endLine = str.find("\r\n", idx);
+//     if (endLine == std::string::npos)
+//         throw std::runtime_error("ERROR : invalid request format (missing CRLF)");
+
+//     // Extraire la valeur (header value)
+//     std::string value = str.substr(idx, endLine - idx);
+//     idx = endLine + 2; // Passer "\r\n"
+
+//     // Ajouter la clé-valeur au map des headers
+//     _headers[_currentHeaderKey] = value;
+
+//     LogManager::log(LogManager::DEBUG, "Header_value: %s", value.c_str());
+
+//     // Vérifier si on continue avec d'autres headers ou si on passe au corps
+//     if (str[idx] == '\r' && str[idx + 1] == '\n') // Fin des headers
+//     {
+//         idx += 2; // Passer "\r\n"
+//         state = END; // Passer à l'état BODY
+//     }
+//     else
+//         state = HEADER_KEY; // Continuer avec un autre header
+// }
 
 // void    Request::displayValue()
 // {
@@ -212,4 +248,61 @@ void Request::parseVersion(int & state, size_t & idx, std::string const & str)
 //     std::cout << _version << std::endl;
 //     _state = END;
 // }
+
+// NOUVELLE VERSION 
+void Request::parseHeaderKey(int & state, size_t & idx, std::string const & str)
+{
+    LogManager::log(LogManager::DEBUG, "Parse HeaderKey");
+    if (str.empty())
+        throw std::runtime_error("ERROR : empty request");
+    
+    // size_t endLine = str.find("\r\n", idx);
+    // if (endLine != std::string::npos)
+    if (str[idx] == '\r' && str[idx + 1] == '\n')
+    {
+        std::cout << "END" << std::endl;
+        state = END; // SUITE CHANGE EN BODY
+        return ;
+    }
+
+        
+    size_t colonPos = str.find(":", idx);
+    if (colonPos == std::string::npos)
+        return ;    
+        // throw std::runtime_error("ERROR : invalid request format");
+    while (idx < colonPos)
+    {
+        _currentHeaderKey += str[idx];
+        idx++;
+    }
+    idx += 2;
+    LogManager::log(LogManager::DEBUG, ("HeaderKey " + _currentHeaderKey).c_str());
+
+    state = HEADER_VALUE;
+}
+
+void Request::parseHeaderValue(int & state, size_t & idx, std::string const & str)
+{
+    LogManager::log(LogManager::DEBUG, "Parse HeaderValue");
+    if (str.empty())
+        throw std::runtime_error("ERROR : empty request");
+
+    size_t endLine = str.find("\r\n", idx);
+    if (endLine == std::string::npos)
+        return ;    
+        // throw std::runtime_error("ERROR : invalid request format");
+    std::string _currentHeaderValue;
+    while (idx < endLine)
+    {
+        _currentHeaderValue += str[idx];
+        idx++;
+    }
+
+    idx += 2;
+    LogManager::log(LogManager::DEBUG, ("HeaderValue " + _currentHeaderValue).c_str());
+    _headers[_currentHeaderKey] = _currentHeaderValue;
+    _currentHeaderKey.clear();
+    state = HEADER_KEY;
+}
+
 
