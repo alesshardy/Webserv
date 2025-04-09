@@ -6,7 +6,7 @@
 /*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 17:05:33 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/08 16:55:55 by tpassin          ###   ########.fr       */
+/*   Updated: 2025/04/09 16:52:36 by tpassin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,14 @@ class Request{
     
     private:
         Client                              *_client;
+        std::string                         _raw;
         std::string                         _method;
         std::string                         _uri;
         std::string                         _version;
         std::string                         _path;
         std::string                         _query;
         std::map<std::string, std::string>  _headers;
+        std::string                         _currentHeaderKey;
         int                                 _statusCode;
         int                                 _state;
         // Server                              *_server;
@@ -63,7 +65,8 @@ class Request{
         void parseRequest(std::string request);
         void parseMethod(int & state, size_t & idx, std::string const & str);
         void parseUri(int & state, size_t & idx, std::string const & str);
-        // void parseHeader(int & state, size_t & idx, std::string const & str);
+        void parseHeaderKey(int & state, size_t & idx, std::string const & str);
+        void parseHeaderValue(int & state, size_t & idx, std::string const & str);
         void parseVersion(int & state, size_t & idx, std::string const & str);
         // void parsePath(int & state, int & idx, std::string const & str);
         // void parseQuery(int & state, int & idx, std::string const & str);
@@ -71,7 +74,7 @@ class Request{
         void displayValue(void);
         
         
-        const std::string                           getMethod() const;
+        const std::string                           &getMethod() const;
         const std::string                           &getUri() const;
         const std::string                           &getVersion() const;
         const std::string                           &getPath() const;
