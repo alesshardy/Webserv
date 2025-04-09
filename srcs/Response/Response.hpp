@@ -13,10 +13,11 @@
 #include "BlocServer.hpp"
 
 
-class Request;
+class   Request;
 
 class   Response
 {
+
     private:
         int                 _client_fd;
         Socket*              _client_socket;

@@ -193,11 +193,14 @@ void Server::handleEpollEvents()
             if (_sockets_map.find(fd) != _sockets_map.end())
             {
                 handleNewConnection(fd);
+                LogManager::log(LogManager::DEBUG, "New connection on socket %d", fd);
+               
             }
             else
             {
                 handleClientData(fd);
                 _clients_map[fd]->handleRequest();
+
             }
         }
 
