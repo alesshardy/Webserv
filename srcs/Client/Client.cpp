@@ -12,6 +12,8 @@ Client::Client(int client_fd, Socket* client_socket)
     // _response = new Response();
 }
 
+
+
 Client::~Client()
 {
     if (this->_request)
@@ -28,6 +30,12 @@ Client::~Client()
 
 void    Client::handleRequest()
 {
+    //infos de client
+    LogManager::log(LogManager::DEBUG, "Client fd: %d", _client_fd);
+    LogManager::log(LogManager::DEBUG, "Client socket: %p", _client_socket);
+    LogManager::log(LogManager::DEBUG, "Client request: %p", _request);
+    
+
     LogManager::log(LogManager::DEBUG, "Handling request for client %d", _client_fd);
 }
 
@@ -35,5 +43,6 @@ void    Client::handleRequest()
 void    Client::handleResponse(int epoll_fd)
 {
     LogManager::log(LogManager::DEBUG, "Handling response for client %d", _client_fd);
+    LogManager::log(LogManager::DEBUG, "epoll_fd: %d", epoll_fd);
     // _response->sendResponse();
 }
