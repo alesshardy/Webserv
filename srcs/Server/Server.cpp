@@ -196,7 +196,7 @@ void Server::handleEpollEvents()
                 // SIUUUUUUUUUUUUUUUUUU peut etre la solution au crash
                 // int client_fd = _clients_map.rbegin()->first; // Dernier client ajouté à la map
                 // _clients_map[client_fd]->handleRequest();
-                _clients_map[fd]->handleRequest();
+                _clients_map[fd]->handleRequest(); 
             }
             else
             {
