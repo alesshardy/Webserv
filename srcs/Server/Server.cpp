@@ -111,11 +111,11 @@ void Server::run()
 
     while (_state == RUNNING && running)
     {
-        LogManager::log(LogManager::DEBUG, "value of running: %d", running);
+        // LogManager::log(LogManager::DEBUG, "value of running: %d", running);
         handleEpollEvents();
     }
 
-    LogManager::log(LogManager::DEBUG, "Value of running: %d", running);
+    // LogManager::log(LogManager::DEBUG, "Value of running: %d", running);
 
 }
 
@@ -197,11 +197,8 @@ void Server::handleEpollEvents()
                
             }
             else
-            {
                 handleClientData(fd);
-                _clients_map[fd]->handleRequest();
 
-            }
         }
 
         if (events[n].events & EPOLLOUT)
@@ -267,7 +264,7 @@ void Server::handleNewConnection(int socket_fd)
  */
 void Server::handleClientData(int client_fd)
 {
-    char buffer[1024];
+    char buffer[1] = {0};
     int bytes = read(client_fd, buffer, sizeof(buffer));
 
     if (bytes == -1)
@@ -282,9 +279,10 @@ void Server::handleClientData(int client_fd)
         close_client(client_fd);
         return;
     }
-
-    buffer[bytes] = '\0';
-    LogManager::log(LogManager::INFO, "Received %d bytes from client %d: %s", bytes, client_fd, buffer);
+    // buffer[bytes] = '\0';
+    std::string str(buffer, bytes);
+    _clients_map[client_fd]->handleRequest(str);
+    // LogManager::log(LogManager::INFO, "Received %d bytes from client %d: %s", bytes, client_fd, buffer);
 
     /*******Test en dur de réponse */
     // if (strncmp(buffer, "GET", 3) == 0)

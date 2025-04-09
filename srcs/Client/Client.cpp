@@ -9,6 +9,7 @@ Client::Client(int client_fd, Socket* client_socket)
     _client_socket = client_socket;
     _request = new Request(this);
     LogManager::log(LogManager::DEBUG, "Create request");
+       _requestFinish = false;
     // _response = new Response();
 }
 
@@ -28,15 +29,29 @@ Client::~Client()
 }
 
 
-void    Client::handleRequest()
+void Client::handleRequest(std::string const & str)
 {
-    //infos de client
-    LogManager::log(LogManager::DEBUG, "Client fd: %d", _client_fd);
-    LogManager::log(LogManager::DEBUG, "Client socket: %p", _client_socket);
-    LogManager::log(LogManager::DEBUG, "Client request: %p", _request);
-    
+    try
+    {
+        // LogManager::log(LogManager::DEBUG, "Handling request for client %d", _client_fd);
 
-    LogManager::log(LogManager::DEBUG, "Handling request for client %d", _client_fd);
+        // Parsing Requete
+        _request->parseRequest(str);
+
+        // Vérifier si la requête est complète
+        // if (_request->getState() == END)
+        // {
+        //     LogManager::log(LogManager::INFO, "Request complete for client %d", _client_fd);
+        //     // Passer à la gestion de la réponse
+        // }
+        // else
+        //     LogManager::log(LogManager::DEBUG, "Request not complete for client %d", _client_fd);
+    }
+    catch (const std::exception &e)
+    {
+        LogManager::log(LogManager::ERROR, "Error handling request for client %d: %s", _client_fd, e.what());
+        // Gérer l'erreur (fermer le client, envoyer une réponse d'erreur, etc.)
+    }
 }
 
 
