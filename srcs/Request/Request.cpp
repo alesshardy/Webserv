@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: apintus <apintus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:23:15 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/09 20:01:43 by tpassin          ###   ########.fr       */
+/*   Updated: 2025/04/10 12:55:46 by apintus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-Request::Request(Client *client): _client(client), _raw(""), _method(""), _uri(""), _version(""), _path(""), _query(""), _currentHeaderKey(""), _statusCode(-1), _state(0){}
+Request::Request(Client *client): _client(client), _raw(""), _method(""), _uri(""), _version(""), _path(""), _query(""), _currentHeaderKey(""), _statusCode(-1), _state(0), _i(0){}
 
 Request::Request(Request const & copy)
 {
@@ -85,21 +85,36 @@ void Request::parseRequest(std::string str)
     try
     {
         this->_raw += str;
-        static size_t i = 0;
+        int boucleK = 0;
+        int boucleV = 0;
+
 
         if (_state == START) 
-            parseMethod(_state, i, _raw);
+            parseMethod(_state, _i, _raw);
         if (_state == URI) 
-            parseUri(_state, i,_raw);
+            parseUri(_state, _i,_raw);
         // if (_state == ) QUERY:
         //     parseQuery(_state, _raw);
         if (_state == VERSION) 
-            parseVersion(_state, i,_raw);
+            parseVersion(_state, _i,_raw);
         // parse header qui boucle entre key et value jusqu'au body
-        if (_state == HEADER_KEY) 
-            parseHeaderKey(_state, i,_raw);
-        if (_state == HEADER_VALUE) 
-            parseHeaderValue(_state, i,_raw);   
+        while (_state >= HEADER_KEY && _state <= HEADER_VALUE)
+        {
+            if (_state == HEADER_KEY)
+            {
+                parseHeaderKey(_state, _i,_raw);
+                boucleK++;
+                boucleV = 0;
+            }
+            if (_state == HEADER_VALUE)
+            {
+                parseHeaderValue(_state, _i,_raw);
+                boucleV++;
+                boucleK = 0;
+            }
+            if (boucleK > 3 || boucleV > 3)
+                break;
+        }
     }
     catch (const std::runtime_error &e)
     {
