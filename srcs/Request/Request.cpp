@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: apintus <apintus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:23:15 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/10 13:55:41 by tpassin          ###   ########.fr       */
+/*   Updated: 2025/04/10 19:12:59 by apintus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-Request::Request(Client *client): _client(client), _raw(""), _method(""), _uri(""), _version(""), _path(""), _query(""), _currentHeaderKey(""), _statusCode(-1), _state(0), _i(0){}
+Request::Request(Client *client, Server *server): _client(client), _server(server), _raw(""), _method(""), _uri(""), _version(""), _path(""), _query(""), _currentHeaderKey(""), _statusCode(-1), _state(0), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0){}
 
 Request::Request(Request const & copy)
 {
@@ -31,7 +31,8 @@ Request & Request::operator=(Request const & rhs)
         this->_currentHeaderKey = rhs._currentHeaderKey;
         // this->_body = rhs._body;
         this->_statusCode = rhs._statusCode;
-        this->_headers = rhs._headers;   
+        this->_headers = rhs._headers;
+        // A COMPLETER SIUUUU
     }
     return (*this);
 }
@@ -97,8 +98,10 @@ void Request::parseRequest(std::string str)
         // parse header qui boucle entre key et value jusqu'au body
         if (_state == HEADER_KEY || _state == HEADER_VALUE)
             parseHeader();
-        // if (_state == BODY)
-        //     parseBody();
+        if (_state == HEADER_CHECK)
+            checkHeader();
+        if (_state == BODY)
+            parseBody();
     }
     catch (const std::runtime_error &e)
     {
@@ -163,6 +166,9 @@ void Request::parseUri()
         throw std::runtime_error("ERROR: Missing Version after uri");
     
     LogManager::log(LogManager::DEBUG, ("Http uri: " + _uri).c_str());
+    // SECU
+    if (_uri.size() > URI_MAX_SIZE)
+        throw std::runtime_error("ERROR: URI size exceeds 2048 characters");
 
     _state = VERSION;
 }
@@ -180,65 +186,11 @@ void Request::parseVersion()
     if (_version != "HTTP/1.1")
         throw std::runtime_error("ERROR: Bad Version");
     LogManager::log(LogManager::DEBUG, ("Http version: " + _version).c_str());
+    // SECU 
+    if (_raw.size() > 8192)
+        throw std::runtime_error("ERROR: Request line exceeds 8 KB");
     _state = HEADER_KEY;
 }
-
-//ANCIENNE VERSION
-
-// void Request::parseHeaderKey()
-// {
-//     LogManager::log(LogManager::DEBUG, "parse header key");
-
-//     std::cout << _raw[_i];
-//     size_t endLine = _raw.find("\r\n", _i);
-//     if (endLine == std::string::npos)
-//         throw std::runtime_error("ERROR : invalid request format (missing CRLF)");
-
-//     size_t colonPos = _raw.find(':', _i);
-//     if (colonPos == std::string::npos || colonPos > endLine)
-//         throw std::runtime_error("ERROR : invalid header format (missing ':')");
-
-//     // Extraire la clé (header key)
-//     std::string key = _raw.substr(_i, colonPos - _i);
-//     _i = colonPos + 1; // Passer le ':'
-
-//     // Ignorer les espaces après le ':'
-//     while (_i < endLine && _raw[_i] == ' ')
-//         _i++;
-
-//     // Ajouter la clé à l'état interne si nécessaire
-//     LogManager::log(LogManager::DEBUG, "Header_key: %s", key.c_str());
-//     _currentHeaderKey = key; // Stocker temporairement la clé
-    
-//     _state = HEADER_VALUE;
-// }
-
-// void Request::parseHeaderValue()
-// {
-//     LogManager::log(LogManager::DEBUG, "Parse header value");
-
-//     size_t endLine = _raw.find("\r\n", _i);
-//     if (endLine == std::string::npos)
-//         throw std::runtime_error("ERROR : invalid request format (missing CRLF)");
-
-//     // Extraire la valeur (header value)
-//     std::string value = _raw.substr(_i, endLine - _i);
-//     _i = endLine + 2; // Passer "\r\n"
-
-//     // Ajouter la clé-valeur au map des headers
-//     _headers[_currentHeaderKey] = value;
-
-//     LogManager::log(LogManager::DEBUG, "Header_value: %s", value.c_str());
-
-//     // Vérifier si on continue avec d'autres headers ou si on passe au corps
-//     if (_raw[_i] == '\r' && _raw[_i + 1] == '\n') // Fin des headers
-//     {
-//         _i += 2; // Passer "\r\n"
-//         _state = END; // Passer à l'état BODY
-//     }
-//     else
-//         _state = HEADER_KEY; // Continuer avec un autre header
-// }
 
 // void    Request::displayValue()
 // {
@@ -259,10 +211,11 @@ void Request::parseHeaderKey()
     // if (endLine != std::string::npos)
     if (_raw[_i] == '\r' && _raw[_i + 1] == '\n')
     {
-        if (this->_method == "GET")
-            _state = END; // SUITE CHANGE EN BODY
-        else if (this->_method == "PUT" || this->_method == "POST")
-            _state = BODY;
+        // if (this->_method == "GET")
+        //     _state = END; // SUITE CHANGE EN BODY
+        // else if (this->_method == "PUT" || this->_method == "POST")
+        //     _state = BODY;
+        _state = HEADER_CHECK;
         return ;
     }
 
@@ -299,8 +252,9 @@ void Request::parseHeaderValue()
     }
 
     _i += 2;
+    // _headers[_currentHeaderKey] = _currentHeaderValue;
+    parseHeaderKeyValue(_currentHeaderKey, _currentHeaderValue);
     LogManager::log(LogManager::DEBUG, ("HeaderValue " + _currentHeaderValue).c_str());
-    _headers[_currentHeaderKey] = _currentHeaderValue;
     _currentHeaderKey.clear();
     _state = HEADER_KEY;
 }
@@ -330,3 +284,179 @@ void   Request::parseHeader()
 }
 
 
+void Request::parseHeaderKeyValue(const std::string& headerKey, const std::string& headerValue)
+{
+    // Vérifier si l'en-tête est unique
+    if (headerKey == "Host" || headerKey == "Content-Length" || headerKey == "Transfer-Encoding")
+    {
+        if (_headers.find(headerKey) != _headers.end())
+        {
+            throw std::runtime_error("ERROR: Duplicate header: " + headerKey);
+        }
+        _headers[headerKey] = headerValue;
+    }
+
+    // VOIR POUR LES AUTRES SI ECRASER OU CONCATENER
+    
+    // // Gérer les en-têtes multiples autorisés
+    // else if (headerKey == "Accept" || headerKey == "Accept-Encoding" || headerKey == "Cookie")
+    // {
+    //     if (_headers.find(headerKey) != _headers.end())
+    //     {
+    //         _headers[headerKey] += ", " + headerValue;
+    //     }
+    //     else
+    //     {
+    //         _headers[headerKey] = headerValue;
+    //     }
+    // }
+    // En-têtes génériques
+    else
+    {
+        _headers[headerKey] = headerValue;
+    }
+}
+
+
+// CHECK HEADER
+void    Request::checkHeader()
+{
+    LogManager::log(LogManager::DEBUG, "Checking headers ...");
+
+    if (_headers.find("Host") == _headers.end())
+        throw std::runtime_error("ERROR: Missing Host Header");
+    
+    // FInd max Body size
+    getMaxBodySize();
+    
+    if (_headers.find("Content-Length") != _headers.end())
+    {
+        long long contentLength;
+        
+        try{
+            contentLength = Utils::ft_stolonglong(_headers["Content-Length"]);
+        }
+        catch (const std::exception &e){
+            throw std::runtime_error("ERROR : Invalid Content-Length value"); 
+        }
+        if (contentLength < 0)
+            throw std::runtime_error("ERROR: Invalid Content-Length value");
+        _contentLength = contentLength; // stocker la taille du content length
+    }
+
+    if (_headers.find("Transfer-Encoding") != _headers.end()) 
+    {
+        std::string transferEncoding = _headers["Transfer-Encoding"];
+        if (transferEncoding.find("chunked") == std::string::npos)
+            throw std::runtime_error("ERROR: Unsupported Transfer-Encoding (must include 'chunked')");
+        _isChunked = true; // Mettre le flag chunked
+    }
+
+    if (_headers.find("Content-Length") != _headers.end() &&
+        _headers.find("Transfer-Encoding") != _headers.end())
+        throw std::runtime_error("ERROR: Both Content-Length and Transfer-Encoding are present");
+
+    // verfier aussi si il y en aucun des deux
+
+    _state = END;
+    LogManager::log(LogManager::DEBUG, "Checking headers DONE");
+}
+
+
+// RePASSER VERIFIER CETTE FONCTION SIUUUUUUU
+void Request::getMaxBodySize()
+{
+    // Vérifier la présence de l'en-tête Host
+    if (_headers.find("Host") == _headers.end())
+        throw std::runtime_error("ERROR: Missing Host Header");
+
+    // Extraire le nom d'hôte et le port depuis l'en-tête Host
+    std::string hostValue = _headers["Host"];
+    size_t colonPos = hostValue.find(':');
+    std::string hostName = hostValue.substr(0, colonPos);
+    int port = (colonPos != std::string::npos) ? Utils::ft_stoi(hostValue.substr(colonPos + 1)) : 80;
+
+    // Conversion du port en chaîne (C++98 compatible)
+    std::ostringstream oss;
+    oss << port;
+    std::string portStr = oss.str();
+    LogManager::log(LogManager::DEBUG, ("Extracted Host: " + hostName + ", Port: " + portStr).c_str());
+
+    // Accéder à la configuration via le getter
+    Config config = _server->get_config();
+
+    // Trouver le bloc server correspondant
+    BlocServer* matchingServer = NULL; // Utiliser NULL au lieu de nullptr
+    for (size_t i = 0; i < config.getServers().size(); ++i) {
+        BlocServer& server = config.getServer(i);
+
+        // Vérifier si le port correspond
+        bool portMatches = false;
+        for (size_t j = 0; j < server.getListen().size(); ++j) {
+            if (server.getListen()[j].getPort() == port) {
+                portMatches = true;
+                break;
+            }
+        }
+
+        // Vérifier si le server_name correspond
+        bool serverNameMatches = false;
+        for (size_t j = 0; j < server.getServerName().size(); ++j) {
+            if (server.getServerName()[j] == hostName) {
+                serverNameMatches = true;
+                break;
+            }
+        }
+
+        // Si le port et le server_name correspondent, sélectionner ce bloc
+        if (portMatches && serverNameMatches) {
+            matchingServer = &server;
+            break;
+        }
+
+        // Si seul le port correspond, garder ce bloc comme fallback
+        if (portMatches && !matchingServer) {
+            matchingServer = &server;
+        }
+    }
+
+    // Si aucun bloc server ne correspond, lever une erreur
+    if (!matchingServer) {
+        throw std::runtime_error("ERROR: No matching server block found for the request");
+    }
+
+    // Récupérer client_max_body_size
+    _maxBodySize = matchingServer->getClientMaxBodySize();
+
+    // Conversion de _maxBodySize en chaîne (C++98 compatible)
+    oss.str(""); // Réinitialiser le flux
+    oss.clear(); // Réinitialiser les flags d'erreur
+    oss << _maxBodySize;
+    std::string maxBodySizeStr = oss.str();
+    LogManager::log(LogManager::DEBUG, ("Max body size set to: " + maxBodySizeStr).c_str());
+}
+
+// BODYYYYYYYYYYYYY
+void Request::parseBody()
+{
+    LogManager::log(LogManager::DEBUG, "Parse Body");
+    
+    if (_contentLength > _maxBodySize)
+        throw std::runtime_error("ERROR: Request body exceeds the maximum allowed size");
+    if (_isChunked)
+    {
+        LogManager::log(LogManager::DEBUG, "Parse Body en mode CHUNKED");
+        // GERER EN MODE CHUNMKER    
+    }
+    else
+    {
+        LogManager::log(LogManager::DEBUG, "Parse Body en mode LENGTH");
+        
+        // exemple
+        // _body += _raw.substr(_i);
+        // if (_body.size() > _maxBodySize) {
+        //     throw std::runtime_error("ERROR: Request body exceeds the maximum allowed size");
+        // }
+    }
+    
+}

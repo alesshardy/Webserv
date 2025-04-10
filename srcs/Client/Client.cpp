@@ -3,11 +3,12 @@
 
 //Constructeur
 
-Client::Client(int client_fd, Socket* client_socket)
+Client::Client(int client_fd, Socket* client_socket, Server *server)
 {
     _client_fd = client_fd;
     _client_socket = client_socket;
-    _request = new Request(this);
+    _server = server;
+    _request = new Request(this, _server);
     LogManager::log(LogManager::DEBUG, "Create request");
        _requestFinish = false;
     // _response = new Response();

@@ -237,7 +237,7 @@ void Server::handleNewConnection(int socket_fd)
         throw std::runtime_error("Error accepting connection");
     }
 
-    Client *client = new Client(client_fd, _sockets_map[socket_fd]);
+    Client *client = new Client(client_fd, _sockets_map[socket_fd], this);
     _clients_map[client_fd] = client;
 
     struct epoll_event ev;
