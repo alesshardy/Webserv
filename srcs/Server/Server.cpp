@@ -2,8 +2,8 @@
 
 
 /**TEST TEMPORAIRE RESPONSE */
-std::string extractFilePath(const std::string &request);
-std::string getContentType(const std::string &filePath);
+// std::string extractFilePath(const std::string &request);
+// std::string getContentType(const std::string &filePath);
 /**************** */
 
 
@@ -237,7 +237,7 @@ void Server::handleNewConnection(int socket_fd)
         throw std::runtime_error("Error accepting connection");
     }
 
-    Client *client = new Client(client_fd, _sockets_map[socket_fd]);
+    Client *client = new Client(client_fd, _sockets_map[socket_fd], this);
     _clients_map[client_fd] = client;
 
     struct epoll_event ev;
@@ -306,47 +306,47 @@ void Server::stop()
 
 }
 
-/**
- * @brief Gérer une requête GET
- * 
- * @param client_fd 
- * @param buffer
- */
-void Server::handleGetRequest(int client_fd, const char *buffer)
-{
-    std::string filePath = extractFilePath(buffer);
+// /**
+//  * @brief Gérer une requête GET
+//  * 
+//  * @param client_fd 
+//  * @param buffer
+//  */
+// void Server::handleGetRequest(int client_fd, const char *buffer)
+// {
+//     std::string filePath = extractFilePath(buffer);
 
-    std::ifstream file(filePath.c_str(), std::ios::binary);
-    if (file.is_open())
-    {
-        std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-        file.close();
+//     std::ifstream file(filePath.c_str(), std::ios::binary);
+//     if (file.is_open())
+//     {
+//         std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+//         file.close();
 
-        std::string contentType = getContentType(filePath);
+//         std::string contentType = getContentType(filePath);
 
-        std::ostringstream oss;
-        oss << content.size();
-        std::string response = "HTTP/1.1 200 OK\r\n";
-        response += "Content-Type: " + contentType + "\r\n";
-        response += "Content-Length: " + oss.str() + "\r\n";
-        response += "\r\n";
-        response += content;
+//         std::ostringstream oss;
+//         oss << content.size();
+//         std::string response = "HTTP/1.1 200 OK\r\n";
+//         response += "Content-Type: " + contentType + "\r\n";
+//         response += "Content-Length: " + oss.str() + "\r\n";
+//         response += "\r\n";
+//         response += content;
 
-        send(client_fd, response.c_str(), response.size(), 0);
-        LogManager::log(LogManager::INFO, "Response sent to client %d for file %s", client_fd, filePath.c_str());
-    }
-    else
-    {
-        std::string response = "HTTP/1.1 404 Not Found\r\n";
-        response += "Content-Type: text/html\r\n";
-        response += "Content-Length: 58\r\n";
-        response += "\r\n";
-        response += "<html><body><h1>404 Not Found</h1><p>File not found.</p></body></html>";
+//         send(client_fd, response.c_str(), response.size(), 0);
+//         LogManager::log(LogManager::INFO, "Response sent to client %d for file %s", client_fd, filePath.c_str());
+//     }
+//     else
+//     {
+//         std::string response = "HTTP/1.1 404 Not Found\r\n";
+//         response += "Content-Type: text/html\r\n";
+//         response += "Content-Length: 58\r\n";
+//         response += "\r\n";
+//         response += "<html><body><h1>404 Not Found</h1><p>File not found.</p></body></html>";
 
-        send(client_fd, response.c_str(), response.size(), 0);
-        LogManager::log(LogManager::ERROR, "File not found: %s", filePath.c_str());
-    }
-}
+//         send(client_fd, response.c_str(), response.size(), 0);
+//         LogManager::log(LogManager::ERROR, "File not found: %s", filePath.c_str());
+//     }
+// }
 
 /**
  * @brief Fermer tous les sockets et clients
@@ -360,7 +360,11 @@ void Server::close_all()
     {
         int client_fd = it->first;
         ++it; // Incrémenter l'itérateur avant de supprimer le client
-        close_client(client_fd);
+        if (client_fd != -1)
+            close_client(client_fd);
+        else
+            LogManager::log(LogManager::WARNING, "Client %d not found in _clients_map", client_fd);
+        // close_client(client_fd);
     }
     _clients_map.clear();
 
@@ -394,6 +398,7 @@ void Server::close_all()
  */
 void Server::close_client(int client_fd)
 {
+    LogManager::log(LogManager::DEBUG, "Closing client ACTUEL %d", client_fd);
     remove_from_epoll(client_fd); // Retirer le client de epoll
 
     // Fermer le client
@@ -422,6 +427,7 @@ void Server::close_client(int client_fd)
  */
 void Server::close_socket(int socket_fd)
 {
+    LogManager::log(LogManager::DEBUG, "Closing socket %d", socket_fd);
     remove_from_epoll(socket_fd); // Retirer le socket de epoll
 
     // Fermer le socket
@@ -443,9 +449,30 @@ void Server::close_socket(int socket_fd)
 
 void Server::remove_from_epoll(int fd)
 {
+    if (fd < 0)
+    {
+        LogManager::log(LogManager::WARNING, "Invalid FD %d, skipping removal from epoll", fd);
+        return;
+    }
     if (epoll_ctl(_epoll_fd, EPOLL_CTL_DEL, fd, NULL) == -1)
     {
         LogManager::log(LogManager::WARNING, "Failed to remove FD %d from epoll", fd);
+    }
+  
+}
+
+
+void Server::change_epoll_event(int socketFD, uint32_t EVENT)
+{
+    int epollFD = _epoll_fd;
+    struct epoll_event ev;
+    ev.events = EVENT;
+    ev.data.fd = socketFD;
+
+    if (epoll_ctl(epollFD, EPOLL_CTL_MOD, socketFD, &ev) == -1)
+    {
+        LogManager::log(LogManager::ERROR, "Failed to modify epoll event for socket %d", socketFD);
+        throw std::runtime_error("Failed to modify epoll event");
     }
 }
 
@@ -456,43 +483,43 @@ void Server::remove_from_epoll(int fd)
 //***************TEST DE REPONSE EN DUR TMP */
 
 
-std::string extractFilePath(const std::string &request)
-{
-    size_t start = request.find("GET ") + 4;
-    size_t end = request.find(" ", start);
-    if (start == std::string::npos || end == std::string::npos)
-        return "";
-    std::string path = request.substr(start, end - start);
-    if (path == "/")
-        path = "/index.html"; // Par défaut, servir index.html
-    return "www/main" + path; // Préfixer avec le répertoire racine
-}
+// std::string extractFilePath(const std::string &request)
+// {
+//     size_t start = request.find("GET ") + 4;
+//     size_t end = request.find(" ", start);
+//     if (start == std::string::npos || end == std::string::npos)
+//         return "";
+//     std::string path = request.substr(start, end - start);
+//     if (path == "/")
+//         path = "/index.html"; // Par défaut, servir index.html
+//     return "www/main" + path; // Préfixer avec le répertoire racine
+// }
 
-bool endsWith(const std::string &str, const std::string &suffix)
-{
-    if (str.length() >= suffix.length())
-    {
-        return str.compare(str.length() - suffix.length(), suffix.length(), suffix) == 0;
-    }
-    return false;
-}
+// bool endsWith(const std::string &str, const std::string &suffix)
+// {
+//     if (str.length() >= suffix.length())
+//     {
+//         return str.compare(str.length() - suffix.length(), suffix.length(), suffix) == 0;
+//     }
+//     return false;
+// }
 
 
-std::string getContentType(const std::string &filePath)
-{
-    if (endsWith(filePath, ".html"))
-        return "text/html";
-    if (endsWith(filePath, ".css"))
-        return "text/css";
-    if (endsWith(filePath, ".js"))
-        return "application/javascript";
-    if (endsWith(filePath, ".png"))
-        return "image/png";
-    if (endsWith(filePath, ".jpg") || endsWith(filePath, ".jpeg"))
-        return "image/jpeg";
-    if (endsWith(filePath, ".gif"))
-        return "image/gif";
-    if (endsWith(filePath, ".ico"))
-        return "image/x-icon";
-    return "application/octet-stream"; // Type par défaut
-}
+// std::string getContentType(const std::string &filePath)
+// {
+//     if (endsWith(filePath, ".html"))
+//         return "text/html";
+//     if (endsWith(filePath, ".css"))
+//         return "text/css";
+//     if (endsWith(filePath, ".js"))
+//         return "application/javascript";
+//     if (endsWith(filePath, ".png"))
+//         return "image/png";
+//     if (endsWith(filePath, ".jpg") || endsWith(filePath, ".jpeg"))
+//         return "image/jpeg";
+//     if (endsWith(filePath, ".gif"))
+//         return "image/gif";
+//     if (endsWith(filePath, ".ico"))
+//         return "image/x-icon";
+//     return "application/octet-stream"; // Type par défaut
+// }
