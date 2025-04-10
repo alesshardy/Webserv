@@ -32,6 +32,8 @@ class Client
         Socket*              _client_socket;
         Request*             _request;
         Response*            _response;
+        bool   _requestFinish;
+
         
 
 
@@ -41,7 +43,7 @@ class Client
         ~Client();
 
         // methodes 
-        void                handleRequest();
+        void                handleRequest(std::string const & str);
         void                handleResponse(int epoll_fd);     
 
         
