@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apintus <apintus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 17:05:33 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/10 12:42:20 by apintus          ###   ########.fr       */
+/*   Updated: 2025/04/10 13:10:19 by tpassin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,12 @@ class Request{
         ~Request();
         
         void parseRequest(std::string request);
-        void parseMethod(int & state, size_t & idx, std::string const & str);
-        void parseUri(int & state, size_t & idx, std::string const & str);
-        void parseHeaderKey(int & state, size_t & idx, std::string const & str);
-        void parseHeaderValue(int & state, size_t & idx, std::string const & str);
-        void parseVersion(int & state, size_t & idx, std::string const & str);
+        void parseMethod();
+        void parseUri(void);
+        void parseHeaderKey(void);
+        void parseHeaderValue(void);
+        void parseVersion(void);
+        void parseHeader(void);
         // void parsePath(int & state, int & idx, std::string const & str);
         // void parseQuery(int & state, int & idx, std::string const & str);
         // void parseBody(int & state, int & idx, std::string const & str);
