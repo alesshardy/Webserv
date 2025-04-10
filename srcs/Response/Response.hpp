@@ -11,8 +11,11 @@
 #include "Request.hpp"
 #include "LogManager.hpp"
 #include "BlocServer.hpp"
+#include "Client.hpp"
 
 
+
+class   Client;
 class   Request;
 
 class   Response
@@ -36,7 +39,7 @@ class   Response
         void                _handleHead();
 
     public:
-        Response(int client_fd, Socket* client_socket, Request* request, BlocServer* server);
+        Response(Client* client);
         ~Response();
 
 
@@ -50,6 +53,14 @@ class   Response
         void                setServer(BlocServer* server);
         void                setClientFd(int client_fd);
         void                setClientSocket(Socket* client_socket);
+
+        // Getters
+        int                 getClientFd() const { return _client_fd; }
+        Socket*             getClientSocket() const { return _client_socket; }
+        Request*            getRequest() const { return _request; }
+        BlocServer*         getServer() const { return _server; }
+        std::string         getResponseBody() const { return _response_body; }
+        std::string         getResponseHeader() const { return _response_header; }
 
 
 };

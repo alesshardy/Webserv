@@ -21,6 +21,8 @@
 
 
 class Request;
+class Server;
+class Response;
 
 class Client
 {
@@ -32,6 +34,8 @@ class Client
         Socket*              _client_socket;
         Request*             _request;
         Response*            _response;
+        Server*                 _server;
+
         bool   _requestFinish;
 
         
@@ -39,7 +43,7 @@ class Client
 
 
     public:
-        Client(int client_fd, Socket* client_socket);
+        Client(int client_fd, Socket* client_socket, Server *server);
         ~Client();
 
         // methodes 
