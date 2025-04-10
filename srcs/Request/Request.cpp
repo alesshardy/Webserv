@@ -6,7 +6,7 @@
 /*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:23:15 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/10 13:21:30 by tpassin          ###   ########.fr       */
+/*   Updated: 2025/04/10 13:55:41 by tpassin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ Request::~Request(){}
 
 const std::string &Request::getMethod() const
 {
-    return (_method);
+    return (this->_method);
 }
 
 const std::string &Request::getUri() const
@@ -109,7 +109,7 @@ void Request::parseRequest(std::string str)
 
 void Request::parseMethod()
 {
-    LogManager::log(LogManager::DEBUG, "Parse method");
+    // LogManager::log(LogManager::DEBUG, "Parse method");
     if (_raw.empty())
         throw std::runtime_error("ERROR : empty request");
 
@@ -139,7 +139,7 @@ void Request::parseMethod()
 
 void Request::parseUri()
 {
-    LogManager::log(LogManager::DEBUG, "Parse uri");
+    // LogManager::log(LogManager::DEBUG, "Parse uri");
     while (_i < _raw.size() && _raw[_i] == ' ')
         _i++;
 
@@ -169,7 +169,7 @@ void Request::parseUri()
 
 void Request::parseVersion()
 {
-    LogManager::log(LogManager::DEBUG, "Parse version");
+    // LogManager::log(LogManager::DEBUG, "Parse version");
     size_t endLine = _raw.find("\r\n", _i);
     if (endLine == std::string::npos)
         throw std::runtime_error("ERROR : invalid request format");
@@ -251,7 +251,7 @@ void Request::parseVersion()
 // NOUVELLE VERSION 
 void Request::parseHeaderKey()
 {
-    LogManager::log(LogManager::DEBUG, "Parse HeaderKey");
+    // LogManager::log(LogManager::DEBUG, "Parse HeaderKey");
     if (_raw.empty())
         throw std::runtime_error("ERROR : empty request");
     
@@ -283,7 +283,7 @@ void Request::parseHeaderKey()
 
 void Request::parseHeaderValue()
 {
-    LogManager::log(LogManager::DEBUG, "Parse HeaderValue");
+    // LogManager::log(LogManager::DEBUG, "Parse HeaderValue");
     if (_raw.empty())
         throw std::runtime_error("ERROR : empty request");
 
