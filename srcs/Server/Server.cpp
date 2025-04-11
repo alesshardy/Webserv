@@ -264,7 +264,7 @@ void Server::handleNewConnection(int socket_fd)
  */
 void Server::handleClientData(int client_fd)
 {
-    char buffer[8016] = {0};
+    char buffer[1] = {0};
     int bytes = read(client_fd, buffer, sizeof(buffer));
     if (bytes == -1)
     {
@@ -280,6 +280,8 @@ void Server::handleClientData(int client_fd)
     }
     // buffer[bytes] = '\0';
     std::string str(buffer, bytes);
+    // std::cout << str << std::endl;
+    // exit(EXIT_SUCCESS);
     _clients_map[client_fd]->handleRequest(str);
     // LogManager::log(LogManager::INFO, "Received %d bytes from client %d: %s", bytes, client_fd, buffer);
 
@@ -474,51 +476,3 @@ void Server::change_epoll_event(int socketFD, uint32_t EVENT)
         throw std::runtime_error("Failed to modify epoll event");
     }
 }
-
-
-
-
-
-//***************TEST DE REPONSE EN DUR TMP */
-
-
-// std::string extractFilePath(const std::string &request)
-// {
-//     size_t start = request.find("GET ") + 4;
-//     size_t end = request.find(" ", start);
-//     if (start == std::string::npos || end == std::string::npos)
-//         return "";
-//     std::string path = request.substr(start, end - start);
-//     if (path == "/")
-//         path = "/index.html"; // Par défaut, servir index.html
-//     return "www/main" + path; // Préfixer avec le répertoire racine
-// }
-
-// bool endsWith(const std::string &str, const std::string &suffix)
-// {
-//     if (str.length() >= suffix.length())
-//     {
-//         return str.compare(str.length() - suffix.length(), suffix.length(), suffix) == 0;
-//     }
-//     return false;
-// }
-
-
-// std::string getContentType(const std::string &filePath)
-// {
-//     if (endsWith(filePath, ".html"))
-//         return "text/html";
-//     if (endsWith(filePath, ".css"))
-//         return "text/css";
-//     if (endsWith(filePath, ".js"))
-//         return "application/javascript";
-//     if (endsWith(filePath, ".png"))
-//         return "image/png";
-//     if (endsWith(filePath, ".jpg") || endsWith(filePath, ".jpeg"))
-//         return "image/jpeg";
-//     if (endsWith(filePath, ".gif"))
-//         return "image/gif";
-//     if (endsWith(filePath, ".ico"))
-//         return "image/x-icon";
-//     return "application/octet-stream"; // Type par défaut
-// }
