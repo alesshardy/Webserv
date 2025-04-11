@@ -237,6 +237,14 @@ void Server::handleNewConnection(int socket_fd)
         throw std::runtime_error("Error accepting connection");
     }
 
+    // Vérifier si le client existe déjà dans _clients_map
+    if (_clients_map.find(client_fd) != _clients_map.end())
+    {
+        LogManager::log(LogManager::WARNING, "Client %d already exists, deleting old client", client_fd);
+        delete _clients_map[client_fd]; // Supprimer l'ancien client
+        _clients_map.erase(client_fd);  // Retirer l'entrée de la map
+    }
+
     Client *client = new Client(client_fd, _sockets_map[socket_fd], this);
     _clients_map[client_fd] = client;
 

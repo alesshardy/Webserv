@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   RequestBody.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: apintus <apintus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:22:00 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/03 19:30:07 by tpassin          ###   ########.fr       */
+/*   Updated: 2025/04/11 18:45:08 by apintus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,28 @@
 #include <iostream>
 #include "Request.hpp"
 
-class RequestBody{
+class RequestBody
+{
     private:
+        std::string             _bodyStr;
+        int                     _bodyFd;
+        unsigned long long      _currentSize;
+        unsigned long long      _maxBodySize;
+        bool                    _isChunked;
+        bool                    _isComplete;
     
     public:
-        RequestBody();
-        RequestBody(RequestBody const & copy);
-        RequestBody & operator=(RequestBody const & rhs);
+        RequestBody(unsigned long long maxBodySize, bool isChunked);
         ~RequestBody();
+
+        void initBody(unsigned long long maxBodySize, bool ischunked);
+
+        // void parseChunked(const std::string &rawData, unsigned long long  &index);
+        // void parseContentLength(const std::string &rawData, unsigned long long  &index, unsigned long long contentLength);
+
+        //getters
+        // const std::string &getBody() const;
+        
 };
 
 #endif
