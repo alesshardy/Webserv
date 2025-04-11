@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apintus <apintus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 17:05:33 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/10 19:00:13 by apintus          ###   ########.fr       */
+/*   Updated: 2025/04/11 17:26:43 by tpassin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,12 @@ class Request{
         std::string                         _uri;
         std::string                         _version;
         std::string                         _path;
-        std::string                         _query;
+        std::map<std::string, std::string>  _query;
         std::map<std::string, std::string>  _headers;
         std::string                         _currentHeaderKey;
         int                                 _statusCode;
         int                                 _state;
+        int                                 _error;
         // BlocLocation                        *_location;
         // RequestBody                         _body;
         size_t  _i;
@@ -84,24 +85,24 @@ class Request{
         void checkHeader(void);
         void parseHeaderKeyValue(const std::string &headerKey, const std::string &headerValue);
         void getMaxBodySize();
+        // void parseQuery();
         void parseBody();
         
         // void parsePath(int & state, int & idx, std::string const & str);
-        // void parseQuery(int & state, int & idx, std::string const & str);
         // void parseBody(int & state, int & idx, std::string const & str);
-        void displayValue(void);
-        
         
         const std::string                           &getMethod() const;
         const std::string                           &getUri() const;
         const std::string                           &getVersion() const;
         const std::string                           &getPath() const;
-        const std::string                           &getQuery() const;
+        const std::map<std::string, std::string>    &getQuery() const;
         const int                                   &getStatusCode() const;
         const std::map<std::string, std::string>    &getHeaders() const;
         const int                                   &getState() const;
         
-        void setCode(int const code);
+        void setCode(int const & code);
+        void setError(int const & error);
+        void setState(int const & state);
 };
 
 #endif

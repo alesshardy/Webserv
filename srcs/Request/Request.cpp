@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Request.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apintus <apintus@student.42.fr>            +#+  +:+       +#+        */
+/*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:23:15 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/10 19:12:59 by apintus          ###   ########.fr       */
+/*   Updated: 2025/04/11 17:47:59 by tpassin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-Request::Request(Client *client, Server *server): _client(client), _server(server), _raw(""), _method(""), _uri(""), _version(""), _path(""), _query(""), _currentHeaderKey(""), _statusCode(-1), _state(0), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0){}
+Request::Request(Client *client, Server *server): _client(client), _server(server), _raw(""), _method(""), _uri(""), _version(""), _path(""), _currentHeaderKey(""), _statusCode(-1), _state(0), _error(0), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0){}
 
 Request::Request(Request const & copy)
 {
@@ -69,12 +69,14 @@ const std::map<std::string, std::string> &Request::getHeaders() const
     return (this->_headers);
 }
 
-const std::string &Request::getQuery() const
+const std::map<std::string, std::string> &Request::getQuery() const
 {
     return (this->_query);
 }
 
-void Request::setCode(int const code){this->_statusCode = code;}
+void Request::setCode(int const & code){this->_statusCode = code;}
+
+void Request::setState(int const & state){this->_state = state;}
 
 const int &Request::getState() const
 {
@@ -91,8 +93,8 @@ void Request::parseRequest(std::string str)
             parseMethod();
         if (_state == URI) 
             parseUri();
-        // if (_state == ) QUERY:
-        //     parseQuery(_state, _raw);
+        // if (_state == QUERY)
+        //     parseQuery();
         if (_state == VERSION) 
             parseVersion();
         // parse header qui boucle entre key et value jusqu'au body
@@ -136,14 +138,17 @@ void Request::parseMethod()
 
     if (_i >= endLine)
         throw std::runtime_error("ERROR: Missing URI after method");
-
-    _state = URI;
+    _raw.erase(0, _i);
+    _i = 0;
+    setState(URI);
 }
 
 void Request::parseUri()
 {
+    if (_raw.empty())
+        return ;
     // LogManager::log(LogManager::DEBUG, "Parse uri");
-    while (_i < _raw.size() && _raw[_i] == ' ')
+    while (_i < _raw.size() && (_raw[_i] == ' ' || _raw[_i] == '\t'))
         _i++;
 
     if (_i >= _raw.size() || _raw[_i] != '/')
@@ -153,14 +158,20 @@ void Request::parseUri()
     if (endLine == std::string::npos)
         throw std::runtime_error("ERROR : invalid request format");
 
-    while (_i < endLine && _raw[_i] != ' ')
+    while (_i < endLine && (_raw[_i] != ' ' ))
     {
         _uri += _raw[_i];
         _i++;
     }
 
-    while (_i < endLine && _raw[_i] == ' ')
+    while (_i < endLine && _raw[_i] && _raw[_i] == ' ')
         _i++;
+    // while (_i < endLine && !isalnum(_raw[_i]))
+    // {
+    //     if (_raw[_i] == '?')
+    //         _query += _raw[_i];
+    //     _i++;        
+    // }
 
     if (_i >= endLine)
         throw std::runtime_error("ERROR: Missing Version after uri");
@@ -170,11 +181,13 @@ void Request::parseUri()
     if (_uri.size() > URI_MAX_SIZE)
         throw std::runtime_error("ERROR: URI size exceeds 2048 characters");
 
-    _state = VERSION;
+    setState(VERSION);
 }
 
 void Request::parseVersion()
-{
+{   
+    if (_raw.empty())
+        return ;
     // LogManager::log(LogManager::DEBUG, "Parse version");
     size_t endLine = _raw.find("\r\n", _i);
     if (endLine == std::string::npos)
@@ -182,6 +195,7 @@ void Request::parseVersion()
 
     _version = _raw.substr(_i, endLine - _i);
 
+    std::cout << "version: " << _version << std::endl;
     _i = endLine + 2; // Passer "\r\n"
     if (_version != "HTTP/1.1")
         throw std::runtime_error("ERROR: Bad Version");
@@ -189,23 +203,15 @@ void Request::parseVersion()
     // SECU 
     if (_raw.size() > 8192)
         throw std::runtime_error("ERROR: Request line exceeds 8 KB");
-    _state = HEADER_KEY;
+    setState(HEADER_KEY);
 }
-
-// void    Request::displayValue()
-// {
-//     std::cout << _method << std::endl;    
-//     std::cout << _uri << std::endl;    
-//     std::cout << _version << std::endl;
-//     _state = END;
-// }
 
 // NOUVELLE VERSION 
 void Request::parseHeaderKey()
 {
-    // LogManager::log(LogManager::DEBUG, "Parse HeaderKey");
     if (_raw.empty())
-        throw std::runtime_error("ERROR : empty request");
+        return ;
+    // LogManager::log(LogManager::DEBUG, "Parse HeaderKey");
     
     // size_t endLine = _raw.find("\r\n", _i);
     // if (endLine != std::string::npos)
@@ -215,7 +221,7 @@ void Request::parseHeaderKey()
         //     _state = END; // SUITE CHANGE EN BODY
         // else if (this->_method == "PUT" || this->_method == "POST")
         //     _state = BODY;
-        _state = HEADER_CHECK;
+        setState(HEADER_CHECK);
         return ;
     }
 
@@ -231,11 +237,13 @@ void Request::parseHeaderKey()
     _i += 2;
     LogManager::log(LogManager::DEBUG, ("HeaderKey " + _currentHeaderKey).c_str());
 
-    _state = HEADER_VALUE;
+    setState(HEADER_VALUE);
 }
 
 void Request::parseHeaderValue()
 {
+    if (_raw.empty())
+        return ;
     // LogManager::log(LogManager::DEBUG, "Parse HeaderValue");
     if (_raw.empty())
         throw std::runtime_error("ERROR : empty request");
@@ -256,7 +264,7 @@ void Request::parseHeaderValue()
     parseHeaderKeyValue(_currentHeaderKey, _currentHeaderValue);
     LogManager::log(LogManager::DEBUG, ("HeaderValue " + _currentHeaderValue).c_str());
     _currentHeaderKey.clear();
-    _state = HEADER_KEY;
+    setState(HEADER_KEY);
 }
 
 void   Request::parseHeader()
@@ -358,7 +366,7 @@ void    Request::checkHeader()
 
     // verfier aussi si il y en aucun des deux
 
-    _state = END;
+    setState(END);
     LogManager::log(LogManager::DEBUG, "Checking headers DONE");
 }
 
