@@ -3,14 +3,16 @@
 
 //Constructeur
 
-Client::Client(int client_fd, Socket* client_socket)
+Client::Client(int client_fd, Socket* client_socket, Server* server)
 {
     _client_fd = client_fd;
     _client_socket = client_socket;
-    _request = new Request(this);
+    _server = server;
+    _request = new Request(this, _server);
     LogManager::log(LogManager::DEBUG, "Create request");
-       _requestFinish = false;
-    // _response = new Response();
+    _requestFinish = false;
+    _response = new Response(this);
+    _server = server;
 }
 
 
@@ -21,6 +23,11 @@ Client::~Client()
     {
         LogManager::log(LogManager::DEBUG, "Destroying request");
         delete this->_request;
+    }
+    if (this->_response)
+    {
+        LogManager::log(LogManager::DEBUG, "Destroying response");
+        delete this->_response;
     }
     LogManager::log(LogManager::DEBUG, "Destroying client %d", _client_fd);
     // Ne pas supprimer _client_socket ici, il est géré par Server
@@ -39,13 +46,14 @@ void Client::handleRequest(std::string const & str)
         _request->parseRequest(str);
 
         // Vérifier si la requête est complète
-        // if (_request->getState() == END)
-        // {
-        //     LogManager::log(LogManager::INFO, "Request complete for client %d", _client_fd);
-        //     // Passer à la gestion de la réponse
-        // }
-        // else
-        //     LogManager::log(LogManager::DEBUG, "Request not complete for client %d", _client_fd);
+        if (_request->getState() == END)
+        {
+            _server->change_epoll_event(_client_fd, RESPONSE_EVENTS);
+            LogManager::log(LogManager::INFO, "Request complete for client %d", _client_fd);
+            // Passer à la gestion de la réponse
+        }
+        else
+            LogManager::log(LogManager::DEBUG, "Request not complete for client %d", _client_fd);
     }
     catch (const std::exception &e)
     {
@@ -60,5 +68,27 @@ void    Client::handleResponse(int epoll_fd)
     (void)epoll_fd;
     LogManager::log(LogManager::DEBUG, "Handling response for client %d", _client_fd);
     LogManager::log(LogManager::DEBUG, "epoll_fd: %d", epoll_fd);
-    // _response->sendResponse();
+    
+    // Send the response to the client
+    if (_response->buildResponse(epoll_fd) == -1)
+    {
+        LogManager::log(LogManager::ERROR, "Failed to build response for client %d", _client_fd);
+        return;
+    }
+    // Send the response to the client
+    if (send(_client_fd, _response->getResponseHeader().c_str(), _response->getResponseHeader().size(), 0) == -1)
+    {
+        LogManager::log(LogManager::ERROR, "Failed to send response header to client %d", _client_fd);
+        return;
+    }
+    if (send(_client_fd, _response->getResponseBody().c_str(), _response->getResponseBody().size(), 0) == -1)
+    {
+        LogManager::log(LogManager::ERROR, "Failed to send response body to client %d", _client_fd);
+        return;
+    }
+    LogManager::log(LogManager::DEBUG, "Response sent to client %d", _client_fd);
+
+    _server->change_epoll_event(_client_fd, REQUEST_EVENTS); // Revenir à l'état de lecture
+    // Close the client socket after sending the response
+    close(_client_fd);
 }

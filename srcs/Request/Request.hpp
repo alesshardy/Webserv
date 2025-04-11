@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: apintus <apintus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 17:05:33 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/10 13:10:19 by tpassin          ###   ########.fr       */
+/*   Updated: 2025/04/10 19:00:13 by apintus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@
 #include <map>
 #include <string>
 
+#include "Server.hpp"
+#include <sstream>
+# define URI_MAX_SIZE 2048
+# define REQUETE_LINE_MAX_SIZE 8192
+
 
 enum parseState
 {
@@ -28,6 +33,7 @@ enum parseState
     QUERY,
     HEADER_KEY,
     HEADER_VALUE,
+    HEADER_CHECK,
     BODY,
     END,
     ERROR
@@ -35,6 +41,7 @@ enum parseState
 
 
 class Client;
+class Server;
 
 class Request{
     friend class Client;
@@ -42,6 +49,7 @@ class Request{
     
     private:
         Client                              *_client;
+        Server                              *_server;
         std::string                         _raw;
         std::string                         _method;
         std::string                         _uri;
@@ -52,13 +60,16 @@ class Request{
         std::string                         _currentHeaderKey;
         int                                 _statusCode;
         int                                 _state;
-        // Server                              *_server;
         // BlocLocation                        *_location;
         // RequestBody                         _body;
         size_t  _i;
+        bool _isChunked;
+        unsigned long long _maxBodySize;
+        unsigned long long _contentLength;
+        
 
     public:                     
-        Request(Client *client);                      
+        Request(Client *client, Server *server);                      
         Request(Request const & copy);
         Request & operator=(Request const & rhs);
         ~Request();
@@ -70,6 +81,11 @@ class Request{
         void parseHeaderValue(void);
         void parseVersion(void);
         void parseHeader(void);
+        void checkHeader(void);
+        void parseHeaderKeyValue(const std::string &headerKey, const std::string &headerValue);
+        void getMaxBodySize();
+        void parseBody();
+        
         // void parsePath(int & state, int & idx, std::string const & str);
         // void parseQuery(int & state, int & idx, std::string const & str);
         // void parseBody(int & state, int & idx, std::string const & str);

@@ -64,6 +64,8 @@ class Server
         void                        close_all();
         void                        remove_from_epoll(int fd);
 
+        void                        change_epoll_event(int socketFD, uint32_t EVENT);
+        
         //run 
         void                        handleNewConnection(int socket_fd);
         void                        handleClientData(int client_fd);
