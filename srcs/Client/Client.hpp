@@ -22,6 +22,7 @@
 
 class Request;
 class Server;
+class Response;
 
 class Client
 {
@@ -33,7 +34,8 @@ class Client
         Socket*              _client_socket;
         Request*             _request;
         Response*            _response;
-        Server*     _server;
+        Server*                 _server;
+
         bool   _requestFinish;
 
         

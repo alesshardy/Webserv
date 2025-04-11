@@ -3,4 +3,7 @@
 
 extern bool running;
 
+#define REQUEST_EVENTS EPOLLIN | EPOLLRDHUP | EPOLLERR 
+#define RESPONSE_EVENTS EPOLLIN | EPOLLOUT | EPOLLHUP | EPOLLERR
+
 #endif
