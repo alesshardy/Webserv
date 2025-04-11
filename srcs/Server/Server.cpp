@@ -237,6 +237,14 @@ void Server::handleNewConnection(int socket_fd)
         throw std::runtime_error("Error accepting connection");
     }
 
+    // verifier si le client existe deja
+    if (_clients_map.find(client_fd) != _clients_map.end())
+    {
+        LogManager::log(LogManager::ERROR, "Client already exists");
+        delete _clients_map[client_fd];
+        _clients_map.erase(client_fd);
+    }
+
     Client *client = new Client(client_fd, _sockets_map[socket_fd], this);
     _clients_map[client_fd] = client;
 
@@ -354,16 +362,17 @@ void Server::stop()
 void Server::close_all()
 {
     LogManager::log(LogManager::DEBUG, "Closing all sockets and clients started");
+
+
+    log_clients_map();
+
+    
     // Fermer les clients
     for (std::map<int, Client*>::iterator it = _clients_map.begin(); it != _clients_map.end();)
     {
         int client_fd = it->first;
         ++it; // Incrémenter l'itérateur avant de supprimer le client
-        if (client_fd != -1)
-            close_client(client_fd);
-        else
-            LogManager::log(LogManager::WARNING, "Client %d not found in _clients_map", client_fd);
-        // close_client(client_fd);
+        close_client(client_fd);
     }
     _clients_map.clear();
 
@@ -385,6 +394,7 @@ void Server::close_all()
         _epoll_fd = -1;
     }
 
+
     LogManager::log(LogManager::DEBUG, "Epoll instance closed");
 
     _state = CREATED;
@@ -398,7 +408,13 @@ void Server::close_all()
 void Server::close_client(int client_fd)
 {
     LogManager::log(LogManager::DEBUG, "Closing client ACTUEL %d", client_fd);
-    remove_from_epoll(client_fd); // Retirer le client de epoll
+
+    
+
+    /***********debug */
+    log_epoll_fds();
+    /*************** */
+    // remove_from_epoll(client_fd); // Retirer le client de epoll
 
     // Fermer le client
     if (_clients_map.find(client_fd) != _clients_map.end())
@@ -455,7 +471,22 @@ void Server::remove_from_epoll(int fd)
     }
     if (epoll_ctl(_epoll_fd, EPOLL_CTL_DEL, fd, NULL) == -1)
     {
-        LogManager::log(LogManager::WARNING, "Failed to remove FD %d from epoll", fd);
+        if (errno == ENOENT)
+        {
+            LogManager::log(LogManager::WARNING, "FD %d not found in epoll (already removed)", fd);
+        }
+        else if (errno == EBADF)
+        {
+            LogManager::log(LogManager::WARNING, "FD %d is invalid (already closed)", fd);
+        }
+        else
+        {
+            LogManager::log(LogManager::WARNING, "Failed to remove FD %d from epoll: %s", fd, strerror(errno));
+        }
+    }
+    else
+    {
+        LogManager::log(LogManager::DEBUG, "Successfully removed FD %d from epoll", fd);
     }
   
 }
@@ -522,3 +553,52 @@ void Server::change_epoll_event(int socketFD, uint32_t EVENT)
 //         return "image/x-icon";
 //     return "application/octet-stream"; // Type par défaut
 // }
+
+
+////debug EPOLL**************************************
+
+void Server::log_epoll_fds()
+{
+    LogManager::log(LogManager::DEBUG, "Listing FDs currently in epoll:");
+    struct epoll_event events[MAX_EVENTS];
+    int nfds = epoll_wait(_epoll_fd, events, MAX_EVENTS, 0); // Timeout 0 to avoid blocking
+
+    if (nfds == -1)
+    {
+        if (errno != EINTR)
+        {
+            LogManager::log(LogManager::ERROR, "Error listing epoll FDs: %s", strerror(errno));
+        }
+        return;
+    }
+
+    for (int i = 0; i < nfds; ++i)
+    {
+        LogManager::log(LogManager::DEBUG, "FD in epoll: %d", events[i].data.fd);
+    }
+}
+
+
+void Server::log_clients_map() const
+{
+    if (_clients_map.empty())
+    {
+        LogManager::log(LogManager::DEBUG, "No clients in _clients_map.");
+        return;
+    }
+
+    LogManager::log(LogManager::DEBUG, "Listing clients in _clients_map:");
+    for (std::map<int, Client*>::const_iterator it = _clients_map.begin(); it != _clients_map.end(); ++it)
+    {
+        int client_fd = it->first;
+        Client* client = it->second;
+        if (client)
+        {
+            LogManager::log(LogManager::DEBUG, "Client FD: %d, Client Pointer: %p", client_fd, client);
+        }
+        else
+        {
+            LogManager::log(LogManager::WARNING, "Client FD: %d has a NULL pointer in _clients_map.", client_fd);
+        }
+    }
+}

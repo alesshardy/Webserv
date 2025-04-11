@@ -65,6 +65,8 @@ class Server
         void                        remove_from_epoll(int fd);
 
         void                        change_epoll_event(int socketFD, uint32_t EVENT);
+        void                        log_epoll_fds();
+        void                        log_clients_map() const;
         
         //run 
         void                        handleNewConnection(int socket_fd);
