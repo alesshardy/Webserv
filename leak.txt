@@ -1,0 +1,59 @@
+==532805== 
+==532805== HEAP SUMMARY:
+==532805==     in use at exit: 2,144 bytes in 12 blocks
+==532805==   total heap usage: 1,406 allocs, 1,394 frees, 2,986,621 bytes allocated
+==532805== 
+==532805== 640 bytes in 4 blocks are indirectly lost in loss record 1 of 3
+==532805==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==532805==    by 0x422F34: Client::reset(Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
+==532805==    by 0x41E4B7: Server::handleEpollEvents() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
+==532805==    by 0x41DE6D: Server::run() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
+==532805==    by 0x40515D: main (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
+==532805== 
+==532805== 1,312 bytes in 4 blocks are indirectly lost in loss record 2 of 3
+==532805==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==532805==    by 0x422EFB: Client::reset(Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
+==532805==    by 0x41E4B7: Server::handleEpollEvents() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
+==532805==    by 0x41DE6D: Server::run() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
+==532805==    by 0x40515D: main (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
+==532805== 
+==532805== 2,144 (192 direct, 1,952 indirect) bytes in 4 blocks are definitely lost in loss record 3 of 3
+==532805==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==532805==    by 0x41E771: Server::handleNewConnection(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
+==532805==    by 0x41E37C: Server::handleEpollEvents() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
+==532805==    by 0x41DE6D: Server::run() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
+==532805==    by 0x40515D: main (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
+==532805== 
+==532805== LEAK SUMMARY:
+==532805==    definitely lost: 192 bytes in 4 blocks
+==532805==    indirectly lost: 1,952 bytes in 8 blocks
+==532805==      possibly lost: 0 bytes in 0 blocks
+==532805==    still reachable: 0 bytes in 0 blocks
+==532805==         suppressed: 0 bytes in 0 blocks
+==532805== 
+==532805== For lists of detected and suppressed errors, rerun with: -s
+==532805== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+
+NOUVEAU MESSAGE:
+
+==539196== 
+==539196== HEAP SUMMARY:
+==539196==     in use at exit: 1,200 bytes in 25 blocks
+==539196==   total heap usage: 4,502 allocs, 4,477 frees, 11,611,385 bytes allocated
+==539196== 
+==539196== 1,200 bytes in 25 blocks are definitely lost in loss record 1 of 1
+==539196==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==539196==    by 0x41E771: Server::handleNewConnection(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
+==539196==    by 0x41E37C: Server::handleEpollEvents() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
+==539196==    by 0x41DE6D: Server::run() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
+==539196==    by 0x40515D: main (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
+==539196== 
+==539196== LEAK SUMMARY:
+==539196==    definitely lost: 1,200 bytes in 25 blocks
+==539196==    indirectly lost: 0 bytes in 0 blocks
+==539196==      possibly lost: 0 bytes in 0 blocks
+==539196==    still reachable: 0 bytes in 0 blocks
+==539196==         suppressed: 0 bytes in 0 blocks
+==539196== 
+==539196== For lists of detected and suppressed errors, rerun with: -s
+==539196== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)

@@ -6,7 +6,7 @@
 /*   By: apintus <apintus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 17:05:33 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/10 19:00:13 by apintus          ###   ########.fr       */
+/*   Updated: 2025/04/11 18:31:58 by apintus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ enum parseState
 
 class Client;
 class Server;
+class RequestBody;
 
 class Request{
     friend class Client;
@@ -61,11 +62,11 @@ class Request{
         int                                 _statusCode;
         int                                 _state;
         // BlocLocation                        *_location;
-        // RequestBody                         _body;
         size_t  _i;
         bool _isChunked;
         unsigned long long _maxBodySize;
         unsigned long long _contentLength;
+        RequestBody                         *_body;
         
 
     public:                     

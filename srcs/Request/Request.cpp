@@ -6,13 +6,13 @@
 /*   By: apintus <apintus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:23:15 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/10 19:12:59 by apintus          ###   ########.fr       */
+/*   Updated: 2025/04/11 18:43:27 by apintus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-Request::Request(Client *client, Server *server): _client(client), _server(server), _raw(""), _method(""), _uri(""), _version(""), _path(""), _query(""), _currentHeaderKey(""), _statusCode(-1), _state(0), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0){}
+Request::Request(Client *client, Server *server): _client(client), _server(server), _raw(""), _method(""), _uri(""), _version(""), _path(""), _query(""), _currentHeaderKey(""), _statusCode(-1), _state(0), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0), _body(){}
 
 Request::Request(Request const & copy)
 {
@@ -23,16 +23,23 @@ Request & Request::operator=(Request const & rhs)
 {
     if (this != &rhs)
     {
+        this->_client = rhs._client;
+        this->_server = rhs._server;
+        this->_raw = rhs._raw;
         this->_method = rhs._method;
         this->_uri = rhs._uri;
         this->_version = rhs._version;
         this->_path = rhs._path;
         this->_query = rhs._query;
-        this->_currentHeaderKey = rhs._currentHeaderKey;
-        // this->_body = rhs._body;
-        this->_statusCode = rhs._statusCode;
         this->_headers = rhs._headers;
-        // A COMPLETER SIUUUU
+        this->_currentHeaderKey = rhs._currentHeaderKey;
+        this->_statusCode = rhs._statusCode;
+        this->_state = rhs._state;
+        this->_i = rhs._i;
+        this->_isChunked = rhs._isChunked;
+        this->_maxBodySize = rhs._maxBodySize;
+        this->_contentLength = rhs._contentLength;
+        this->_body = rhs._body;
     }
     return (*this);
 }
