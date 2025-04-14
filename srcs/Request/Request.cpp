@@ -6,7 +6,7 @@
 /*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:23:15 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/11 17:47:59 by tpassin          ###   ########.fr       */
+/*   Updated: 2025/04/14 18:53:49 by tpassin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,10 @@ void Request::parseMethod()
 {
     // LogManager::log(LogManager::DEBUG, "Parse method");
     if (_raw.empty())
+    {
         throw std::runtime_error("ERROR : empty request");
+        return ;
+    }
 
     size_t endLine = _raw.find("\r\n", _i);
     if (endLine == std::string::npos)
@@ -180,6 +183,8 @@ void Request::parseUri()
     // SECU
     if (_uri.size() > URI_MAX_SIZE)
         throw std::runtime_error("ERROR: URI size exceeds 2048 characters");
+    _raw.erase(0, _i);
+    _i = 0;
 
     setState(VERSION);
 }
@@ -203,6 +208,9 @@ void Request::parseVersion()
     // SECU 
     if (_raw.size() > 8192)
         throw std::runtime_error("ERROR: Request line exceeds 8 KB");
+    _raw.erase(0, _i);
+    _i = 0;
+    
     setState(HEADER_KEY);
 }
 
@@ -215,7 +223,7 @@ void Request::parseHeaderKey()
     
     // size_t endLine = _raw.find("\r\n", _i);
     // if (endLine != std::string::npos)
-    if (_raw[_i] == '\r' && _raw[_i + 1] == '\n')
+    if (_raw[_i] && _raw[_i] == '\r' && _raw[_i + 1] == '\n')
     {
         // if (this->_method == "GET")
         //     _state = END; // SUITE CHANGE EN BODY
@@ -235,6 +243,8 @@ void Request::parseHeaderKey()
         _i++;
     }
     _i += 2;
+    _raw.erase(0, _i);
+    _i = 0;
     LogManager::log(LogManager::DEBUG, ("HeaderKey " + _currentHeaderKey).c_str());
 
     setState(HEADER_VALUE);
@@ -245,8 +255,6 @@ void Request::parseHeaderValue()
     if (_raw.empty())
         return ;
     // LogManager::log(LogManager::DEBUG, "Parse HeaderValue");
-    if (_raw.empty())
-        throw std::runtime_error("ERROR : empty request");
 
     size_t endLine = _raw.find("\r\n", _i);
     if (endLine == std::string::npos)
@@ -258,12 +266,14 @@ void Request::parseHeaderValue()
         _currentHeaderValue += _raw[_i];
         _i++;
     }
-
     _i += 2;
     // _headers[_currentHeaderKey] = _currentHeaderValue;
     parseHeaderKeyValue(_currentHeaderKey, _currentHeaderValue);
     LogManager::log(LogManager::DEBUG, ("HeaderValue " + _currentHeaderValue).c_str());
     _currentHeaderKey.clear();
+    // std::cout << "\033[31m" << _raw << "\033[0m" << std::endl; // Affichage en rouge
+    _raw.erase(0, _i);
+    _i = 0;
     setState(HEADER_KEY);
 }
 

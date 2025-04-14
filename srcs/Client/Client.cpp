@@ -53,7 +53,8 @@ void Client::handleRequest(std::string const & str)
             // Passer à la gestion de la réponse
         }
         else
-            LogManager::log(LogManager::DEBUG, "Request not complete for client %d", _client_fd);
+            return ;
+            // LogManager::log(LogManager::DEBUG, "Request not complete for client %d", _client_fd);
     }
     catch (const std::exception &e)
     {
