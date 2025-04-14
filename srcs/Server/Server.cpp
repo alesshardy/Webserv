@@ -210,6 +210,7 @@ void Server::handleEpollEvents()
             {
                 LogManager::log(LogManager::DEBUG, "Request is complete, sending response");
                 _clients_map[fd]->handleResponse(_epoll_fd);
+
             }
             else
             {
@@ -409,8 +410,8 @@ void Server::close_client(int client_fd)
         if (client != NULL)
         {
             LogManager::log(LogManager::INFO, "Closing client %d", client_fd);
-            delete client; // Supprime le client
             _clients_map.erase(client_fd);
+            delete client; // Supprime le client
         }
     }
     else
