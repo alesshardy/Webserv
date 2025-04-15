@@ -6,13 +6,13 @@
 /*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:23:15 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/14 18:53:49 by tpassin          ###   ########.fr       */
+/*   Updated: 2025/04/15 14:17:16 by tpassin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Request.hpp"
 
-Request::Request(Client *client, Server *server): _client(client), _server(server), _raw(""), _method(""), _uri(""), _version(""), _path(""), _currentHeaderKey(""), _statusCode(-1), _state(0), _error(0), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0){}
+Request::Request(Client *client, Server *server): _client(client), _server(server), _raw(""), _method(""), _uri(""), _version(""), _path(""), _currentHeaderKey(""), _statusCode(-1), _state(0), _error(0), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0), _timeOut(std::time(NULL)){}
 
 Request::Request(Request const & copy)
 {
@@ -339,6 +339,14 @@ void Request::parseHeaderKeyValue(const std::string& headerKey, const std::strin
 // CHECK HEADER
 void    Request::checkHeader()
 {
+    // std::time_t now = std::time(NULL);
+    // if (now - _timeOut > 3)
+    // {
+    //     LogManager::log(LogManager::WARNING, "Header timeout exceeded (%d seconds)", now - _timeOut);
+    //     return ;
+    // }
+    // std::cout << "\033[31m" << now - _timeOut << "\033[0m" << std::endl; // Affichage en rouge
+        
     LogManager::log(LogManager::DEBUG, "Checking headers ...");
 
     if (_headers.find("Host") == _headers.end())

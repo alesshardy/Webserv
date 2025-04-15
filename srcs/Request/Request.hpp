@@ -6,7 +6,7 @@
 /*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 17:05:33 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/11 17:26:43 by tpassin          ###   ########.fr       */
+/*   Updated: 2025/04/15 12:57:51 by tpassin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <ctime>
 
 #include "Server.hpp"
 #include <sstream>
@@ -67,6 +68,7 @@ class Request{
         bool _isChunked;
         unsigned long long _maxBodySize;
         unsigned long long _contentLength;
+        std::time_t _timeOut;
         
 
     public:                     
