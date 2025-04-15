@@ -6,7 +6,7 @@
 /*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 17:05:33 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/15 15:15:27 by tpassin          ###   ########.fr       */
+/*   Updated: 2025/04/15 15:17:38 by tpassin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ class Request{
     private:
         Client                              *_client;
         Server                              *_server;
+        RequestBody                         *_body;
         std::string                         _raw;
         std::string                         _method;
         std::string                         _uri;
