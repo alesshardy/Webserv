@@ -6,7 +6,7 @@
 /*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:23:15 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/15 15:19:33 by tpassin          ###   ########.fr       */
+/*   Updated: 2025/04/15 18:20:28 by tpassin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,21 @@ const std::map<std::string, std::string> &Request::getQuery() const
     return (this->_query);
 }
 
-void Request::setCode(int const & code){this->_statusCode = code;}
-
-void Request::setState(int const & state){this->_state = state;}
-
-const int &Request::getState() const
+const int &Request::getState() const 
 {
-    return (_state);
+    return (this->_state);
 }
+
+void Request::setCode(int const & code)
+{
+    this->_statusCode = code;
+}
+
+void Request::setState(int const & state)
+{
+    this->_state = state;
+}
+
 
 void Request::parseRequest(std::string str)
 {
@@ -100,8 +107,8 @@ void Request::parseRequest(std::string str)
             parseMethod();
         if (_state == URI) 
             parseUri();
-        // if (_state == QUERY)
-        //     parseQuery();
+        if (_state == QUERY)
+            parseQuery();
         if (_state == VERSION) 
             parseVersion();
         // parse header qui boucle entre key et value jusqu'au body
@@ -118,66 +125,6 @@ void Request::parseRequest(std::string str)
         throw; // Rethrow the exception if needed
     }
 }
-
-// Version qui clean au fur et a mesure
-// void Request::parseRequest(std::string str)
-// {
-//     try
-//     {
-//         this->_raw += str;
-
-//         if (_state == START) 
-//         {
-//             parseMethod();
-//             // Ne pas nettoyer ici car parseUri et parseVersion continueront sur la même ligne
-//         }
-//         if (_state == URI) 
-//         {
-//             parseUri();
-//             // Ne pas nettoyer ici pour la même raison
-//         }
-//         if (_state == VERSION) 
-//         {
-//             parseVersion();
-//             // Maintenant on peut nettoyer la première ligne
-//             size_t end_of_request_line = _i;
-//             clearProcessedData(end_of_request_line);
-//         }
-//         if (_state == HEADER_KEY || _state == HEADER_VALUE)
-//         {
-//             // size_t start_idx = _i;
-//             parseHeader();
-//             // Nettoyer les headers traités sauf si on est en attente de plus de données
-//             if (_state != HEADER_KEY && _state != HEADER_VALUE)
-//             {
-//                 clearProcessedData(_i);
-//             }
-//         }
-//         if (_state == HEADER_CHECK)
-//             checkHeader();
-//         if (_state == BODY)
-//         {
-//             size_t start_idx = _i;
-//             parseBody();
-//             // Si le body est complet ou non-existant, on peut tout nettoyer
-//             if (_state == END)
-//             {
-//                 _raw.clear();
-//                 _i = 0;
-//             }
-//             // Si le parsing du body est en cours, nettoyer ce qui a été traité
-//             else if (_i > start_idx)
-//             {
-//                 clearProcessedData(start_idx);
-//             }
-//         }
-//     }
-//     catch (const std::runtime_error &e)
-//     {
-//         LogManager::log(LogManager::ERROR, e.what());
-//         throw;
-//     }
-// }
 
 void Request::parseMethod()
 {
@@ -228,20 +175,14 @@ void Request::parseUri()
     if (endLine == std::string::npos)
         throw std::runtime_error("ERROR : invalid request format");
 
-    while (_i < endLine && (_raw[_i] != ' ' ))
+    while (_i < endLine && _raw[_i] != ' ')
     {
         _uri += _raw[_i];
         _i++;
     }
 
-    while (_i < endLine && _raw[_i] && _raw[_i] == ' ')
+    while (_i < endLine && _raw[_i] == ' ')
         _i++;
-    // while (_i < endLine && !isalnum(_raw[_i]))
-    // {
-    //     if (_raw[_i] == '?')
-    //         _query += _raw[_i];
-    //     _i++;        
-    // }
 
     if (_i >= endLine)
         throw std::runtime_error("ERROR: Missing Version after uri");
@@ -252,7 +193,48 @@ void Request::parseUri()
         throw std::runtime_error("ERROR: URI size exceeds 2048 characters");
     _raw.erase(0, _i);
     _i = 0;
+    
+    setState(QUERY);
+}
 
+void Request::parseQuery()
+{
+    size_t queryStart = _uri.find("?");
+    if (queryStart == std::string::npos)
+    {
+        setState(VERSION);
+        return;
+    }
+
+    std::string queryString = _uri.substr(queryStart + 1);
+    std::string key, value;
+    size_t pos = 0;
+
+    while (pos < queryString.length())
+    {
+        size_t equalPos = queryString.find("=", pos);
+        size_t ampersandPos = queryString.find("&", pos);
+
+        if (equalPos == std::string::npos || (ampersandPos != std::string::npos && ampersandPos < equalPos))
+        {
+            key = queryString.substr(pos, ampersandPos - pos);
+            value = ""; // Pas de valeur associée
+            pos = (ampersandPos == std::string::npos) ? queryString.length() : ampersandPos + 1;
+        }
+        else
+        {
+            key = queryString.substr(pos, equalPos - pos);
+            value = queryString.substr(equalPos + 1, ampersandPos - equalPos - 1);
+            pos = (ampersandPos == std::string::npos) ? queryString.length() : ampersandPos + 1;
+        }
+
+        if (!key.empty())
+            _query[key] = value;
+    }
+    LogManager::log(LogManager::DEBUG, "Parsed query parameters:");
+    for (std::map<std::string, std::string>::iterator it = _query.begin(); it != _query.end(); ++it)
+        LogManager::log(LogManager::DEBUG, ("Key: " + it->first + ", Value: " + it->second).c_str());
+    _uri = _uri.substr(0, queryStart);
     setState(VERSION);
 }
 
