@@ -15,8 +15,6 @@ Client::Client(int client_fd, Socket* client_socket, Server* server)
     _server = server;
 }
 
-
-
 Client::~Client()
 {
     if (this->_request)
