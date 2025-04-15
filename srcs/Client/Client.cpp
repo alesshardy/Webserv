@@ -65,9 +65,16 @@ void Client::handleRequest(std::string const & str)
 
 void    Client::handleResponse(int epoll_fd)
 {
+    if (_response == NULL)
+    {
+        LogManager::log(LogManager::ERROR, "Response object is NULL for client %d", _client_fd);
+        return;
+    }
+
+    (void)epoll_fd;
     LogManager::log(LogManager::DEBUG, "Handling response for client %d", _client_fd);
     LogManager::log(LogManager::DEBUG, "epoll_fd: %d", epoll_fd);
-    
+
     // Send the response to the client
     if (_response->buildResponse(epoll_fd) == -1)
     {
