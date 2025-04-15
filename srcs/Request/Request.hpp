@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Request.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: apintus <apintus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 17:05:33 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/15 15:17:38 by tpassin          ###   ########.fr       */
+/*   Updated: 2025/04/15 17:43:44 by apintus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,10 @@ class Request{
         void getMaxBodySize();
         // void parseQuery();
         void parseBody();
+        void clearProcessedData(size_t processedBytes);
+        bool isTimeoutExceeded() const;
+
+
         
         // void parsePath(int & state, int & idx, std::string const & str);
         // void parseBody(int & state, int & idx, std::string const & str);
