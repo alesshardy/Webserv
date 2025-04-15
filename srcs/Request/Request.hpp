@@ -6,7 +6,7 @@
 /*   By: apintus <apintus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/02 17:05:33 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/10 19:00:13 by apintus          ###   ########.fr       */
+/*   Updated: 2025/04/14 18:32:38 by apintus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ enum parseState
 
 class Client;
 class Server;
+class RequestBody;
 
 class Request{
     friend class Client;
@@ -61,11 +62,11 @@ class Request{
         int                                 _statusCode;
         int                                 _state;
         // BlocLocation                        *_location;
-        // RequestBody                         _body;
         size_t  _i;
         bool _isChunked;
-        unsigned long long _maxBodySize;
-        unsigned long long _contentLength;
+        size_t _maxBodySize;
+        size_t _contentLength;
+        RequestBody                         *_body;
         
 
     public:                     
@@ -89,9 +90,8 @@ class Request{
         // void parsePath(int & state, int & idx, std::string const & str);
         // void parseQuery(int & state, int & idx, std::string const & str);
         // void parseBody(int & state, int & idx, std::string const & str);
-        void displayValue(void);
-        
-        
+        void clearProcessedData(size_t processed_bytes);
+
         const std::string                           &getMethod() const;
         const std::string                           &getUri() const;
         const std::string                           &getVersion() const;
