@@ -66,9 +66,16 @@ void Client::handleRequest(std::string const & str)
 
 void    Client::handleResponse(int epoll_fd)
 {
+    if (_response == NULL)
+    {
+        LogManager::log(LogManager::ERROR, "Response object is NULL for client %d", _client_fd);
+        return;
+    }
+
+    (void)epoll_fd;
     LogManager::log(LogManager::DEBUG, "Handling response for client %d", _client_fd);
     LogManager::log(LogManager::DEBUG, "epoll_fd: %d", epoll_fd);
-    
+
     // Send the response to the client
     if (_response->buildResponse(epoll_fd) == -1)
     {
@@ -91,4 +98,18 @@ void    Client::handleResponse(int epoll_fd)
     _server->change_epoll_event(_client_fd, REQUEST_EVENTS); // Revenir à l'état de lecture
     // Close the client socket after sending the response
     close(_client_fd);
+    if (_request)
+    {
+        delete _request;
+        _request = NULL;
+    }
+    if (_response)
+    {
+        delete _response;
+        _response = NULL;
+    }
+
+    _request = new Request(this, _server);
+    _response = new Response(this);
+    
 }
