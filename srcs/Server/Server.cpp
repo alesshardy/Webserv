@@ -153,7 +153,8 @@ void Server::checkAndStart()
 void Server::handleEpollEvents()
 {
     struct epoll_event events[MAX_EVENTS];
-    int nfds = epoll_wait(_epoll_fd, events, MAX_EVENTS, -1);
+    int timeout = 1000; // tiemout de 1sec pour relancer epoll_wait
+    int nfds = epoll_wait(_epoll_fd, events, MAX_EVENTS, timeout);
 
     if (nfds == -1)
     {
@@ -164,6 +165,12 @@ void Server::handleEpollEvents()
         }
         LogManager::log(LogManager::ERROR, "Error in epoll_wait");
         throw std::runtime_error("Error in epoll_wait");
+    }
+
+    if (nfds == 0)
+    {
+        checkRequestTimeouts();
+        return ;
     }
 
     for (int n = 0; n < nfds; ++n)
@@ -283,7 +290,7 @@ void Server::handleNewConnection(int socket_fd)
  */
 void Server::handleClientData(int client_fd)
 {
-    char buffer[1] = {0};
+    char buffer[1024] = {0};
     int bytes = read(client_fd, buffer, sizeof(buffer));
     if (bytes == -1)
     {
@@ -609,6 +616,27 @@ void Server::log_clients_map() const
         else
         {
             LogManager::log(LogManager::WARNING, "Client FD: %d has a NULL pointer in _clients_map.", client_fd);
+        }
+    }
+}
+
+void Server::checkRequestTimeouts()
+{
+
+    for (std::map<int, Client*>::iterator it = _clients_map.begin(); it != _clients_map.end();)
+    {
+        Client *client = it->second;
+        Request *request = client->getRequest();
+
+        if (request && request->isTimeoutExceeded())
+        {
+            LogManager::log(LogManager::WARNING, "Request timeout exceeded for client FD %d", it->first);
+            close_client(it->first); // Fermez la connexion pour ce client
+            it = _clients_map.erase(it); // Supprimez le client de la map et mettez à jour l'itérateur
+        }
+        else
+        {
+            ++it;
         }
     }
 }

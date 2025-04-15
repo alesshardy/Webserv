@@ -91,6 +91,7 @@ class Server
         void                        set_clients_map(std::map<int, Client*> clients_map) { _clients_map = clients_map; }
         void                        set_sockets_map(std::map<int, Socket*> sockets_map) { _sockets_map = sockets_map; }
 
+        void checkRequestTimeouts();
 
 
 };
