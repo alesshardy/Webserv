@@ -117,6 +117,8 @@
     "iomanip": "cpp",
     "stop_token": "cpp",
     "thread": "cpp",
-    "semaphore": "cpp"
+    "semaphore": "cpp",
+    "bitset": "cpp",
+    "regex": "cpp"
   }
 }
