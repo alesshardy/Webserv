@@ -412,7 +412,6 @@ void    Config::handleDefaultConfig()
 //A decouper fonction principale pour verifier que le fichier config est correct
 void    Config::parseConfigFile(const std::string &filePath, Config &config) 
 {
-    (void)config;
     std::ifstream file(filePath.c_str());
     if (!file) 
     {
@@ -485,7 +484,6 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                 }
                 token.clear(); // Vider le token à la fin de la ligne
             }
-            // REGLER CE PUTIN DE PB D"ESPACE DE CON
             if (semicolonCount != 1 && lastKey != "server" && lastKey != "location" && lastC != '\n' && lastC != '}' && lastKey != "")
             {
                 throw std::runtime_error("ERROR : line request must end by ';'");

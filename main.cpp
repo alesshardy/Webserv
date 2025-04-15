@@ -20,6 +20,8 @@ void signalHandler(int signum)
 
 int main(int ac, char **av)
 {
+    signal(SIGPIPE, SIG_IGN); // Ignorer SIGPIPE
+
     //Initialisation du gestionnaire d'arguments de la ligne de commande
     CommandLineParser cmdParser(ac, av);
 
@@ -64,7 +66,6 @@ int main(int ac, char **av)
         // Capturer les signaux pour arrêter proprement le serveur
         signal(SIGINT, signalHandler);
         signal(SIGTERM, signalHandler);
-
         // Lancer le serveur
         server.run();
 
@@ -89,7 +90,7 @@ int main(int ac, char **av)
     //fermeture du serveur
     
     LogManager::log(LogManager::INFO, "Server is shutting down...");
-    
+    LogManager::cleanup();
     return (EXIT_SUCCESS);
 }
 

@@ -53,6 +53,7 @@ class LogManager
         static std::string getLogFileName();
         static std::string getLogLevelStr(LogLevel level);
         static std::string getLogLevelColor(LogLevel level);
+        static void cleanup();
 };
 
 // Inclure le fichier .tpp ici
