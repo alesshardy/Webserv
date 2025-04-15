@@ -154,3 +154,9 @@ void LogManager::_writeLogInFile(LogManager::LogLevel level, const char *msg, co
         logFile.close();
     }
 }
+
+void LogManager::cleanup()
+{
+    _logLevelStr.clear();
+    _logLevelColor.clear();
+}
