@@ -6,7 +6,7 @@
 /*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:23:15 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/15 15:15:13 by tpassin          ###   ########.fr       */
+/*   Updated: 2025/04/15 15:19:33 by tpassin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ Request & Request::operator=(Request const & rhs)
         this->_isChunked = rhs._isChunked;
         this->_maxBodySize = rhs._maxBodySize;
         this->_contentLength = rhs._contentLength;
-        this->_body = rhs._body;
+        // this->_body = rhs._body;
     }
     return (*this);
 }
@@ -571,20 +571,3 @@ void Request::parseBody()
     }
     
 }
-
-
-/**
- * Supprime les données déjà traitées de _raw et réinitialise l'index
- * @param processed_bytes Nombre d'octets déjà traités
- */
-void Request::clearProcessedData(size_t processed_bytes)
-{
-    if (processed_bytes > 0 && processed_bytes <= _raw.size())
-    {
-        _raw.erase(0, processed_bytes);
-        _i = 0; // Réinitialiser l'index
-        LogManager::log(LogManager::DEBUG, "Cleared processed data, new raw size: %zu", _raw.size());
-    }
-}
-
-
