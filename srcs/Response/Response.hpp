@@ -60,9 +60,7 @@ class   Response
         Request*            getRequest() const { return _request; }
         BlocServer*         getServer() const { return _server; }
         std::string         getResponseBody() const { return _response_body; }
-        std::string         getResponseHeader() const { return _response_header; }
-
-
+        std::string         getResponseHeader() const { return _response_header;}
 };
 
 #endif

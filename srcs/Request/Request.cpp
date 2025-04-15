@@ -6,7 +6,7 @@
 /*   By: apintus <apintus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:23:15 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/11 18:43:27 by apintus          ###   ########.fr       */
+/*   Updated: 2025/04/14 18:32:35 by apintus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,66 @@ void Request::parseRequest(std::string str)
     }
 }
 
+// Version qui clean au fur et a mesure
+// void Request::parseRequest(std::string str)
+// {
+//     try
+//     {
+//         this->_raw += str;
+
+//         if (_state == START) 
+//         {
+//             parseMethod();
+//             // Ne pas nettoyer ici car parseUri et parseVersion continueront sur la même ligne
+//         }
+//         if (_state == URI) 
+//         {
+//             parseUri();
+//             // Ne pas nettoyer ici pour la même raison
+//         }
+//         if (_state == VERSION) 
+//         {
+//             parseVersion();
+//             // Maintenant on peut nettoyer la première ligne
+//             size_t end_of_request_line = _i;
+//             clearProcessedData(end_of_request_line);
+//         }
+//         if (_state == HEADER_KEY || _state == HEADER_VALUE)
+//         {
+//             // size_t start_idx = _i;
+//             parseHeader();
+//             // Nettoyer les headers traités sauf si on est en attente de plus de données
+//             if (_state != HEADER_KEY && _state != HEADER_VALUE)
+//             {
+//                 clearProcessedData(_i);
+//             }
+//         }
+//         if (_state == HEADER_CHECK)
+//             checkHeader();
+//         if (_state == BODY)
+//         {
+//             size_t start_idx = _i;
+//             parseBody();
+//             // Si le body est complet ou non-existant, on peut tout nettoyer
+//             if (_state == END)
+//             {
+//                 _raw.clear();
+//                 _i = 0;
+//             }
+//             // Si le parsing du body est en cours, nettoyer ce qui a été traité
+//             else if (_i > start_idx)
+//             {
+//                 clearProcessedData(start_idx);
+//             }
+//         }
+//     }
+//     catch (const std::runtime_error &e)
+//     {
+//         LogManager::log(LogManager::ERROR, e.what());
+//         throw;
+//     }
+// }
+
 void Request::parseMethod()
 {
     // LogManager::log(LogManager::DEBUG, "Parse method");
@@ -198,14 +258,6 @@ void Request::parseVersion()
         throw std::runtime_error("ERROR: Request line exceeds 8 KB");
     _state = HEADER_KEY;
 }
-
-// void    Request::displayValue()
-// {
-//     std::cout << _method << std::endl;    
-//     std::cout << _uri << std::endl;    
-//     std::cout << _version << std::endl;
-//     _state = END;
-// }
 
 // NOUVELLE VERSION 
 void Request::parseHeaderKey()
@@ -365,7 +417,7 @@ void    Request::checkHeader()
 
     // verfier aussi si il y en aucun des deux
 
-    _state = END;
+    _state = BODY;
     LogManager::log(LogManager::DEBUG, "Checking headers DONE");
 }
 
@@ -447,23 +499,58 @@ void Request::getMaxBodySize()
 void Request::parseBody()
 {
     LogManager::log(LogManager::DEBUG, "Parse Body");
+    if (_method == "GET")
+    {
+        _state = END;
+        return;
+    }
     
     if (_contentLength > _maxBodySize)
         throw std::runtime_error("ERROR: Request body exceeds the maximum allowed size");
-    if (_isChunked)
-    {
-        LogManager::log(LogManager::DEBUG, "Parse Body en mode CHUNKED");
-        // GERER EN MODE CHUNMKER    
-    }
-    else
-    {
-        LogManager::log(LogManager::DEBUG, "Parse Body en mode LENGTH");
+
+    if (!_body)
+        _body = new RequestBody(_maxBodySize, _isChunked);
         
-        // exemple
-        // _body += _raw.substr(_i);
-        // if (_body.size() > _maxBodySize) {
-        //     throw std::runtime_error("ERROR: Request body exceeds the maximum allowed size");
-        // }
+    try{
+        
+        if (_isChunked)
+        {
+            LogManager::log(LogManager::DEBUG, "Parse Body en mode CHUNKED");
+            _body->parseChunked(_raw, _i);
+            // GERER EN MODE CHUNMKER    
+        }
+        else
+        {
+            LogManager::log(LogManager::DEBUG, "Parse Body en mode LENGTH");
+            _body->parseContentLength(_raw, _i, _contentLength);
+        }
+        if (_body->isComplete())
+        {
+            _state = END;
+            LogManager::log(LogManager::DEBUG, "Parse body DONE!");
+            std::cout << _body->getBody() << std::endl;
+        }
+        
+    } catch (const std::exception &e) {
+        LogManager::log(LogManager::ERROR, e.what());
+        throw; // Relancer l'exception pour traitement en amont
     }
     
 }
+
+
+/**
+ * Supprime les données déjà traitées de _raw et réinitialise l'index
+ * @param processed_bytes Nombre d'octets déjà traités
+ */
+void Request::clearProcessedData(size_t processed_bytes)
+{
+    if (processed_bytes > 0 && processed_bytes <= _raw.size())
+    {
+        _raw.erase(0, processed_bytes);
+        _i = 0; // Réinitialiser l'index
+        LogManager::log(LogManager::DEBUG, "Cleared processed data, new raw size: %zu", _raw.size());
+    }
+}
+
+

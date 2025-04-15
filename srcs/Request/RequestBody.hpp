@@ -6,7 +6,7 @@
 /*   By: apintus <apintus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:22:00 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/11 18:45:08 by apintus          ###   ########.fr       */
+/*   Updated: 2025/04/14 15:52:42 by apintus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,23 +20,24 @@ class RequestBody
 {
     private:
         std::string             _bodyStr;
-        int                     _bodyFd;
-        unsigned long long      _currentSize;
-        unsigned long long      _maxBodySize;
+        // int                     _bodyFd;
+        size_t      _currentSize;
+        size_t      _maxBodySize;
         bool                    _isChunked;
         bool                    _isComplete;
     
     public:
-        RequestBody(unsigned long long maxBodySize, bool isChunked);
+        RequestBody(size_t maxBodySize, bool isChunked);
         ~RequestBody();
 
-        void initBody(unsigned long long maxBodySize, bool ischunked);
 
-        // void parseChunked(const std::string &rawData, unsigned long long  &index);
-        // void parseContentLength(const std::string &rawData, unsigned long long  &index, unsigned long long contentLength);
+        void parseChunked(const std::string &rawData, size_t  &index);
+        void parseContentLength(const std::string &rawData, size_t  &index, size_t contentLength);
 
         //getters
-        // const std::string &getBody() const;
+        const std::string &getBody() const {return _bodyStr;};
+        bool isComplete() const {return _isComplete;};
+        size_t getCurrentSize() const {return _currentSize;};
         
 };
 

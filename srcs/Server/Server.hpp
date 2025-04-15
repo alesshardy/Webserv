@@ -50,8 +50,6 @@ class Server
         std::map<int, Client*>       _clients_map;
         std::map<int, Socket*>       _sockets_map;
 
-
-
     public:
         Server();
         ~Server();
