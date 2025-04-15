@@ -170,6 +170,13 @@ void Server::handleEpollEvents()
     {
         int fd = events[n].data.fd;
 
+     // Vérifiez si le FD est valide dans _clients_map ou _sockets_map
+     if (_clients_map.find(fd) == _clients_map.end() && _sockets_map.find(fd) == _sockets_map.end())
+     {
+         LogManager::log(LogManager::WARNING, "Event on invalid or closed FD %d, skipping", fd);
+         continue;
+     }
+
         if (events[n].events & EPOLLERR)
         {
             LogManager::log(LogManager::ERROR, "Error on socket %d", fd);
@@ -203,24 +210,27 @@ void Server::handleEpollEvents()
 
         if (events[n].events & EPOLLOUT)
         {
-            // Gérer les événements d'écriture si nécessaire
-            LogManager::log(LogManager::DEBUG, "EPOLLOUT event on socket %d", events[n].data.fd);
-
-            if (_clients_map[fd]->getRequest() && _clients_map[fd]->getRequest()->getState() == END)
+            if (_clients_map.find(fd) != _clients_map.end())
             {
-                LogManager::log(LogManager::DEBUG, "Request is complete, sending response");
-                _clients_map[fd]->handleResponse(_epoll_fd);
-
+                Client *client = _clients_map[fd];
+                if (client->getRequest() && client->getRequest()->getState() == END)
+                {
+                    LogManager::log(LogManager::DEBUG, "Request is complete, sending response for FD %d", fd);
+                    client->handleResponse(_epoll_fd);
+                }
+                else
+                {
+                    LogManager::log(LogManager::DEBUG, "Request is not complete for FD %d, waiting for more data", fd);
+                }
             }
             else
             {
-                LogManager::log(LogManager::DEBUG, "Request is not complete, waiting for more data");
+                LogManager::log(LogManager::WARNING, "EPOLLOUT event on invalid or closed FD %d, skipping", fd);
             }
-            
-
         }
     }
 }
+
 
 /**
  * @brief Gérer une nouvelle connexion.
@@ -236,6 +246,14 @@ void Server::handleNewConnection(int socket_fd)
     {
         LogManager::log(LogManager::ERROR, "Error accepting connection");
         throw std::runtime_error("Error accepting connection");
+    }
+
+    // Vérifier si le client existe déjà dans _clients_map
+    if (_clients_map.find(client_fd) != _clients_map.end())
+    {
+        LogManager::log(LogManager::WARNING, "Client %d already exists, deleting old client", client_fd);
+        delete _clients_map[client_fd]; // Supprimer l'ancien client
+        _clients_map.erase(client_fd);  // Retirer l'entrée de la map
     }
 
     Client *client = new Client(client_fd, _sockets_map[socket_fd], this);
@@ -265,7 +283,7 @@ void Server::handleNewConnection(int socket_fd)
  */
 void Server::handleClientData(int client_fd)
 {
-    char buffer[1] = {0};
+    char buffer[1024] = {0};
     int bytes = read(client_fd, buffer, sizeof(buffer));
     if (bytes == -1)
     {
@@ -291,7 +309,6 @@ void Server::handleClientData(int client_fd)
     // {
     //     handleGetRequest(client_fd, buffer);
     // }
-
 
 }
 
@@ -357,16 +374,17 @@ void Server::stop()
 void Server::close_all()
 {
     LogManager::log(LogManager::DEBUG, "Closing all sockets and clients started");
+
+
+    log_clients_map();
+
+    
     // Fermer les clients
     for (std::map<int, Client*>::iterator it = _clients_map.begin(); it != _clients_map.end();)
     {
         int client_fd = it->first;
         ++it; // Incrémenter l'itérateur avant de supprimer le client
-        if (client_fd != -1)
-            close_client(client_fd);
-        else
-            LogManager::log(LogManager::WARNING, "Client %d not found in _clients_map", client_fd);
-        // close_client(client_fd);
+        close_client(client_fd);
     }
     _clients_map.clear();
 
@@ -388,6 +406,7 @@ void Server::close_all()
         _epoll_fd = -1;
     }
 
+
     LogManager::log(LogManager::DEBUG, "Epoll instance closed");
 
     _state = CREATED;
@@ -400,26 +419,36 @@ void Server::close_all()
  */
 void Server::close_client(int client_fd)
 {
-    LogManager::log(LogManager::DEBUG, "Closing client ACTUEL %d", client_fd);
-    remove_from_epoll(client_fd); // Retirer le client de epoll
+    LogManager::log(LogManager::DEBUG, "Closing client FD %d", client_fd);
 
-    // Fermer le client
+    // Retirer le FD d'epoll
+    remove_from_epoll(client_fd);
+
+    // Supprimer le client de la map
     if (_clients_map.find(client_fd) != _clients_map.end())
     {
         Client *client = _clients_map[client_fd];
         if (client != NULL)
         {
-            LogManager::log(LogManager::INFO, "Closing client %d", client_fd);
+            LogManager::log(LogManager::INFO, "Deleting client object for FD %d", client_fd);
+            delete client;
             _clients_map.erase(client_fd);
-            delete client; // Supprime le client
         }
     }
     else
     {
-        LogManager::log(LogManager::WARNING, "Client %d not found in _clients_map", client_fd);
+        LogManager::log(LogManager::WARNING, "Client FD %d not found in _clients_map", client_fd);
     }
 
-    close(client_fd); // Fermer le descripteur de fichier
+    // Fermer le descripteur de fichier
+    if (close(client_fd) == -1)
+    {
+        LogManager::log(LogManager::WARNING, "Failed to close FD %d: %s", client_fd, strerror(errno));
+    }
+    else
+    {
+        LogManager::log(LogManager::DEBUG, "Successfully closed FD %d", client_fd);
+    }
 }
 
 /**
@@ -447,6 +476,11 @@ void Server::close_socket(int socket_fd)
     {
         LogManager::log(LogManager::WARNING, "Socket %d not found in _sockets_map", socket_fd);
     }
+    // Fermer le descripteur de fichier
+    if (close(socket_fd) == -1)
+    {
+        LogManager::log(LogManager::WARNING, "Failed to close FD %d: %s", socket_fd, strerror(errno));
+    }
 }
 
 void Server::remove_from_epoll(int fd)
@@ -456,11 +490,15 @@ void Server::remove_from_epoll(int fd)
         LogManager::log(LogManager::WARNING, "Invalid FD %d, skipping removal from epoll", fd);
         return;
     }
+    LogManager::log(LogManager::DEBUG, "Attempting to remove FD %d from epoll", fd);
     if (epoll_ctl(_epoll_fd, EPOLL_CTL_DEL, fd, NULL) == -1)
     {
-        LogManager::log(LogManager::WARNING, "Failed to remove FD %d from epoll", fd);
+        LogManager::log(LogManager::WARNING, "Failed to remove FD %d from epoll: %s", fd, strerror(errno));
     }
-  
+    else
+    {
+        LogManager::log(LogManager::DEBUG, "Successfully removed FD %d from epoll", fd);
+    }
 }
 
 
@@ -475,5 +513,102 @@ void Server::change_epoll_event(int socketFD, uint32_t EVENT)
     {
         LogManager::log(LogManager::ERROR, "Failed to modify epoll event for socket %d", socketFD);
         throw std::runtime_error("Failed to modify epoll event");
+    }
+}
+
+
+
+
+
+//***************TEST DE REPONSE EN DUR TMP */
+
+
+// std::string extractFilePath(const std::string &request)
+// {
+//     size_t start = request.find("GET ") + 4;
+//     size_t end = request.find(" ", start);
+//     if (start == std::string::npos || end == std::string::npos)
+//         return "";
+//     std::string path = request.substr(start, end - start);
+//     if (path == "/")
+//         path = "/index.html"; // Par défaut, servir index.html
+//     return "www/main" + path; // Préfixer avec le répertoire racine
+// }
+
+// bool endsWith(const std::string &str, const std::string &suffix)
+// {
+//     if (str.length() >= suffix.length())
+//     {
+//         return str.compare(str.length() - suffix.length(), suffix.length(), suffix) == 0;
+//     }
+//     return false;
+// }
+
+
+// std::string getContentType(const std::string &filePath)
+// {
+//     if (endsWith(filePath, ".html"))
+//         return "text/html";
+//     if (endsWith(filePath, ".css"))
+//         return "text/css";
+//     if (endsWith(filePath, ".js"))
+//         return "application/javascript";
+//     if (endsWith(filePath, ".png"))
+//         return "image/png";
+//     if (endsWith(filePath, ".jpg") || endsWith(filePath, ".jpeg"))
+//         return "image/jpeg";
+//     if (endsWith(filePath, ".gif"))
+//         return "image/gif";
+//     if (endsWith(filePath, ".ico"))
+//         return "image/x-icon";
+//     return "application/octet-stream"; // Type par défaut
+// }
+
+
+////debug EPOLL**************************************
+
+void Server::log_epoll_fds()
+{
+    LogManager::log(LogManager::DEBUG, "Listing FDs currently in epoll:");
+    struct epoll_event events[MAX_EVENTS];
+    int nfds = epoll_wait(_epoll_fd, events, MAX_EVENTS, 0); // Timeout 0 to avoid blocking
+
+    if (nfds == -1)
+    {
+        if (errno != EINTR)
+        {
+            LogManager::log(LogManager::ERROR, "Error listing epoll FDs: %s", strerror(errno));
+        }
+        return;
+    }
+
+    for (int i = 0; i < nfds; ++i)
+    {
+        LogManager::log(LogManager::DEBUG, "FD in epoll: %d", events[i].data.fd);
+    }
+}
+
+
+void Server::log_clients_map() const
+{
+    if (_clients_map.empty())
+    {
+        LogManager::log(LogManager::DEBUG, "No clients in _clients_map.");
+        return;
+    }
+
+    LogManager::log(LogManager::DEBUG, "Listing clients in _clients_map:");
+    for (std::map<int, Client*>::const_iterator it = _clients_map.begin(); it != _clients_map.end(); ++it)
+    {
+        int client_fd = it->first;
+        Client* client = it->second;
+        if (client)
+        {
+            LogManager::log(LogManager::DEBUG, "Client FD: %d, Client Pointer: %p", client_fd, client);
+        }
+        else
+        {
+            LogManager::log(LogManager::WARNING, "Client FD: %d has a NULL pointer in _clients_map.", client_fd);
+        }
     }
 }
