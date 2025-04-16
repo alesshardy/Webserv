@@ -466,7 +466,7 @@ void Server::close_client(int client_fd)
 void Server::close_socket(int socket_fd)
 {
     LogManager::log(LogManager::DEBUG, "Closing socket %d", socket_fd);
-    remove_from_epoll(socket_fd); // Retirer le socket de epoll
+    // remove_from_epoll(socket_fd); // SIUUUU a supprimer surment inutile 
 
     // Fermer le socket
     if (_sockets_map.find(socket_fd) != _sockets_map.end())
@@ -490,6 +490,7 @@ void Server::close_socket(int socket_fd)
     }
 }
 
+// SIUUUU a supprimer surment inutile
 void Server::remove_from_epoll(int fd)
 {
     if (fd < 0)
@@ -620,23 +621,60 @@ void Server::log_clients_map() const
     }
 }
 
+// SIUUU rajouter check etat reponse FINISH
 void Server::checkRequestTimeouts()
 {
-
     for (std::map<int, Client*>::iterator it = _clients_map.begin(); it != _clients_map.end();)
     {
         Client *client = it->second;
         Request *request = client->getRequest();
 
-        if (request && request->isTimeoutExceeded())
+        if (request)
         {
-            LogManager::log(LogManager::WARNING, "Request timeout exceeded for client FD %d", it->first);
-            close_client(it->first); // Fermez la connexion pour ce client
-            it = _clients_map.erase(it); // Supprimez le client de la map et mettez à jour l'itérateur
+            // Vérifier si la requête a dépassé le timeout
+            if (request->isTimeoutExceeded())
+            {
+                LogManager::log(LogManager::ERROR, "Request timeout exceeded for client FD %d", it->first);
+                int client_fd = it->first;
+                ++it;
+                close_client(client_fd); // Fermez la connexion pour ce client
+                continue;
+            }
+
+            // Vérifier si la requête est dans un état d'erreur
+            if (request->getState() == ERROR)
+            {
+                LogManager::log(LogManager::ERROR, "Request in ERROR state for client FD %d", it->first);
+                int client_fd = it->first;
+                ++it;
+                close_client(client_fd); // Fermez la connexion pour ce client
+                continue;
+            }
         }
-        else
-        {
-            ++it;
-        }
+
+        ++it; // Passer au client suivant
     }
 }
+
+
+// VERSION SANS LE CHECK ERROR
+// void Server::checkRequestTimeouts()
+// {
+//     for (std::map<int, Client*>::iterator it = _clients_map.begin(); it != _clients_map.end();)
+//     {
+//         Client *client = it->second;
+//         Request *request = client->getRequest();
+
+//         if (request && request->isTimeoutExceeded())
+//         {
+//             LogManager::log(LogManager::WARNING, "Request timeout exceeded for client FD %d", it->first);
+//             int client_fd = it->first;
+//             ++it;
+//             close_client(client_fd); // Supprimez le client de la map et mettez à jour l'itérateur
+//         }
+//         else
+//         {
+//             ++it; // Passez à l'élément suivant
+//         }
+//     }
+// }

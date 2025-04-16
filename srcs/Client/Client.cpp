@@ -56,7 +56,7 @@ void Client::handleRequest(std::string const & str)
     }
     catch (const std::exception &e)
     {
-        LogManager::log(LogManager::ERROR, "Error handling request for client %d: %s", _client_fd, e.what());
+        LogManager::log(LogManager::ERROR, "Error handling request for client %d: \n%s", _client_fd, e.what());
         // Gérer l'erreur (fermer le client, envoyer une réponse d'erreur, etc.)
     }
 }

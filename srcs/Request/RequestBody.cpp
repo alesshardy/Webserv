@@ -6,7 +6,7 @@
 /*   By: apintus <apintus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 18:21:35 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/15 17:07:02 by apintus          ###   ########.fr       */
+/*   Updated: 2025/04/16 18:07:45 by apintus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,6 @@ RequestBody::~RequestBody()
 {
 }
 
-// void RequestBody::parseChunked(const std::string &rawData, size_t  &index)
-// {
-//     while (index < rawData.size())
-//     {
-//         size_t endSize = rawData.find("\r\n", index);
-//         if (endSize == std::string::npos)
-//             return ; // pas assez de data, continue a lire
-
-        
-//     }
-// }
-
 void RequestBody::parseContentLength(const std::string &rawData, size_t  &index, size_t contentLength)
 {
     if (_currentSize >= contentLength)
@@ -46,7 +34,6 @@ void RequestBody::parseContentLength(const std::string &rawData, size_t  &index,
     }
 
     size_t bytesToRead = rawData.size() - index;
-    // size_t remainBytes = contentLength - _currentSize;
 
     if (bytesToRead > 0)
     {
@@ -77,7 +64,7 @@ void RequestBody::parseChunked(const std::string &rawData, size_t &index)
         // Convertir la taille du chunk de l'hexadécimal en décimal
         std::istringstream iss(chunkSizeHex);
         iss >> std::hex >> chunkSize;
-
+        
         // Avancer après la taille du chunk
         index = endSize + 2; // Sauter "\r\n"
 
@@ -101,13 +88,17 @@ void RequestBody::parseChunked(const std::string &rawData, size_t &index)
         // Vérifier qu'on ne dépasse pas la taille max
         if (_currentSize + chunkSize > _maxBodySize)
             throw std::runtime_error("ERROR: Chunked body exceeds maximum allowed size");
-
+        
         // Ajouter le chunk au body
         _bodyStr.append(rawData.substr(index, chunkSize));
         _currentSize += chunkSize;
 
+        // Vérifier que les deux caractères suivant le chunk sont "\r\n"
+        if (rawData.substr(index + chunkSize, 2) != "\r\n")
+            throw std::runtime_error("ERROR: Chunked size announce don't match reality");
+
         // Avancer au chunk suivant
-        index += chunkSize + 2; // Sauter le chunk et "\r\n"
+        index += chunkSize + 2; // Sauter le chunk et "\r\n"]
     }
 }
 

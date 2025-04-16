@@ -1,99 +1,66 @@
-[2025-04-15 18:14:15] [WARNING] Failed to remove FD 7 from epoll: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Client FD 7 not found in _clients_map
-[2025-04-15 18:14:15] [WARNING] Failed to close FD 7: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Request timeout exceeded for client FD 7
-[2025-04-15 18:14:15] [DEBUG] Closing client FD 7
-[2025-04-15 18:14:15] [DEBUG] Attempting to remove FD 7 from epoll
-[2025-04-15 18:14:15] [WARNING] Failed to remove FD 7 from epoll: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Client FD 7 not found in _clients_map
-[2025-04-15 18:14:15] [WARNING] Failed to close FD 7: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Request timeout exceeded for client FD 7
-[2025-04-15 18:14:15] [DEBUG] Closing client FD 7
-[2025-04-15 18:14:15] [DEBUG] Attempting to remove FD 7 from epoll
-[2025-04-15 18:14:15] [WARNING] Failed to remove FD 7 from epoll: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Client FD 7 not found in _clients_map
-[2025-04-15 18:14:15] [WARNING] Failed to close FD 7: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Request timeout exceeded for client FD 7
-[2025-04-15 18:14:15] [DEBUG] Closing client FD 7
-[2025-04-15 18:14:15] [DEBUG] Attempting to remove FD 7 from epoll
-[2025-04-15 18:14:15] [WARNING] Failed to remove FD 7 from epoll: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Client FD 7 not found in _clients_map
-[2025-04-15 18:14:15] [WARNING] Failed to close FD 7: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Request timeout exceeded for client FD 7
-[2025-04-15 18:14:15] [DEBUG] Closing client FD 7
-[2025-04-15 18:14:15] [DEBUG] Attempting to remove FD 7 from epoll
-[2025-04-15 18:14:15] [WARNING] Failed to remove FD 7 from epoll: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Client FD 7 not found in _clients_map
-[2025-04-15 18:14:15] [WARNING] Failed to close FD 7: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Request timeout exceeded for client FD 7
-[2025-04-15 18:14:15] [DEBUG] Closing client FD 7
-[2025-04-15 18:14:15] [DEBUG] Attempting to remove FD 7 from epoll
-[2025-04-15 18:14:15] [WARNING] Failed to remove FD 7 from epoll: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Client FD 7 not found in _clients_map
-[2025-04-15 18:14:15] [WARNING] Failed to close FD 7: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Request timeout exceeded for client FD 7
-[2025-04-15 18:14:15] [DEBUG] Closing client FD 7
-[2025-04-15 18:14:15] [DEBUG] Attempting to remove FD 7 from epoll
-[2025-04-15 18:14:15] [WARNING] Failed to remove FD 7 from epoll: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Client FD 7 not found in _clients_map
-[2025-04-15 18:14:15] [WARNING] Failed to close FD 7: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Request timeout exceeded for client FD 7
-[2025-04-15 18:14:15] [DEBUG] Closing client FD 7
-[2025-04-15 18:14:15] [DEBUG] Attempting to remove FD 7 from epoll
-[2025-04-15 18:14:15] [WARNING] Failed to remove FD 7 from epoll: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Client FD 7 not found in _clients_map
-[2025-04-15 18:14:15] [WARNING] Failed to close FD 7: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Request timeout exceeded for client FD 7
-[2025-04-15 18:14:15] [DEBUG] Closing client FD 7
-[2025-04-15 18:14:15] [DEBUG] Attempting to remove FD 7 from epoll
-[2025-04-15 18:14:15] [WARNING] Failed to remove FD 7 from epoll: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Client FD 7 not found in _clients_map
-[2025-04-15 18:14:15] [WARNING] Failed to close FD 7: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Request timeout exceeded for client FD 7
-[2025-04-15 18:14:15] [DEBUG] Closing client FD 7
-[2025-04-15 18:14:15] [DEBUG] Attempting to remove FD 7 from epoll
-[2025-04-15 18:14:15] [WARNING] Failed to remove FD 7 from epoll: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Client FD 7 not found in _clients_map
-[2025-04-15 18:14:15] [WARNING] Failed to close FD 7: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Request timeout exceeded for client FD 7
-[2025-04-15 18:14:15] [DEBUG] Closing client FD 7
-[2025-04-15 18:14:15] [DEBUG] Attempting to remove FD 7 from epoll
-[2025-04-15 18:14:15] [WARNING] Failed to remove FD 7 from epoll: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Client FD 7 not found in _clients_map
-[2025-04-15 18:14:15] [WARNING] Failed to close FD 7: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Request timeout exceeded for client FD 7
-[2025-04-15 18:14:15] [DEBUG] Closing client FD 7
-[2025-04-15 18:14:15] [DEBUG] Attempting to remove FD 7 from epoll
-[2025-04-15 18:14:15] [WARNING] Failed to remove FD 7 from epoll: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Client FD 7 not found in _clients_map
-[2025-04-15 18:14:15] [WARNING] Failed to close FD 7: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Request timeout exceeded for client FD 7
-[2025-04-15 18:14:15] [DEBUG] Closing client FD 7
-[2025-04-15 18:14:15] [DEBUG] Attempting to remove FD 7 from epoll
-[2025-04-15 18:14:15] [WARNING] Failed to remove FD 7 from epoll: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Client FD 7 not found in _clients_map
-[2025-04-15 18:14:15] [WARNING] Failed to close FD 7: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Request timeout exceeded for client FD 7
-[2025-04-15 18:14:15] [DEBUG] Closing client FD 7
-[2025-04-15 18:14:15] [DEBUG] Attempting to remove FD 7 from epoll
-[2025-04-15 18:14:15] [WARNING] Failed to remove FD 7 from epoll: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Client FD 7 not found in _clients_map
-[2025-04-15 18:14:15] [WARNING] Failed to close FD 7: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Request timeout exceeded for client FD 7
-[2025-04-15 18:14:15] [DEBUG] Closing client FD 7
-[2025-04-15 18:14:15] [DEBUG] Attempting to remove FD 7 from epoll
-[2025-04-15 18:14:15] [WARNING] Failed to remove FD 7 from epoll: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Client FD 7 not found in _clients_map
-[2025-04-15 18:14:15] [WARNING] Failed to close FD 7: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Request timeout exceeded for client FD 7
-[2025-04-15 18:14:15] [DEBUG] Closing client FD 7
-[2025-04-15 18:14:15] [DEBUG] Attempting to remove FD 7 from epoll
-[2025-04-15 18:14:15] [WARNING] Failed to remove FD 7 from epoll: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Client FD 7 not found in _clients_map
-[2025-04-15 18:14:15] [WARNING] Failed to close FD 7: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Request timeout exceeded for client FD 7
-[2025-04-15 18:14:15] [DEBUG] Closing client FD 7
-[2025-04-15 18:14:15] [DEBUG] Attempting to remove FD 7 from epoll
-[2025-04-15 18:14:15] [WARNING] Failed to remove FD 7 from epoll: Bad file descriptor
-[2025-04-15 18:14:15] [WARNING] Client FD 7 not found in _clients_map
-[2025-04-15 18:14:15] [WARNING] Failed to close FD 7: Bad file descriptor
+ rawdata = 4
+Wiki
+5
+pedia
+E
+ in
+chunks.
+0
+
+
+ Index 0
+endSize = 1
+chunkSizeHex = "4"
+ +2 
+ +2 du bas 
+JE BOUCLE COMME UN CON 
+ rawdata = 4
+Wiki
+5
+pedia
+E
+ in
+chunks.
+0
+
+
+ Index 9
+endSize = 10
+chunkSizeHex = "5"
+ +2 
+ +2 du bas 
+JE BOUCLE COMME UN CON 
+ rawdata = 4
+Wiki
+5
+pedia
+E
+ in
+chunks.
+0
+
+
+ Index 19
+endSize = 20
+chunkSizeHex = "E"
+ +2 
+ +2 du bas 
+JE BOUCLE COMME UN CON 
+ rawdata = 4
+Wiki
+5
+pedia
+E
+ in
+chunks.
+0
+
+
+ Index 38
+endSize = 39
+chunkSizeHex = "
+"
+ +2 
+Chunk size is 0. Checking for final CRLF...
+Index: 41, rawData.size(): 41
+Next 2 characters: "
