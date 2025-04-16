@@ -6,7 +6,7 @@
 /*   By: apintus <apintus@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 13:23:15 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/15 17:44:47 by apintus          ###   ########.fr       */
+/*   Updated: 2025/04/16 17:57:43 by apintus          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,70 +127,10 @@ void Request::parseRequest(std::string str)
     }
     catch (const std::runtime_error &e)
     {
-        LogManager::log(LogManager::ERROR, e.what());
+        // LogManager::log(LogManager::ERROR, e.what());
         throw; // Rethrow the exception if needed
     }
 }
-
-// Version qui clean au fur et a mesure
-// void Request::parseRequest(std::string str)
-// {
-//     try
-//     {
-//         this->_raw += str;
-
-//         if (_state == START) 
-//         {
-//             parseMethod();
-//             // Ne pas nettoyer ici car parseUri et parseVersion continueront sur la même ligne
-//         }
-//         if (_state == URI) 
-//         {
-//             parseUri();
-//             // Ne pas nettoyer ici pour la même raison
-//         }
-//         if (_state == VERSION) 
-//         {
-//             parseVersion();
-//             // Maintenant on peut nettoyer la première ligne
-//             size_t end_of_request_line = _i;
-//             clearProcessedData(end_of_request_line);
-//         }
-//         if (_state == HEADER_KEY || _state == HEADER_VALUE)
-//         {
-//             // size_t start_idx = _i;
-//             parseHeader();
-//             // Nettoyer les headers traités sauf si on est en attente de plus de données
-//             if (_state != HEADER_KEY && _state != HEADER_VALUE)
-//             {
-//                 clearProcessedData(_i);
-//             }
-//         }
-//         if (_state == HEADER_CHECK)
-//             checkHeader();
-//         if (_state == BODY)
-//         {
-//             size_t start_idx = _i;
-//             parseBody();
-//             // Si le body est complet ou non-existant, on peut tout nettoyer
-//             if (_state == END)
-//             {
-//                 _raw.clear();
-//                 _i = 0;
-//             }
-//             // Si le parsing du body est en cours, nettoyer ce qui a été traité
-//             else if (_i > start_idx)
-//             {
-//                 clearProcessedData(start_idx);
-//             }
-//         }
-//     }
-//     catch (const std::runtime_error &e)
-//     {
-//         LogManager::log(LogManager::ERROR, e.what());
-//         throw;
-//     }
-// }
 
 void Request::parseMethod()
 {
@@ -462,7 +402,14 @@ void    Request::checkHeader()
         _headers.find("Transfer-Encoding") != _headers.end())
         throw std::runtime_error("ERROR: Both Content-Length and Transfer-Encoding are present");
 
-    // verfier aussi si il y en aucun des deux
+    // Passer la séquence \r\n\r\n si elle n'a pas encore été sautée
+    if (_raw.substr(_i, 2) == "\r\n")
+    {
+        std::cout << "NETOYYYYOUUUAGE" << std::endl;
+        _i += 2; // Sauter \r\n\r\n
+        _raw.erase(0, _i); // Nettoyer les caractères déjà traités
+        _i = 0; // Réinitialiser l'index
+    }
 
     setState(BODY);
     LogManager::log(LogManager::DEBUG, "Checking headers DONE");
@@ -544,14 +491,7 @@ void Request::getMaxBodySize()
 
 // BODYYYYYYYYYYYYY
 void Request::parseBody()
-{
-    // SECU TEMPS
-    if (isTimeoutExceeded())
-    {
-        LogManager::log(LogManager::WARNING, "Request timeout exceeded (%d seconds)", std::time(NULL) - _timeOut);
-        throw std::runtime_error("ERROR: Request processing timeout exceeded");
-    }
-   
+{   
     LogManager::log(LogManager::DEBUG, "Parse Body");
     if (_method == "GET")
     {
@@ -591,7 +531,7 @@ void Request::parseBody()
         }
         
     } catch (const std::exception &e) {
-        LogManager::log(LogManager::ERROR, e.what());
+        // LogManager::log(LogManager::ERROR, e.what()); //affichage en double des erreur car catch au dessus
         _state = ERROR;
         throw; // Relancer l'exception pour traitement en amont
     }
@@ -613,5 +553,5 @@ void Request::clearProcessedData(size_t processedBytes)
 bool Request::isTimeoutExceeded() const
 {
     std::time_t now = std::time(NULL);
-    return (now - _timeOut > 10); // 10 secondes de timeout
+    return (now - _timeOut > 10); // SIUU CHANGER EN 60 sec
 }
