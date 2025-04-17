@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Request.hpp                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/02 17:05:33 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/15 17:54:09 by tpassin          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef REQUEST_HPP
 #define REQUEST_HPP
 
@@ -57,7 +45,6 @@ class Request{
         std::string                         _method;
         std::string                         _uri;
         std::string                         _version;
-        std::string                         _path;
         std::map<std::string, std::string>  _query;
         std::map<std::string, std::string>  _headers;
         std::string                         _currentHeaderKey;
