@@ -50,16 +50,11 @@ class Client
         void                handleRequest(std::string const & str);
         void                handleResponse(int epoll_fd);     
 
-        
-
         // Getters
         int                 getClientFd() const { return _client_fd; }
         Socket*             getClientSocket() const { return _client_socket; }
         Request*            getRequest() const { return _request; }
-        Response*           getResponse() const { return _response; }
-
-
-    
+        Response*           getResponse() const { return _response; }    
 };
 
 #endif

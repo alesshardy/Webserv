@@ -7,10 +7,12 @@
 class RequestBody
 {
     private:
-        std::string             _bodyStr;
-        // int                     _bodyFd;
-        size_t      _currentSize;
-        size_t      _maxBodySize;
+        std::string             _tmpFilePath;
+        int                     _fd;
+        
+        // std::string             _bodyStr;
+        size_t                  _currentSize;
+        size_t                  _maxBodySize;
         bool                    _isChunked;
         bool                    _isComplete;
     
@@ -23,7 +25,8 @@ class RequestBody
         void parseContentLength(const std::string &rawData, size_t  &index, size_t contentLength);
 
         //getters
-        const std::string &getBody() const {return _bodyStr;};
+        std::string readBody() const;
+        // const std::string &getBody() const {return _bodyStr;};
         bool isComplete() const {return _isComplete;};
         size_t getCurrentSize() const {return _currentSize;};
         
