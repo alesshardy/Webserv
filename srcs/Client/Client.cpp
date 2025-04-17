@@ -83,33 +83,41 @@ void    Client::handleResponse(int epoll_fd)
         return;
     }
     // Send the response to the client
-    if (send(_client_fd, _response->getResponseHeader().c_str(), _response->getResponseHeader().size(), 0) == -1)
+    if (send(_client_fd, _response->getResponse().c_str(), _response->getResponse().size(), 0) == -1)
     {
-        LogManager::log(LogManager::ERROR, "Failed to send response header to client %d", _client_fd);
+        LogManager::log(LogManager::ERROR, "Failed to send response to client %d", _client_fd);
         return;
     }
-    if (send(_client_fd, _response->getResponseBody().c_str(), _response->getResponseBody().size(), 0) == -1)
-    {
-        LogManager::log(LogManager::ERROR, "Failed to send response body to client %d", _client_fd);
-        return;
-    }
+    
+    // if (send(_client_fd, _response->getResponseHeader().c_str(), _response->getResponseHeader().size(), 0) == -1)
+    // {
+    //     LogManager::log(LogManager::ERROR, "Failed to send response header to client %d", _client_fd);
+    //     return;
+    // }
+    // if (send(_client_fd, _response->getResponseBody().c_str(), _response->getResponseBody().size(), 0) == -1)
+    // {
+    //     LogManager::log(LogManager::ERROR, "Failed to send response body to client %d", _client_fd);
+    //     return;
+    // }
     LogManager::log(LogManager::DEBUG, "Response sent to client %d", _client_fd);
+    
 
     _server->change_epoll_event(_client_fd, REQUEST_EVENTS); // Revenir à l'état de lecture
     // Close the client socket after sending the response
     close(_client_fd);
-    if (_request)
-    {
-        delete _request;
-        _request = NULL;
-    }
-    if (_response)
-    {
-        delete _response;
-        _response = NULL;
-    }
+    // if (_request)
+    // {
+    //     delete _request;
+    //     _request = NULL;
+    // }
+    // if (_response)
+    // {
+    //     delete _response;
+    //     _response = NULL;
+    // }
 
-    _request = new Request(this, _server);
-    _response = new Response(this);
+    // _request = new Request(this, _server);
+    // _response = new Response(this);
     
 }
+
