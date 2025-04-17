@@ -109,7 +109,7 @@ void    Client::handleResponse(int epoll_fd)
         _response = NULL;
     }
 
-    _request = new Request(this, _server);
-    _response = new Response(this);
+    // _request = new Request(this, _server);
+    // _response = new Response(this);
     
 }

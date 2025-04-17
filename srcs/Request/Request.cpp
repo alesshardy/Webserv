@@ -1,18 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Request.cpp                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: tpassin <tpassin@student.42.fr>            +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/03 13:23:15 by tpassin           #+#    #+#             */
-/*   Updated: 2025/04/15 18:20:28 by tpassin          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "Request.hpp"
 
-Request::Request(Client *client, Server *server): _client(client), _server(server), _raw(""), _method(""), _uri(""), _version(""), _path(""), _currentHeaderKey(""), _statusCode(-1), _state(0), _error(0), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0), _timeOut(std::time(NULL)){}
+Request::Request(Client *client, Server *server): _client(client), _server(server), _raw(""), _method(""), _uri(""), _version(""), _currentHeaderKey(""), _statusCode(-1), _state(0), _error(0), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0), _timeOut(std::time(NULL)){}
 
 Request::Request(Request const & copy)
 {
@@ -29,7 +17,6 @@ Request & Request::operator=(Request const & rhs)
         this->_method = rhs._method;
         this->_uri = rhs._uri;
         this->_version = rhs._version;
-        this->_path = rhs._path;
         this->_query = rhs._query;
         this->_headers = rhs._headers;
         this->_currentHeaderKey = rhs._currentHeaderKey;
@@ -59,11 +46,6 @@ const std::string &Request::getUri() const
 const std::string &Request::getVersion() const
 {
     return (this->_version);
-}
-
-const std::string &Request::getPath() const
-{
-    return (this->_path);
 }
 
 const int &Request::getStatusCode() const
@@ -188,7 +170,6 @@ void Request::parseUri()
         throw std::runtime_error("ERROR: Missing Version after uri");
     
     LogManager::log(LogManager::DEBUG, ("Http uri: " + _uri).c_str());
-    // SECU
     if (_uri.size() > URI_MAX_SIZE)
         throw std::runtime_error("ERROR: URI size exceeds 2048 characters");
     _raw.erase(0, _i);
@@ -199,7 +180,7 @@ void Request::parseUri()
 
 void Request::parseQuery()
 {
-    size_t queryStart = _uri.find("?");
+    size_t queryStart = _uri.find('?');
     if (queryStart == std::string::npos)
     {
         setState(VERSION);
@@ -207,34 +188,43 @@ void Request::parseQuery()
     }
 
     std::string queryString = _uri.substr(queryStart + 1);
+    _uri.erase(queryStart);
+
     std::string key, value;
     size_t pos = 0;
+    size_t length = queryString.length();
 
-    while (pos < queryString.length())
+    while (pos < length)
     {
-        size_t equalPos = queryString.find("=", pos);
-        size_t ampersandPos = queryString.find("&", pos);
+        // Trouve la prochaine '=' ou '&'
+        size_t equalPos = queryString.find('=', pos);
+        size_t ampersandPos = queryString.find('&', pos);
 
+        // Cas 1: Pas de '=' avant '&' (clé sans valeur)
         if (equalPos == std::string::npos || (ampersandPos != std::string::npos && ampersandPos < equalPos))
         {
             key = queryString.substr(pos, ampersandPos - pos);
-            value = ""; // Pas de valeur associée
-            pos = (ampersandPos == std::string::npos) ? queryString.length() : ampersandPos + 1;
+            value.clear(); // Pas de valeur
+            pos = (ampersandPos == std::string::npos) ? length : ampersandPos + 1;
         }
+        // Cas 2: '=' trouvé avant '&' (clé + valeur)
         else
         {
             key = queryString.substr(pos, equalPos - pos);
-            value = queryString.substr(equalPos + 1, ampersandPos - equalPos - 1);
-            pos = (ampersandPos == std::string::npos) ? queryString.length() : ampersandPos + 1;
+            value = queryString.substr(equalPos + 1, 
+                (ampersandPos == std::string::npos) ? length - equalPos - 1 : ampersandPos - equalPos - 1);
+            pos = (ampersandPos == std::string::npos) ? length : ampersandPos + 1;
         }
-
         if (!key.empty())
             _query[key] = value;
     }
+
     LogManager::log(LogManager::DEBUG, "Parsed query parameters:");
-    for (std::map<std::string, std::string>::iterator it = _query.begin(); it != _query.end(); ++it)
-        LogManager::log(LogManager::DEBUG, ("Key: " + it->first + ", Value: " + it->second).c_str());
-    _uri = _uri.substr(0, queryStart);
+    for (std::map<std::string, std::string>::const_iterator it = _query.begin(); it != _query.end(); ++it)
+    {
+        for (std::map<std::string, std::string>::iterator it = _query.begin(); it != _query.end(); ++it)
+            LogManager::log(LogManager::DEBUG, ("Key: " + it->first + ", Value: " + it->second).c_str());
+    }
     setState(VERSION);
 }
 
@@ -242,7 +232,7 @@ void Request::parseVersion()
 {   
     if (_raw.empty())
         return ;
-    // LogManager::log(LogManager::DEBUG, "Parse version");
+        
     size_t endLine = _raw.find("\r\n", _i);
     if (endLine == std::string::npos)
         throw std::runtime_error("ERROR : invalid request format");
@@ -269,15 +259,9 @@ void Request::parseHeaderKey()
     if (_raw.empty())
         return ;
     // LogManager::log(LogManager::DEBUG, "Parse HeaderKey");
-    
-    // size_t endLine = _raw.find("\r\n", _i);
-    // if (endLine != std::string::npos)
+
     if (_raw[_i] && _raw[_i] == '\r' && _raw[_i + 1] == '\n')
     {
-        // if (this->_method == "GET")
-        //     _state = END; // SUITE CHANGE EN BODY
-        // else if (this->_method == "PUT" || this->_method == "POST")
-        //     _state = BODY;
         setState(HEADER_CHECK);
         return ;
     }
@@ -285,7 +269,7 @@ void Request::parseHeaderKey()
     size_t colonPos = _raw.find(":", _i);
     if (colonPos == std::string::npos)
         return ;    
-        // throw std::runtime_error("ERROR : invalid request format");
+
     while (_i < colonPos)
     {
         _currentHeaderKey += _raw[_i];
