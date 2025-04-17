@@ -69,7 +69,6 @@ void    Client::handleResponse(int epoll_fd)
         LogManager::log(LogManager::ERROR, "Response object is NULL for client %d", _client_fd);
         return;
     }
-
     (void)epoll_fd;
     LogManager::log(LogManager::DEBUG, "Handling response for client %d", _client_fd);
     LogManager::log(LogManager::DEBUG, "epoll_fd: %d", epoll_fd);
