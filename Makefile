@@ -65,6 +65,7 @@ SRCS 			=	main.cpp \
 					srcs/Request/Request.cpp \
 					srcs/Request/RequestBody.cpp \
 					srcs/Response/Response.cpp \
+					srcs/Response/ErrorPage.cpp \
 
 OBJS			=	$(SRCS:%.cpp=$(OBJ_PATH)/%.o)
 

@@ -8,10 +8,13 @@ Response::Response(Client* client)
 {
     _client_fd = client->getClientFd();
     _request = client->getRequest();
+    _r_state = R_INIT;
     _response_body = "";
     _response_header = "";
     _response_status = "";
     _response_code = "";
+    _server = client->getServer();
+    
 }
 Response::~Response()
 {
@@ -55,7 +58,7 @@ void Response::setRequest(Request* request)
 {
     _request = request;
 }
-void Response::setServer(BlocServer* server)
+void Response::setServer(Server* server)
 {
     _server = server;
 }
@@ -78,16 +81,39 @@ void Response::_handleGet()
     filePath = "www/main" + filePath; // Préfixer avec le répertoire racine
     LogManager::log(LogManager::DEBUG, "File path: %s", filePath.c_str());
 
-     // Vérifier si le chemin correspond à un répertoire
-     struct stat fileStat;
-     if (stat(filePath.c_str(), &fileStat) == 0 && S_ISDIR(fileStat.st_mode))
-     {
-         // Si c'est un répertoire, ajouter index.html
-         if (!filePath.empty() && filePath[filePath.size() - 1] != '/')
-            filePath += "/";
-         filePath += "index.html";
-         LogManager::log(LogManager::DEBUG, "Path is a directory, appending index.html: %s", filePath.c_str());
-     }
+    // Vérifier si le chemin correspond à un répertoire
+    struct stat fileStat;
+    if (stat(filePath.c_str(), &fileStat) == 0)
+    {
+        if (S_ISDIR(fileStat.st_mode))
+        {
+            // Si c'est un répertoire, ajouter index.html
+            if (!filePath.empty() && filePath[filePath.size() - 1] != '/')
+                filePath += "/";
+            filePath += "index.html";
+            LogManager::log(LogManager::DEBUG, "Path is a directory, appending index.html: %s", filePath.c_str());
+        }
+
+        // Vérifier les permissions d'accès
+        if (access(filePath.c_str(), R_OK) != 0)
+        {
+            // Si l'accès est refusé, retourner une réponse 403
+            LogManager::log(LogManager::ERROR, "Access denied: %s", filePath.c_str());
+            BlocServer* matchingServer = _server->getMatchingServer(_request);
+            _response = ErrorPage::getErrorPage(403, matchingServer->getErrorPage());
+            setRState(R_END);
+            return;
+        }
+    }
+    else
+    {
+        // Si le fichier ou le répertoire n'existe pas, retourner une réponse 404
+        LogManager::log(LogManager::ERROR, "File not found: %s", filePath.c_str());
+        BlocServer* matchingServer = _server->getMatchingServer(_request);
+        _response = ErrorPage::getErrorPage(404, matchingServer->getErrorPage());
+        setRState(R_END);
+        return;
+    }
 
     // Ouvrir le fichier demandé
     std::ifstream file(filePath.c_str(), std::ios::binary);
@@ -112,23 +138,18 @@ void Response::_handleGet()
 
         // Stocker le corps de la réponse
         _response_body = content;
+        _response += _response_header + _response_body;
 
         LogManager::log(LogManager::INFO, "Response prepared for client %d: %s", _client_fd, filePath.c_str());
     }
     else
     {
         // Si le fichier n'est pas trouvé, retourner une réponse 404
-        _response_body = "<html><body><h1>404 Not Found</h1><p>File not found.</p></body></html>";
-        std::ostringstream oss;
-        oss << _response_body.size();
-        _response_header = "HTTP/1.1 404 Not Found\r\n";
-        _response_header += "Content-Type: text/html\r\n";
-        _response_header += "Content-Length: " + oss.str() + "\r\n";
-        _response_header += "\r\n";
-
         LogManager::log(LogManager::ERROR, "File not found: %s", filePath.c_str());
+        BlocServer* matchingServer = _server->getMatchingServer(_request);
+        _response = ErrorPage::getErrorPage(404, matchingServer->getErrorPage());
     }
-
+    setRState(R_END);
 }
 void Response::_handlePost()
 {
@@ -149,7 +170,14 @@ void Response::_handlePut()
     // Implement PUT logic here
 }
 
+// void            Response::handleError(int error_code, bool errorPage)
+// {
+//     _request->setCode(error_code);
 
+//     if (errorPage)
+//         _response = ErrorPage::getErrorPage(error_code, _server->getErrorPage());
+    
+// }
 
 
 
