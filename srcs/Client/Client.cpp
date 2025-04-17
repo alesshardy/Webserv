@@ -15,8 +15,6 @@ Client::Client(int client_fd, Socket* client_socket, Server* server)
     _server = server;
 }
 
-
-
 Client::~Client()
 {
     if (this->_request)
@@ -58,7 +56,7 @@ void Client::handleRequest(std::string const & str)
     }
     catch (const std::exception &e)
     {
-        LogManager::log(LogManager::ERROR, "Error handling request for client %d: %s", _client_fd, e.what());
+        LogManager::log(LogManager::ERROR, "Error handling request for client %d: \n%s", _client_fd, e.what());
         // Gérer l'erreur (fermer le client, envoyer une réponse d'erreur, etc.)
     }
 }
@@ -108,7 +106,8 @@ void    Client::handleResponse(int epoll_fd)
         delete _response;
         _response = NULL;
     }
-
+    
+    // SIUU pas besoin de reset / ca detruit la gestion du temps
     // _request = new Request(this, _server);
     // _response = new Response(this);
     

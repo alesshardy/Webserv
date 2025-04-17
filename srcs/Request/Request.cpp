@@ -1,6 +1,6 @@
 #include "Request.hpp"
 
-Request::Request(Client *client, Server *server): _client(client), _server(server), _raw(""), _method(""), _uri(""), _version(""), _currentHeaderKey(""), _statusCode(-1), _state(0), _error(0), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0), _timeOut(std::time(NULL)){}
+Request::Request(Client *client, Server *server): _client(client), _server(server), _body(),_raw(""), _method(""), _uri(""), _version(""), _currentHeaderKey(""), _statusCode(-1), _state(0), _error(0), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0), _timeOut(std::time(NULL)){}
 
 Request::Request(Request const & copy)
 {
@@ -31,7 +31,14 @@ Request & Request::operator=(Request const & rhs)
     return (*this);
 }
 
-Request::~Request(){}
+Request::~Request()
+{
+    if (_body)
+    {
+        delete _body;
+        _body = NULL;
+    }
+}
 
 const std::string &Request::getMethod() const
 {
@@ -85,6 +92,12 @@ void Request::parseRequest(std::string str)
     {
         this->_raw += str;
 
+        if (isTimeoutExceeded())
+        {
+            LogManager::log(LogManager::WARNING, "Request timeout exceeded (%d seconds)", std::time(NULL) - _timeOut);
+            throw std::runtime_error("ERROR: Request processing timeout exceeded");
+        }
+
         if (_state == START) 
             parseMethod();
         if (_state == URI) 
@@ -103,7 +116,7 @@ void Request::parseRequest(std::string str)
     }
     catch (const std::runtime_error &e)
     {
-        LogManager::log(LogManager::ERROR, e.what());
+        // LogManager::log(LogManager::ERROR, e.what());
         throw; // Rethrow the exception if needed
     }
 }
@@ -373,7 +386,7 @@ void Request::parseHeaderKeyValue(const std::string& headerKey, const std::strin
 void    Request::checkHeader()
 {
     // std::time_t now = std::time(NULL);
-    // if (now - _timeOut > 3)
+    // if (now - _timeOut > 60)
     // {
     //     LogManager::log(LogManager::WARNING, "Header timeout exceeded (%d seconds)", now - _timeOut);
     //     return ;
@@ -415,9 +428,16 @@ void    Request::checkHeader()
         _headers.find("Transfer-Encoding") != _headers.end())
         throw std::runtime_error("ERROR: Both Content-Length and Transfer-Encoding are present");
 
-    // verfier aussi si il y en aucun des deux
+    // Passer la séquence \r\n\r\n si elle n'a pas encore été sautée
+    if (_raw.substr(_i, 2) == "\r\n")
+    {
+        _i += 2; // Sauter \r\n\r\n
+        _raw.erase(0, _i); // Nettoyer les caractères déjà traités
+        _i = 0; // Réinitialiser l'index
+    }
 
-    setState(END);
+    setState(BODY);
+    _timeOut = std::time(NULL); // Reset timmer pour le body
     LogManager::log(LogManager::DEBUG, "Checking headers DONE");
 }
 
@@ -497,7 +517,7 @@ void Request::getMaxBodySize()
 
 // BODYYYYYYYYYYYYY
 void Request::parseBody()
-{
+{   
     LogManager::log(LogManager::DEBUG, "Parse Body");
     if (_method == "GET")
     {
@@ -513,27 +533,51 @@ void Request::parseBody()
         
     try{
         
+        size_t startIndex = _i;
+        
         if (_isChunked)
         {
             LogManager::log(LogManager::DEBUG, "Parse Body en mode CHUNKED");
             _body->parseChunked(_raw, _i);
-            // GERER EN MODE CHUNMKER    
         }
         else
         {
             LogManager::log(LogManager::DEBUG, "Parse Body en mode LENGTH");
             _body->parseContentLength(_raw, _i, _contentLength);
         }
+
+        // Nettoyer les données traitées dans _raw
+        clearProcessedData(_i - startIndex);
+        
         if (_body->isComplete())
         {
             _state = END;
             LogManager::log(LogManager::DEBUG, "Parse body DONE!");
-            std::cout << _body->getBody() << std::endl;
+            std::cout << "ReadtmpFIle :\n" << _body->readBody() << std::endl;
         }
         
     } catch (const std::exception &e) {
-        LogManager::log(LogManager::ERROR, e.what());
+        // LogManager::log(LogManager::ERROR, e.what()); //affichage en double des erreur car catch au dessus
+        _state = ERROR;
         throw; // Relancer l'exception pour traitement en amont
     }
     
+}
+
+
+void Request::clearProcessedData(size_t processedBytes)
+{
+    if (processedBytes > 0 && processedBytes <= _raw.size())
+    {
+        // Log des données qui vont être supprimées
+        LogManager::log(LogManager::DEBUG, ("Clearing processed data: \"" + _raw.substr(0, processedBytes) + "\"").c_str());
+        _raw.erase(0, processedBytes);
+        _i -= processedBytes; // Ajuster l'index pour refléter le nettoyage
+    }
+}
+
+bool Request::isTimeoutExceeded() const
+{
+    std::time_t now = std::time(NULL);
+    return (now - _timeOut > 10); // SIUU CHANGER EN 60 sec
 }
