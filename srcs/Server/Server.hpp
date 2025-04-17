@@ -24,6 +24,7 @@
 
 class   Client;
 class   Request;
+class   Response;
 
 #define MAX_EVENTS 10
 
@@ -39,6 +40,7 @@ class Server
 {
     friend class Client;
     friend class Request;
+    friend class Response;
 
     private:
         int                         _state;
