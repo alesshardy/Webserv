@@ -54,7 +54,13 @@ class Client
         int                 getClientFd() const { return _client_fd; }
         Socket*             getClientSocket() const { return _client_socket; }
         Request*            getRequest() const { return _request; }
-        Response*           getResponse() const { return _response; }    
+        Response*           getResponse() const { return _response; }
+        Server*             getServer() const { return _server; }
+
+        
+
+
+    
 };
 
 #endif

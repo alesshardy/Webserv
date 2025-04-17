@@ -12,6 +12,7 @@ Config::Config(const Config &copy)
 
 Config::~Config()
 {
+    std::cout << "Config destructor called" << std::endl;
 }
 
 Config &Config::operator=(const Config &assign)
@@ -30,9 +31,12 @@ void Config::addServer(const BlocServer &server)
 }
 
 //Getters
-BlocServer &Config::getServer(size_t index)
-{
-    return (_server[index]);
+BlocServer &Config::getServer(size_t index) {
+    return _server[index];
+}
+
+const BlocServer &Config::getServer(size_t index) const {
+    return _server[index];
 }
 
 const std::vector<BlocServer> &Config::getServers() const

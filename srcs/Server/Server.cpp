@@ -13,6 +13,7 @@ Server::Server()
     _state = CREATED;
     _socket = -1;
     _epoll_fd = -1;
+    _config = Config();
 }
 //Destructeur
 Server::~Server()
@@ -621,6 +622,68 @@ void Server::log_clients_map() const
     }
 }
 
+BlocServer* Server::getMatchingServer(const Request* request) const 
+{
+    if (!request) {
+        throw std::runtime_error("ERROR: Request object is not initialized");
+    }
+
+    // Récupérer les en-têtes de la requête
+    std::map<std::string, std::string> headers = request->getHeaders();
+    if (headers.find("Host") == headers.end()) {
+        throw std::runtime_error("ERROR: Missing Host Header");
+    }
+
+    // Extraire le nom d'hôte et le port depuis l'en-tête Host
+    std::string hostValue = headers["Host"];
+    size_t colonPos = hostValue.find(':');
+    std::string hostName = hostValue.substr(0, colonPos);
+    int port = (colonPos != std::string::npos) ? Utils::ft_stoi(hostValue.substr(colonPos + 1)) : 80;
+
+    // Trouver le bloc serveur correspondant
+    const std::vector<BlocServer>& servers = _config.getServers();
+    BlocServer* matchingServer = NULL;
+
+    for (size_t i = 0; i < servers.size(); ++i) {
+        const BlocServer& server = _config.getServer(i); // Utilisation d'une référence constante
+
+        // Vérifier si le port correspond
+        bool portMatches = false;
+        for (size_t j = 0; j < server.getListen().size(); ++j) {
+            if (server.getListen()[j].getPort() == port) {
+                portMatches = true;
+                break;
+            }
+        }
+
+        // Vérifier si le server_name correspond
+        bool serverNameMatches = false;
+        for (size_t j = 0; j < server.getServerName().size(); ++j) {
+            if (server.getServerName()[j] == hostName) {
+                serverNameMatches = true;
+                break;
+            }
+        }
+
+        // Si le port et le server_name correspondent, sélectionner ce bloc
+        if (portMatches && serverNameMatches) {
+            return const_cast<BlocServer*>(&server); // Suppression du const pour retourner un pointeur non-const
+        }
+
+        // Si seul le port correspond, garder ce bloc comme fallback
+        if (portMatches && !matchingServer) {
+            matchingServer = const_cast<BlocServer*>(&server); // Suppression du const pour fallback
+        }
+    }
+
+    // Si aucun bloc serveur ne correspond, lever une erreur
+    if (!matchingServer) {
+        throw std::runtime_error("ERROR: No matching server block found for the request");
+    }
+
+    return matchingServer;
+}
+
 // SIUUU rajouter check etat reponse FINISH
 void Server::checkRequestTimeouts()
 {
@@ -656,26 +719,3 @@ void Server::checkRequestTimeouts()
         ++it; // Passer au client suivant
     }
 }
-
-
-// VERSION SANS LE CHECK ERROR
-// void Server::checkRequestTimeouts()
-// {
-//     for (std::map<int, Client*>::iterator it = _clients_map.begin(); it != _clients_map.end();)
-//     {
-//         Client *client = it->second;
-//         Request *request = client->getRequest();
-
-//         if (request && request->isTimeoutExceeded())
-//         {
-//             LogManager::log(LogManager::WARNING, "Request timeout exceeded for client FD %d", it->first);
-//             int client_fd = it->first;
-//             ++it;
-//             close_client(client_fd); // Supprimez le client de la map et mettez à jour l'itérateur
-//         }
-//         else
-//         {
-//             ++it; // Passez à l'élément suivant
-//         }
-//     }
-// }

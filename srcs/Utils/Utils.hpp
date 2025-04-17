@@ -13,4 +13,6 @@ class Utils
         static unsigned long long ft_stolonglong(const std::string &input);
 };
 
+std::string toString(int value);
+
 #endif

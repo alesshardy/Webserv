@@ -38,3 +38,11 @@ unsigned long long Utils::ft_stolonglong(const std::string &input)
     
     return ret;
 }
+
+
+std::string toString(int value)
+{
+	std::ostringstream oss;
+	oss << value;
+	return oss.str();
+}
