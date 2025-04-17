@@ -57,6 +57,9 @@ class Client
         Socket*             getClientSocket() const { return _client_socket; }
         Request*            getRequest() const { return _request; }
         Response*           getResponse() const { return _response; }
+        Server*             getServer() const { return _server; }
+
+        
 
 
     
