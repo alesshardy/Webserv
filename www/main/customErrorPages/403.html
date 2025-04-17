@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>403 Interdit</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Sans MS', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+            animation: float 3s ease-in-out infinite;
+        }
+        h1 {
+            font-size: 6rem;
+            margin: 0;
+            color: #ff6f61;
+            text-shadow: 2px 2px #fff;
+        }
+        p {
+            font-size: 1.5rem;
+            margin: 10px 0 20px;
+            color: #555;
+        }
+        a {
+            text-decoration: none;
+            color: #fff;
+            background: #ff4d6d;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        a:hover {
+            background: #ff1e3c;
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        .emoji {
+            font-size: 5rem;
+            margin: 20px 0;
+        }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>403</h1>
+        <div class="emoji">🚫</div>
+        <p>Oups ! Vous n'avez pas les droits pour accéder à cette page.</p>
+        <p>Peut-être que vous devriez demander la permission ou essayer autre chose ?</p>
+        <a href="/">Retour à l'accueil</a>
+    </div>
+</body>
+</html>
