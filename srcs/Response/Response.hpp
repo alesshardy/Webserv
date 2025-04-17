@@ -12,24 +12,43 @@
 #include "LogManager.hpp"
 #include "BlocServer.hpp"
 #include "Client.hpp"
+#include "ErrorPage.hpp"
 
 
 
 class   Client;
 class   Request;
+class Server;
 
 class   Response
 {
+    friend class Client;
+    friend class Request;
+    friend class Server;
+
+    enum    r_state
+    {
+        R_INIT,
+        R_PROCESSING,
+        R_CHUNK,
+        R_END
+
+    };
+
 
     private:
         int                 _client_fd;
         Socket*              _client_socket;
         Request*             _request;
-        BlocServer*          _server;
+        Server*                _server;
+        Client*              _client;
+        std::string          _response;
         std::string          _response_body;
         std::string          _response_header;
         std::string          _response_status;
         std::string          _response_code;
+
+        r_state             _r_state;
 
         //methodes
         void                _handleGet();
@@ -50,7 +69,7 @@ class   Response
         void                setResponseStatus(const std::string& status);
         void                setResponseCode(const std::string& code);
         void                setRequest(Request* request);
-        void                setServer(BlocServer* server);
+        void                setServer(Server* server);
         void                setClientFd(int client_fd);
         void                setClientSocket(Socket* client_socket);
 
@@ -58,9 +77,14 @@ class   Response
         int                 getClientFd() const { return _client_fd; }
         Socket*             getClientSocket() const { return _client_socket; }
         Request*            getRequest() const { return _request; }
-        BlocServer*         getServer() const { return _server; }
+        Server*             getServer() const { return _server; }
+        std::string         getResponse() const { return _response; }
         std::string         getResponseBody() const { return _response_body; }
         std::string         getResponseHeader() const { return _response_header;}
+
+        void                setRState(r_state state) { _r_state = state; }
+
+        // void                handleError(int error_code, bool errorPage = true);
 };
 
 #endif

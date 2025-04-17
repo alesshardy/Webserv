@@ -23,6 +23,7 @@
 #include "Response.hpp"
 
 class   Client;
+class   Request;
 
 #define MAX_EVENTS 10
 
@@ -82,6 +83,9 @@ class Server
         Config                      get_config() const { return _config; }
         const std::map<int, Client*>      &get_clients_map() const { return _clients_map; }
         const std::map<int, Socket*>      &get_sockets_map() const { return _sockets_map; }
+
+
+        BlocServer*                 getMatchingServer(const Request* request) const;
 
         // Setters
         void                        set_state(int state) { _state = state; }

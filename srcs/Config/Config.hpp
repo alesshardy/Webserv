@@ -37,7 +37,8 @@ class Config
 
             //Getters
             const std::vector<BlocServer> &getServers() const;
-            BlocServer &getServer(size_t index);
+            BlocServer &getServer(size_t index);               // Pour les objets non-const
+            const BlocServer &getServer(size_t index) const;   // Pour les objets const
 
             //Validation
             bool    validateConfig() const;
