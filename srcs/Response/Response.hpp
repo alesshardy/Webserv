@@ -15,25 +15,24 @@
 #include "ErrorPage.hpp"
 
 
+enum    r_state
+{
+    R_INIT,
+    R_PROCESSING,
+    R_CHUNK,
+    R_END
+};
+
 
 class   Client;
 class   Request;
-class Server;
+class   Server;
 
 class   Response
 {
     friend class Client;
     friend class Request;
     friend class Server;
-
-    enum    r_state
-    {
-        R_INIT,
-        R_PROCESSING,
-        R_CHUNK,
-        R_END
-
-    };
 
 
     private:
@@ -48,7 +47,9 @@ class   Response
         std::string          _response_status;
         std::string          _response_code;
 
-        r_state             _r_state;
+        int             _r_state;
+
+        std::time_t _timeOut;
 
         //methodes
         void                _handleGet();
@@ -72,6 +73,7 @@ class   Response
         void                setServer(Server* server);
         void                setClientFd(int client_fd);
         void                setClientSocket(Socket* client_socket);
+        void                setTimeStartResponse(){_timeOut = std::time(NULL);};
 
         // Getters
         int                 getClientFd() const { return _client_fd; }
@@ -81,8 +83,12 @@ class   Response
         std::string         getResponse() const { return _response; }
         std::string         getResponseBody() const { return _response_body; }
         std::string         getResponseHeader() const { return _response_header;}
+        const int           &getResponseState() const {return (this->_r_state);}
 
-        void                setRState(r_state state) { _r_state = state; }
+        void                setRState(int state) { _r_state = state;}
+        
+
+        bool                isTimeoutExceeded() const;
 
         // void                handleError(int error_code, bool errorPage = true);
 };

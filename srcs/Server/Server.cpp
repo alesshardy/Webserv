@@ -224,6 +224,7 @@ void Server::handleEpollEvents()
                 if (client->getRequest() && client->getRequest()->getState() == END)
                 {
                     LogManager::log(LogManager::DEBUG, "Request is complete, sending response for FD %d", fd);
+                    client->getResponse()->setTimeStartResponse();//set le temps de debut response
                     client->handleResponse(_epoll_fd);
                 }
                 else
@@ -687,10 +688,12 @@ BlocServer* Server::getMatchingServer(const Request* request) const
 // SIUUU rajouter check etat reponse FINISH
 void Server::checkRequestTimeouts()
 {
+    std::cout << "SIUUUUUUUUUUU " << std::endl;
     for (std::map<int, Client*>::iterator it = _clients_map.begin(); it != _clients_map.end();)
     {
         Client *client = it->second;
         Request *request = client->getRequest();
+        Response *response = client->getResponse();
 
         if (request)
         {
@@ -704,7 +707,8 @@ void Server::checkRequestTimeouts()
                 close_client(client_fd); // Fermez la connexion pour ce client
                 continue;
             }
-
+            
+            
             // Vérifier si la requête est dans un état d'erreur
             if (request->getState() == ERROR)
             {
@@ -716,6 +720,20 @@ void Server::checkRequestTimeouts()
             }
         }
 
+        if (response)
+        {
+            //verifier si la reponse a depasse le timeout
+            if (response->isTimeoutExceeded() && response->getResponseState() != R_END)
+            {
+                std::cout << "_r_state = " << response->getResponseState() << std::endl;
+                LogManager::log(LogManager::ERROR, "Request timeout exceeded for client FD %d", it->first);
+                int client_fd = it->first;
+                ++it;
+                close_client(client_fd); // Fermez la connexion pour ce client
+                continue;
+            }
+        }
+        
         ++it; // Passer au client suivant
     }
 }
