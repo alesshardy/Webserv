@@ -632,8 +632,9 @@ void Server::checkRequestTimeouts()
         if (request)
         {
             // Vérifier si la requête a dépassé le timeout
-            if (request->isTimeoutExceeded())
+            if (request->isTimeoutExceeded() && request->getState() != END)
             {
+                std::cout << "_state = " << request->getState() << std::endl;
                 LogManager::log(LogManager::ERROR, "Request timeout exceeded for client FD %d", it->first);
                 int client_fd = it->first;
                 ++it;

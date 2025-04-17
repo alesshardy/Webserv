@@ -106,8 +106,9 @@ void    Client::handleResponse(int epoll_fd)
         delete _response;
         _response = NULL;
     }
-
-    _request = new Request(this, _server);
-    _response = new Response(this);
+    
+    // SIUU pas besoin de reset / ca detruit la gestion du temps
+    // _request = new Request(this, _server);
+    // _response = new Response(this);
     
 }
