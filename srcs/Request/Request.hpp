@@ -77,6 +77,10 @@ class Request{
         void getMaxBodySize();
         void parseQuery();
         void parseBody();
+        void clearProcessedData(size_t processedBytes);
+        bool isTimeoutExceeded() const;
+
+
         
         // void parsePath(int & state, int & idx, std::string const & str);
         // void parseBody(int & state, int & idx, std::string const & str);
