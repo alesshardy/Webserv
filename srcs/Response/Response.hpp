@@ -47,8 +47,11 @@ class   Response
         int                 _r_state;
         std::time_t         _timeOut;
 
+
         //methodes
         void                _handleGet();
+        void                _sendFullResponse(const std::string& filePath, const std::string& contentType);
+        void                _sendChunkedResponse(const std::string& filePath, const std::string& contentType);
         void                _handlePost();
         void                _handleDelete();
         void                _handlePut();

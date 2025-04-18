@@ -27,6 +27,9 @@ int Response::buildResponse(int epoll_fd)
 {
     (void)epoll_fd; // Suppress unused parameter warning
 
+    if (_r_state != R_CHUNK)
+        setRState(R_PROCESSING);
+
     // Build the response based on the request method
     if (_request->getMethod() == "GET")
         _handleGet();
@@ -37,7 +40,10 @@ int Response::buildResponse(int epoll_fd)
     else if (_request->getMethod() == "PUT")
         _handlePut();
     else
+    {
+        // SIUUU gerer plus tard le code 500
         LogManager::log(LogManager::ERROR, "Unsupported HTTP method: %s", _request->getMethod().c_str());
+    }
     return 0;
 }
 void Response::setResponseHeader(const std::string& header)
@@ -73,6 +79,87 @@ void Response::setClientSocket(Socket* client_socket)
     _client_socket = client_socket;
 }
 // Handle different HTTP methods
+// void Response::_handleGet()
+// {
+//     // Récupérer le chemin du fichier demandé
+//     std::string filePath = _request->getUri();
+//     if (filePath == "/")
+//         filePath = "/index.html"; // Par défaut, servir index.html
+    
+//     filePath = "www/main" + filePath; // Préfixer avec le répertoire racine
+//     LogManager::log(LogManager::DEBUG, "File path: %s", filePath.c_str());
+
+//     // Vérifier si le chemin correspond à un répertoire
+//     struct stat fileStat;
+//     if (stat(filePath.c_str(), &fileStat) == 0)
+//     {
+//         if (S_ISDIR(fileStat.st_mode))
+//         {
+//             // Si c'est un répertoire, ajouter index.html
+//             if (!filePath.empty() && filePath[filePath.size() - 1] != '/')
+//                 filePath += "/";
+//             filePath += "index.html";
+//             LogManager::log(LogManager::DEBUG, "Path is a directory, appending index.html: %s", filePath.c_str());
+//         }
+
+//         // Vérifier les permissions d'accès
+//         if (access(filePath.c_str(), R_OK) != 0)
+//         {
+//             // Si l'accès est refusé, retourner une réponse 403
+//             LogManager::log(LogManager::ERROR, "Access denied: %s", filePath.c_str());
+//             BlocServer* matchingServer = _server->getMatchingServer(_request);
+//             _response = ErrorPage::getErrorPage(403, matchingServer->getErrorPage());
+//             setRState(R_END);
+//             return;
+//         }
+//     }
+//     else
+//     {
+//         // Si le fichier ou le répertoire n'existe pas, retourner une réponse 404
+//         LogManager::log(LogManager::ERROR, "File not found: %s", filePath.c_str());
+//         BlocServer* matchingServer = _server->getMatchingServer(_request);
+//         _response = ErrorPage::getErrorPage(404, matchingServer->getErrorPage());
+//         setRState(R_END);
+//         return;
+//     }
+
+//     // Ouvrir le fichier demandé
+//     std::ifstream file(filePath.c_str(), std::ios::binary);
+//     if (file.is_open())
+//     {
+//         LogManager::log(LogManager::DEBUG, "File opened successfully: %s", filePath.c_str());
+
+//         // Lire le contenu du fichier
+//         std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+//         file.close();
+
+//         // Déterminer le type de contenu
+//         std::string contentType = getContentType(filePath);
+
+//         // Construire les en-têtes de la réponse
+//         std::ostringstream oss;
+//         oss << content.size();
+//         _response_header = "HTTP/1.1 200 OK\r\n";
+//         _response_header += "Content-Type: " + contentType + "\r\n";
+//         _response_header += "Content-Length: " + oss.str() + "\r\n";
+//         _response_header += "\r\n";
+
+//         // Stocker le corps de la réponse
+//         _response_body = content;
+//         _response += _response_header + _response_body;
+
+//         LogManager::log(LogManager::INFO, "Response prepared for client %d: %s", _client_fd, filePath.c_str());
+//     }
+//     else
+//     {
+//         // Si le fichier n'est pas trouvé, retourner une réponse 404
+//         LogManager::log(LogManager::ERROR, "File not found: %s", filePath.c_str());
+//         BlocServer* matchingServer = _server->getMatchingServer(_request);
+//         _response = ErrorPage::getErrorPage(404, matchingServer->getErrorPage());
+//     }
+//     setRState(R_END);
+// }
+
 void Response::_handleGet()
 {
     // Récupérer le chemin du fichier demandé
@@ -117,42 +204,79 @@ void Response::_handleGet()
         return;
     }
 
-    // Ouvrir le fichier demandé
-    std::ifstream file(filePath.c_str(), std::ios::binary);
-    if (file.is_open())
+    // Déterminer le type de contenu
+    std::string contentType = getContentType(filePath);
+
+    // Choisir entre réponse complète ou chunked
+    if (fileStat.st_size <= CHUNKED_THRESHOLD)
     {
-        LogManager::log(LogManager::DEBUG, "File opened successfully: %s", filePath.c_str());
-
-        // Lire le contenu du fichier
-        std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-        file.close();
-
-        // Déterminer le type de contenu
-        std::string contentType = getContentType(filePath);
-
-        // Construire les en-têtes de la réponse
-        std::ostringstream oss;
-        oss << content.size();
-        _response_header = "HTTP/1.1 200 OK\r\n";
-        _response_header += "Content-Type: " + contentType + "\r\n";
-        _response_header += "Content-Length: " + oss.str() + "\r\n";
-        _response_header += "\r\n";
-
-        // Stocker le corps de la réponse
-        _response_body = content;
-        _response += _response_header + _response_body;
-
-        LogManager::log(LogManager::INFO, "Response prepared for client %d: %s", _client_fd, filePath.c_str());
+        LogManager::log(LogManager::DEBUG, "File size is small enough for full response: %s", filePath.c_str());
+        _sendFullResponse(filePath, contentType);
+        setRState(R_END);
     }
     else
     {
-        // Si le fichier n'est pas trouvé, retourner une réponse 404
-        LogManager::log(LogManager::ERROR, "File not found: %s", filePath.c_str());
-        BlocServer* matchingServer = _server->getMatchingServer(_request);
-        _response = ErrorPage::getErrorPage(404, matchingServer->getErrorPage());
+        LogManager::log(LogManager::DEBUG, "File size is too large for full response, using chunked response: %s", filePath.c_str());
+        _sendChunkedResponse(filePath, contentType);
+        setRState(R_CHUNK); // Passer à l'état CHUNK
     }
-    setRState(R_END);
 }
+
+void Response::_sendChunkedResponse(const std::string& filePath, const std::string& contentType)
+{
+    std::ifstream file(filePath.c_str(), std::ios::binary);
+    if (!file.is_open())
+    {
+        LogManager::log(LogManager::ERROR, "Failed to open file for chunked response: %s", filePath.c_str());
+        return;
+    }
+
+    _response_header = "HTTP/1.1 200 OK\r\n";
+    _response_header += "Content-Type: " + contentType + "\r\n";
+    _response_header += "Transfer-Encoding: chunked\r\n";
+    _response_header += "\r\n";
+
+    _response = _response_header;
+
+    const size_t chunkSize = 8192; // Taille de chaque chunk
+    char buffer[chunkSize];
+    while (file.read(buffer, chunkSize) || file.gcount() > 0)
+    {
+        std::ostringstream chunk;
+        chunk << std::hex << file.gcount() << "\r\n"; // Taille du chunk en hexadécimal
+        chunk.write(buffer, file.gcount());
+        chunk << "\r\n";
+        _response += chunk.str();
+    }
+
+    _response += "0\r\n\r\n"; // Chunk final
+    file.close();
+
+    LogManager::log(LogManager::INFO, "Chunked response prepared for client %d: %s", _client_fd, filePath.c_str());
+}
+
+void Response::_sendFullResponse(const std::string& filePath, const std::string& contentType)
+{
+    // Lire le contenu du fichier
+    std::ifstream file(filePath.c_str(), std::ios::binary);
+    std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+    file.close();
+
+    // Construire les en-têtes de la réponse
+    std::ostringstream oss;
+    oss << content.size();
+    _response_header = "HTTP/1.1 200 OK\r\n";
+    _response_header += "Content-Type: " + contentType + "\r\n";
+    _response_header += "Content-Length: " + oss.str() + "\r\n";
+    _response_header += "\r\n";
+
+    // Stocker le corps de la réponse
+    _response_body = content;
+    _response = _response_header + _response_body;
+
+    LogManager::log(LogManager::INFO, "Full response prepared for client %d: %s", _client_fd, filePath.c_str());
+}
+
 void Response::_handlePost()
 {
     // Handle POST request
