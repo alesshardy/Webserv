@@ -21,8 +21,6 @@ class Listen
             //setters
             void    setIp(const std::string &ip) {_ip = ip;};
             void    setPort(int port) {_port = port;};
-
-            //Methods
 };
 
 #endif

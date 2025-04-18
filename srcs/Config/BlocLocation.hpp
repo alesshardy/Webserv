@@ -50,7 +50,6 @@ class BlocLocation
             bool                                        getAutoIndex() const {return _autoIndex;};
             const std::map<int, std::string>            &getReturnDirectives() const {return _returnDirectives;};
 
-
             //pour stocker cgi
             void                setTmpCgiExtension(std::string extension) {_tmpCgiExtension = extension; _hasTmpCgiExtension = true;};
             std::string         getTmpCgiExtension() const {return _tmpCgiExtension;};
@@ -65,8 +64,6 @@ class BlocLocation
 
             //Validation
             bool    validateLocation() const;
-
-            //Print
 };
 
 #endif

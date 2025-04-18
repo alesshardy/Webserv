@@ -1,7 +1,6 @@
 #include "Client.hpp"
 
-
-//Constructeur
+//Constructeur et destructeur
 
 Client::Client(int client_fd, Socket* client_socket, Server* server)
 {
@@ -28,12 +27,15 @@ Client::~Client()
         delete this->_response;
     }
     LogManager::log(LogManager::DEBUG, "Destroying client %d", _client_fd);
-    // Ne pas supprimer _client_socket ici, il est géré par Server
-    // delete _request;
-    // delete _response;
 }
 
+/********************************************** CLIENT *********************************************************/
 
+/**
+ * @brief   Gérer la requête du client.
+ * 
+ * @param str 
+ */
 void Client::handleRequest(std::string const & str)
 {
     try
@@ -57,11 +59,15 @@ void Client::handleRequest(std::string const & str)
     catch (const std::exception &e)
     {
         LogManager::log(LogManager::ERROR, "Error handling request for client %d: \n%s", _client_fd, e.what());
-        // Gérer l'erreur (fermer le client, envoyer une réponse d'erreur, etc.)
+        //SIUUU Gérer l'erreur (fermer le client, envoyer une réponse d'erreur, etc.)
     }
 }
 
-
+/**
+ * @brief   Gérer la réponse du client.
+ * 
+ * @param epoll_fd 
+ */
 void    Client::handleResponse(int epoll_fd)
 {
     if (_response == NULL)
@@ -69,7 +75,6 @@ void    Client::handleResponse(int epoll_fd)
         LogManager::log(LogManager::ERROR, "Response object is NULL for client %d", _client_fd);
         return;
     }
-
     (void)epoll_fd;
     LogManager::log(LogManager::DEBUG, "Handling response for client %d", _client_fd);
     LogManager::log(LogManager::DEBUG, "epoll_fd: %d", epoll_fd);
@@ -86,36 +91,27 @@ void    Client::handleResponse(int epoll_fd)
         LogManager::log(LogManager::ERROR, "Failed to send response to client %d", _client_fd);
         return;
     }
-    
-    // if (send(_client_fd, _response->getResponseHeader().c_str(), _response->getResponseHeader().size(), 0) == -1)
-    // {
-    //     LogManager::log(LogManager::ERROR, "Failed to send response header to client %d", _client_fd);
-    //     return;
-    // }
-    // if (send(_client_fd, _response->getResponseBody().c_str(), _response->getResponseBody().size(), 0) == -1)
-    // {
-    //     LogManager::log(LogManager::ERROR, "Failed to send response body to client %d", _client_fd);
-    //     return;
-    // }
+
     LogManager::log(LogManager::DEBUG, "Response sent to client %d", _client_fd);
     
 
     _server->change_epoll_event(_client_fd, REQUEST_EVENTS); // Revenir à l'état de lecture
     // Close the client socket after sending the response
     close(_client_fd);
-    if (_request)
-    {
-        delete _request;
-        _request = NULL;
-    }
-    if (_response)
-    {
-        delete _response;
-        _response = NULL;
-    }
+    
+    // SIUUUU a voir si reset utile ou non
+    // if (_request)
+    // {
+    //     delete _request;
+    //     _request = NULL;
+    // }
+    // if (_response)
+    // {
+    //     delete _response;
+    //     _response = NULL;
+    // }
 
     // _request = new Request(this, _server);
     // _response = new Response(this);
-    
 }
 

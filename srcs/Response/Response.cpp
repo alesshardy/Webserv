@@ -14,6 +14,8 @@ Response::Response(Client* client)
     _response_status = "";
     _response_code = "";
     _server = client->getServer();
+    _timeOut = NULL;
+
     
 }
 Response::~Response()
@@ -231,3 +233,10 @@ std::string getContentType(const std::string &filePath)
         return "image/x-icon";
     return "application/octet-stream"; // Type par défaut
 }
+
+bool Response::isTimeoutExceeded() const
+{
+    std::time_t now = std::time(NULL);
+    return (now - _timeOut > 10); // SIUU CHANGER EN 60 sec
+}
+
