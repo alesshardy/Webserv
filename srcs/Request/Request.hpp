@@ -50,7 +50,7 @@ class Request{
         std::string                         _currentHeaderKey;
         int                                 _statusCode;
         int                                 _state;
-        int                                 _error;
+        int                                 _inHeader;
         // BlocLocation                        *_location;
         size_t  _i;
         bool _isChunked;
@@ -79,6 +79,12 @@ class Request{
         void parseBody();
         void clearProcessedData(size_t processedBytes);
         bool isTimeoutExceeded() const;
+        void handleError(int code, int state, const std::string& errorMessage);
+
+
+        
+        // void parsePath(int & state, int & idx, std::string const & str);
+        // void parseBody(int & state, int & idx, std::string const & str);
         
         const std::string                           &getMethod() const;
         const std::string                           &getUri() const;
@@ -90,7 +96,6 @@ class Request{
         const int                                   &getState() const;
         
         void setCode(int const & code);
-        void setError(int const & error);
         void setState(int const & state);
 };
 

@@ -1,7 +1,6 @@
 #include "Request.hpp"
 
-// Constructeur et Destructeur
-Request::Request(Client *client, Server *server): _client(client), _server(server), _body(),_raw(""), _method(""), _uri(""), _version(""), _currentHeaderKey(""), _statusCode(-1), _state(0), _error(0), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0), _timeOut(std::time(NULL)){}
+Request::Request(Client *client, Server *server): _client(client), _server(server), _body(),_raw(""), _method(""), _uri(""), _version(""), _currentHeaderKey(""), _statusCode(200), _state(0), _inHeader(false), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0), _timeOut(std::time(NULL)){}
 
 Request::Request(Request const & copy)
 {
@@ -23,12 +22,20 @@ Request &Request::operator=(Request const & rhs)
         this->_currentHeaderKey = rhs._currentHeaderKey;
         this->_statusCode = rhs._statusCode;
         this->_state = rhs._state;
+        this->_inHeader = rhs._inHeader;
         this->_i = rhs._i;
         this->_isChunked = rhs._isChunked;
         this->_maxBodySize = rhs._maxBodySize;
         this->_contentLength = rhs._contentLength;
         this->_timeOut = rhs._timeOut;
-        this->_body = rhs._body;
+
+        if (this->_body)
+        {
+            delete this->_body;
+            this->_body = NULL;
+        }
+        if (rhs._body)
+            this->_body = new RequestBody(*rhs._body); 
     }
     return (*this);
 }
@@ -88,13 +95,15 @@ void Request::setState(int const & state)
     this->_state = state;
 }
 
-/*********************************** Parsing de la request **********************************/
+void Request::handleError(int code, int state, const std::string& errorMessage)
+{
+    setCode(code);      
+    setState(state);     
+    LogManager::log(LogManager::ERROR, errorMessage.c_str()); 
+    throw std::runtime_error(errorMessage);
+}
 
-/**
- * @brief   Parse la requête HTTP.
- * 
- * @param str 
- */
+
 void Request::parseRequest(std::string str)
 {
     try
@@ -131,15 +140,11 @@ void Request::parseMethod()
 {
     // LogManager::log(LogManager::DEBUG, "Parse method");
     if (_raw.empty())
-    {
-        throw std::runtime_error("ERROR : empty request");
-        return ;
-    }
+       return (handleError(400, ERROR, "ERROR : empty request"));
 
     size_t endLine = _raw.find("\r\n", _i);
     if (endLine == std::string::npos)
-        return ;    
-        // throw std::runtime_error("ERROR : invalid request format");
+        return ;
     while (_i < endLine && _raw[_i] != ' ')
     {
         _method += _raw[_i];
@@ -149,13 +154,13 @@ void Request::parseMethod()
     LogManager::log(LogManager::DEBUG, ("Http method: " + _method).c_str());
 
     if (_method != "GET" && _method != "POST" && _method != "DELETE" && _method != "PUT")
-        throw std::runtime_error("ERROR : unsupported HTTP method");
+        return (handleError(400, ERROR, "ERROR : unsupported HTTP method"));
 
     while (_i < endLine && _raw[_i] == ' ')
         _i++;
 
     if (_i >= endLine)
-        throw std::runtime_error("ERROR: Missing URI after method");
+        return (handleError(400, ERROR, "ERROR: Missing URI after method"));
     _raw.erase(0, _i);
     _i = 0;
     setState(URI);
@@ -174,11 +179,11 @@ void Request::parseUri()
         _i++;
 
     if (_i >= _raw.size() || _raw[_i] != '/')
-        throw std::runtime_error("ERROR: Uri unknown format");
+        return (handleError(400, ERROR, "ERROR: Uri unknown format"));
 
     size_t endLine = _raw.find("\r\n", _i);
     if (endLine == std::string::npos)
-        throw std::runtime_error("ERROR : invalid request format");
+        return (handleError(400, ERROR, "ERROR : invalid request format"));
 
     while (_i < endLine && _raw[_i] != ' ')
     {
@@ -190,14 +195,13 @@ void Request::parseUri()
         _i++;
 
     if (_i >= endLine)
-        throw std::runtime_error("ERROR: Missing Version after uri");
+        return (handleError(400, ERROR, "ERROR: Missing Version after uri"));
     
     LogManager::log(LogManager::DEBUG, ("Http uri: " + _uri).c_str());
     if (_uri.size() > URI_MAX_SIZE)
-        throw std::runtime_error("ERROR: URI size exceeds 2048 characters");
+        return (handleError(400, ERROR, "ERROR: URI size exceeds 2048 characters"));
     _raw.erase(0, _i);
     _i = 0;
-    
     setState(QUERY);
 }
 
@@ -209,10 +213,7 @@ void Request::parseQuery()
 {
     size_t queryStart = _uri.find('?');
     if (queryStart == std::string::npos)
-    {
-        setState(VERSION);
-        return;
-    }
+        return (setState(VERSION));
 
     std::string queryString = _uri.substr(queryStart + 1);
     _uri.erase(queryStart);
@@ -266,21 +267,20 @@ void Request::parseVersion()
         
     size_t endLine = _raw.find("\r\n", _i);
     if (endLine == std::string::npos)
-        throw std::runtime_error("ERROR : invalid request format");
+        return (handleError(400, ERROR, "ERROR : invalid request format"));
 
     _version = _raw.substr(_i, endLine - _i);
 
     std::cout << "version: " << _version << std::endl;
     _i = endLine + 2; // Passer "\r\n"
     if (_version != "HTTP/1.1")
-        throw std::runtime_error("ERROR: Bad Version");
+        return (handleError(400, ERROR, "ERROR: Bad Version"));
     LogManager::log(LogManager::DEBUG, ("Http version: " + _version).c_str());
     // SECU 
     if (_raw.size() > 8192)
-        throw std::runtime_error("ERROR: Request line exceeds 8 KB");
+        return (handleError(400, ERROR, "ERROR: Request line exceeds 8 KB"));
     _raw.erase(0, _i);
     _i = 0;
-    
     setState(HEADER_KEY);
 }
 /**
@@ -289,19 +289,20 @@ void Request::parseVersion()
  */
 void Request::parseHeaderKey()
 {
+    _inHeader = false;
     if (_raw.empty())
         return ;
     // LogManager::log(LogManager::DEBUG, "Parse HeaderKey");
 
     if (_raw[_i] && _raw[_i] == '\r' && _raw[_i + 1] == '\n')
-    {
-        setState(HEADER_CHECK);
-        return ;
-    }
+        return (setState(HEADER_CHECK));
 
     size_t colonPos = _raw.find(":", _i);
     if (colonPos == std::string::npos)
+    {
+        _inHeader = true;
         return ;    
+    }
 
     while (_i < colonPos)
     {
@@ -312,7 +313,6 @@ void Request::parseHeaderKey()
     _raw.erase(0, _i);
     _i = 0;
     LogManager::log(LogManager::DEBUG, ("HeaderKey " + _currentHeaderKey).c_str());
-
     setState(HEADER_VALUE);
 }
 
@@ -328,8 +328,10 @@ void Request::parseHeaderValue()
 
     size_t endLine = _raw.find("\r\n", _i);
     if (endLine == std::string::npos)
+    {
+        _inHeader = true;
         return ;    
-        // throw std::runtime_error("ERROR : invalid request format");
+    }
     std::string _currentHeaderValue;
     while (_i < endLine)
     {
@@ -341,7 +343,6 @@ void Request::parseHeaderValue()
     parseHeaderKeyValue(_currentHeaderKey, _currentHeaderValue);
     LogManager::log(LogManager::DEBUG, ("HeaderValue " + _currentHeaderValue).c_str());
     _currentHeaderKey.clear();
-    // std::cout << "\033[31m" << _raw << "\033[0m" << std::endl; // Affichage en rouge
     _raw.erase(0, _i);
     _i = 0;
     setState(HEADER_KEY);
@@ -353,34 +354,20 @@ void Request::parseHeaderValue()
  */
 void   Request::parseHeader()
 {
-    int boucleK = 0;
-    int boucleV = 0;
-
     while (_state >= HEADER_KEY && _state <= HEADER_VALUE)
     {
         if (_state == HEADER_KEY)
-        {
             parseHeaderKey();
-            boucleK++;
-            boucleV = 0;
-        }
         if (_state == HEADER_VALUE)
-        {
             parseHeaderValue();
-            boucleV++;
-            boucleK = 0;
+        if (_inHeader || _raw.empty())
+        {
+            LogManager::log(LogManager::DEBUG, "Exiting header parsing loop: incomplete buffer or empty data");
+            break ;       
         }
-        if (boucleK > 3 || boucleV > 3)
-            break;
     }
 }
 
-/**
- * @brief Parse le corps de la requête HTTP.
- * 
- * @param headerKey 
- * @param headerValue 
- */
 void Request::parseHeaderKeyValue(const std::string& headerKey, const std::string& headerValue)
 {
     // Vérifier si l'en-tête est unique
@@ -409,15 +396,11 @@ void Request::parseHeaderKeyValue(const std::string& headerKey, const std::strin
     // }
     // En-têtes génériques
     else
-    {
         _headers[headerKey] = headerValue;
-    }
 }
 
-/**
- * @brief  Vérifie les en-têtes de la requête HTTP.
- * 
- */
+
+// CHECK HEADER
 void    Request::checkHeader()
 {        
     LogManager::log(LogManager::DEBUG, "Checking headers ...");
