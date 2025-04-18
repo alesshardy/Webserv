@@ -79,11 +79,6 @@ class Request{
         void parseBody();
         void clearProcessedData(size_t processedBytes);
         bool isTimeoutExceeded() const;
-
-
-        
-        // void parsePath(int & state, int & idx, std::string const & str);
-        // void parseBody(int & state, int & idx, std::string const & str);
         
         const std::string                           &getMethod() const;
         const std::string                           &getUri() const;

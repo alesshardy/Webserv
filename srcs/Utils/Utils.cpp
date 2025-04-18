@@ -1,6 +1,6 @@
 #include "Utils.hpp"
 
-int Utils::ft_stoi(const std::string &input)
+int ft_stoi(const std::string &input)
 {
     long long ret;
     std::istringstream iss(input);
@@ -24,7 +24,7 @@ int Utils::ft_stoi(const std::string &input)
     return static_cast<int>(ret);
 }
 
-unsigned long long Utils::ft_stolonglong(const std::string &input)
+unsigned long long ft_stoll(const std::string &input)
 {
     unsigned long long ret;
 

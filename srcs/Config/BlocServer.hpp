@@ -14,12 +14,12 @@ class Listen;
 class BlocServer
 {
     private:
-            std::vector<Listen>         _listen;
-            std::vector<std::string>    _serverName;
-            std::string                 _root;
-            std::vector<std::string>    _index;
-            std::map<int, std::string>  _errorPage;
-            unsigned long long                   _clientMaxBodySize;
+            std::vector<Listen>                 _listen;
+            std::vector<std::string>            _serverName;
+            std::string                         _root;
+            std::vector<std::string>            _index;
+            std::map<int, std::string>          _errorPage;
+            unsigned long long                  _clientMaxBodySize;
             std::map<std::string, BlocLocation> _location;
 
             // pour stocker error_page
@@ -62,9 +62,6 @@ class BlocServer
             
             // check double location
             bool        locationExists(const std::string &locationPath) const;
-
-
-            //Print
 };
 
 #endif

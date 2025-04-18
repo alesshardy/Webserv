@@ -33,5 +33,3 @@ BlocLocation &BlocLocation::operator=(const BlocLocation &assign)
     }
     return (*this);
 }
-
-//

@@ -1,5 +1,7 @@
 #include "CommandLineParser.hpp"
 
+// Constructors and destructors
+
 CommandLineParser::CommandLineParser(int argc, char **argv)
 {
     _parseCommandLine(argc, argv);
@@ -16,14 +18,18 @@ CommandLineParser::CommandLineParser(int argc, char **argv)
         std::string logFile = getOption("logfile");
         LogManager::log(LogManager::INFO, "Logging to file: %s", logFile.c_str());
     }
-
-
-    
 }
 
 CommandLineParser::~CommandLineParser()
 {
 }
+
+/***************************************************  COMMAND LINE ********************************************************/
+
+/**
+ * @brief Affiche l'aide pour la ligne de commande.
+ * 
+ */
 void    CommandLineParser::printHelp() const
 {
     std::cout << "Usage: ./webserv [configuration_file] [options]" << std::endl;
@@ -34,6 +40,12 @@ void    CommandLineParser::printHelp() const
     std::cout << "  --help            Show this help message" << std::endl;
 }
 
+/**
+ * @brief Parse la ligne de commande et remplit les options.
+ * 
+ * @param argc 
+ * @param argv 
+ */
 void    CommandLineParser::_parseCommandLine(int argc, char **argv)
 {
     for (int i = 1; i < argc; ++i)
@@ -76,11 +88,22 @@ void    CommandLineParser::_parseCommandLine(int argc, char **argv)
     }
 }
 
+/**
+ * @brief Vérifie si un fichier de configuration a été fourni.
+ * 
+ * @return true 
+ * @return false 
+ */
 bool    CommandLineParser::hasConfigFile() const
 {
     return !_configFilePath.empty();
 }
 
+/**
+ * @brief Récupère le chemin du fichier de configuration.
+ * 
+ * @return std::string 
+ */
 std::string CommandLineParser::getConfigFilePath() const
 {
     if (_configFilePath.empty())
@@ -90,11 +113,24 @@ std::string CommandLineParser::getConfigFilePath() const
     return _configFilePath;
 }
 
+/**
+ * @brief  Vérifie si une option est présente dans la ligne de commande.
+ * 
+ * @param option 
+ * @return true 
+ * @return false 
+ */
 bool CommandLineParser::hasOption(const std::string &option) const
 {
     return _options.find(option) != _options.end();
 }
 
+/**
+ * @brief  Récupère la valeur d'une option.
+ * 
+ * @param option 
+ * @return std::string 
+ */
 std::string CommandLineParser::getOption(const std::string &option) const
 {
     std::map<std::string, std::string>::const_iterator it = _options.find(option);

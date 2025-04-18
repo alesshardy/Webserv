@@ -70,7 +70,7 @@ class Config
         
             void        handleDefaultConfig();
             
-            // VErif les arg
+            // Verif les arg
             bool        isValidRoot(const std::string &path);
             bool        isValidIPv4(const std::string &ip);
 

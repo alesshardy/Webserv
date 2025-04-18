@@ -3,7 +3,7 @@
 #include "Socket.hpp"
 #include <cstdlib> 
 #include <csignal>
-#include "./includes/Webserv.hpp"
+#include "../includes/Webserv.hpp"
 #include "Config.hpp"
 #include "Server.hpp"
 #include "CommandLineParser.hpp"
@@ -31,15 +31,6 @@ int main(int ac, char **av)
         return (EXIT_SUCCESS);
     }
 
-    // A enlever plus tard car config par default acceptable si pas de file
-    // if (ac != 2) 
-    // {
-    //     std::cerr << "Usage:./webserv [configuration file] " << std::endl;
-    //     return (EXIT_FAILURE);
-    // }
-    
-
-
     try
     {
         Config config;
@@ -47,15 +38,10 @@ int main(int ac, char **av)
         std::string configFile = cmdParser.getConfigFilePath();
         LogManager::log(LogManager::INFO, "Using configuration file: %s", configFile.c_str());
         config.parseConfigFile(configFile, config);
-        
-        // config.parseConfigFile(av[1], config);
-        // LogManager::log(LogManager::INFO, "Fichier config correct!");
-        // // print config ranger
-        // rajouter un if pour afficher que en mode debug
+
         if (LogManager::getDebugLogStatus())
             config.printConfig();
         
-
         // Initialiser le serveur
         Server server;
         server.set_config(config); // Assigner la configuration au serveur
@@ -69,11 +55,9 @@ int main(int ac, char **av)
         // Lancer le serveur
         server.run();
 
-
         // Arrêter le serveur
         server.stop();
        
-
         // Vérifiez si le programme doit quitter
         if (!running)
         {
@@ -88,7 +72,6 @@ int main(int ac, char **av)
     }
 
     //fermeture du serveur
-    
     LogManager::log(LogManager::INFO, "Server is shutting down...");
     LogManager::cleanup();
     return (EXIT_SUCCESS);
