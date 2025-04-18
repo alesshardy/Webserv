@@ -14,7 +14,6 @@
 #include "Client.hpp"
 #include "ErrorPage.hpp"
 
-
 enum    r_state
 {
     R_INIT,
@@ -22,7 +21,6 @@ enum    r_state
     R_CHUNK,
     R_END
 };
-
 
 class   Client;
 class   Request;
@@ -36,20 +34,18 @@ class   Response
 
 
     private:
-        int                 _client_fd;
+        int                  _client_fd;
         Socket*              _client_socket;
         Request*             _request;
-        Server*                _server;
+        Server*              _server;
         Client*              _client;
         std::string          _response;
         std::string          _response_body;
         std::string          _response_header;
         std::string          _response_status;
         std::string          _response_code;
-
-        int             _r_state;
-
-        std::time_t _timeOut;
+        int                 _r_state;
+        std::time_t         _timeOut;
 
         //methodes
         void                _handleGet();

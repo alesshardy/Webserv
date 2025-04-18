@@ -51,7 +51,7 @@ INC			=	-I./srcs/	\
 #                                   SOURCES                                    #
 # **************************************************************************** #
 
-SRCS 			=	main.cpp \
+SRCS 			=	srcs/main.cpp \
 					srcs/LogManager/LogManager.cpp \
 					srcs/Config/Config.cpp \
 					srcs/Config/BlocServer.cpp \
