@@ -30,17 +30,12 @@ class Client
     friend class Server;
 
     private:
-        int                 _client_fd;
+        int                  _client_fd;
         Socket*              _client_socket;
         Request*             _request;
         Response*            _response;
-        Server*                 _server;
-
-        bool   _requestFinish;
-
-        
-
-
+        Server*              _server;
+        bool                 _requestFinish;
 
     public:
         Client(int client_fd, Socket* client_socket, Server *server);
@@ -51,16 +46,11 @@ class Client
         void                handleResponse(int epoll_fd);     
 
         // Getters
-        int                 getClientFd() const { return _client_fd; }
-        Socket*             getClientSocket() const { return _client_socket; }
-        Request*            getRequest() const { return _request; }
-        Response*           getResponse() const { return _response; }
-        Server*             getServer() const { return _server; }
-
-        
-
-
-    
+        int                 getClientFd() const {return _client_fd;}
+        Socket*             getClientSocket() const {return _client_socket;}
+        Request*            getRequest() const {return _request;}
+        Response*           getResponse() const {return _response;}
+        Server*             getServer() const {return _server;}
 };
 
 #endif

@@ -1,12 +1,5 @@
 #include "Server.hpp"
 
-
-/**TEST TEMPORAIRE RESPONSE */
-// std::string extractFilePath(const std::string &request);
-// std::string getContentType(const std::string &filePath);
-/**************** */
-
-
 //Constructeur
 Server::Server()
 {
@@ -18,22 +11,9 @@ Server::Server()
 //Destructeur
 Server::~Server()
 {
-    // for (std::map<int, Socket *>::iterator it = _sockets_map.begin(); it != _sockets_map.end(); ++it)
-    // {
-    //     delete it->second;
-    // }
-    // if (_epoll_fd != -1)
-    // {
-    //     close(_epoll_fd);
-    // }
-    // for (std::map<int, Client *>::iterator it = _clients_map.begin(); it != _clients_map.end(); ++it)
-    // {
-    //     delete it->second;
-    // }
     close_all();
 }
-
-
+/***************************************************** SERVER  **************************************************************/
 
 /**
  * @brief Initialise le serveur :
@@ -112,15 +92,10 @@ void Server::run()
 
     while (_state == RUNNING && running)
     {
-        // LogManager::log(LogManager::DEBUG, "value of running: %d", running);
         handleEpollEvents();
     }
-
-    // LogManager::log(LogManager::DEBUG, "Value of running: %d", running);
-
 }
 
-/***********************************************Handle run */
 
 /**
  * @brief vérifie l'état du serveur et le démarre
@@ -154,7 +129,7 @@ void Server::checkAndStart()
 void Server::handleEpollEvents()
 {
     struct epoll_event events[MAX_EVENTS];
-    int timeout = 1000; // tiemout de 1sec pour relancer epoll_wait
+    int timeout = 1000; // SIUUU voir si changer le temps / timeout de 1sec pour relancer epoll_wait
     int nfds = epoll_wait(_epoll_fd, events, MAX_EVENTS, timeout);
 
     if (nfds == -1)
@@ -184,36 +159,22 @@ void Server::handleEpollEvents()
          LogManager::log(LogManager::WARNING, "Event on invalid or closed FD %d, skipping", fd);
          continue;
      }
+        if (events[n].events & (EPOLLERR | EPOLLHUP | EPOLLRDHUP))
+        {
+            LogManager::log(LogManager::ERROR, "ERROR : client disconnected ");
+            close_socket(fd);
+            continue;
+        }
 
-        if (events[n].events & EPOLLERR)
-        {
-            LogManager::log(LogManager::ERROR, "Error on socket %d", fd);
-            close_socket(fd);
-            continue;
-        }
-        if (events[n].events & EPOLLHUP)
-        {
-            LogManager::log(LogManager::WARNING, "Socket %d hung up", fd);
-            close_socket(fd);
-            continue;
-        }
-        if (events[n].events & EPOLLRDHUP)
-        {
-            LogManager::log(LogManager::WARNING, "Socket %d read hang up", fd);
-            close_socket(fd);
-            continue;
-        }
         if (events[n].events & EPOLLIN)
         {
             if (_sockets_map.find(fd) != _sockets_map.end())
             {
                 handleNewConnection(fd);
                 LogManager::log(LogManager::DEBUG, "New connection on socket %d", fd);
-               
             }
             else
                 handleClientData(fd);
-
         }
 
         if (events[n].events & EPOLLOUT)
@@ -224,6 +185,7 @@ void Server::handleEpollEvents()
                 if (client->getRequest() && client->getRequest()->getState() == END)
                 {
                     LogManager::log(LogManager::DEBUG, "Request is complete, sending response for FD %d", fd);
+                    client->getResponse()->setTimeStartResponse();//SIUUU set le temps de debut response
                     client->handleResponse(_epoll_fd);
                 }
                 else
@@ -256,7 +218,7 @@ void Server::handleNewConnection(int socket_fd)
         throw std::runtime_error("Error accepting connection");
     }
 
-    // Vérifier si le client existe déjà dans _clients_map
+    //SIUUU chelou le client ce fait ecraser / Vérifier si le client existe déjà dans _clients_map
     if (_clients_map.find(client_fd) != _clients_map.end())
     {
         LogManager::log(LogManager::WARNING, "Client %d already exists, deleting old client", client_fd);
@@ -305,19 +267,9 @@ void Server::handleClientData(int client_fd)
         close_client(client_fd);
         return;
     }
-    // buffer[bytes] = '\0';
     std::string str(buffer, bytes);
-    // std::cout << str << std::endl;
-    // exit(EXIT_SUCCESS);
     _clients_map[client_fd]->handleRequest(str);
     // LogManager::log(LogManager::INFO, "Received %d bytes from client %d: %s", bytes, client_fd, buffer);
-
-    /*******Test en dur de réponse */
-    // if (strncmp(buffer, "GET", 3) == 0)
-    // {
-    //     handleGetRequest(client_fd, buffer);
-    // }
-
 }
 
 /**
@@ -333,48 +285,6 @@ void Server::stop()
 
 }
 
-// /**
-//  * @brief Gérer une requête GET
-//  * 
-//  * @param client_fd 
-//  * @param buffer
-//  */
-// void Server::handleGetRequest(int client_fd, const char *buffer)
-// {
-//     std::string filePath = extractFilePath(buffer);
-
-//     std::ifstream file(filePath.c_str(), std::ios::binary);
-//     if (file.is_open())
-//     {
-//         std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-//         file.close();
-
-//         std::string contentType = getContentType(filePath);
-
-//         std::ostringstream oss;
-//         oss << content.size();
-//         std::string response = "HTTP/1.1 200 OK\r\n";
-//         response += "Content-Type: " + contentType + "\r\n";
-//         response += "Content-Length: " + oss.str() + "\r\n";
-//         response += "\r\n";
-//         response += content;
-
-//         send(client_fd, response.c_str(), response.size(), 0);
-//         LogManager::log(LogManager::INFO, "Response sent to client %d for file %s", client_fd, filePath.c_str());
-//     }
-//     else
-//     {
-//         std::string response = "HTTP/1.1 404 Not Found\r\n";
-//         response += "Content-Type: text/html\r\n";
-//         response += "Content-Length: 58\r\n";
-//         response += "\r\n";
-//         response += "<html><body><h1>404 Not Found</h1><p>File not found.</p></body></html>";
-
-//         send(client_fd, response.c_str(), response.size(), 0);
-//         LogManager::log(LogManager::ERROR, "File not found: %s", filePath.c_str());
-//     }
-// }
-
 /**
  * @brief Fermer tous les sockets et clients
  * 
@@ -383,10 +293,9 @@ void Server::close_all()
 {
     LogManager::log(LogManager::DEBUG, "Closing all sockets and clients started");
 
+    if (LogManager::getDebugLogStatus())
+        log_clients_map();
 
-    log_clients_map();
-
-    
     // Fermer les clients
     for (std::map<int, Client*>::iterator it = _clients_map.begin(); it != _clients_map.end();)
     {
@@ -413,7 +322,6 @@ void Server::close_all()
         close(_epoll_fd);
         _epoll_fd = -1;
     }
-
 
     LogManager::log(LogManager::DEBUG, "Epoll instance closed");
 
@@ -467,7 +375,6 @@ void Server::close_client(int client_fd)
 void Server::close_socket(int socket_fd)
 {
     LogManager::log(LogManager::DEBUG, "Closing socket %d", socket_fd);
-    // remove_from_epoll(socket_fd); // SIUUUU a supprimer surment inutile 
 
     // Fermer le socket
     if (_sockets_map.find(socket_fd) != _sockets_map.end())
@@ -491,7 +398,11 @@ void Server::close_socket(int socket_fd)
     }
 }
 
-// SIUUUU a supprimer surment inutile
+/**
+ * @brief Supprimer un descripteur de fichier de epoll
+ * 
+ * @param fd 
+ */
 void Server::remove_from_epoll(int fd)
 {
     if (fd < 0)
@@ -510,7 +421,12 @@ void Server::remove_from_epoll(int fd)
     }
 }
 
-
+/**
+ * @brief Modifier l'événement epoll pour un socket
+ * 
+ * @param socketFD 
+ * @param EVENT 
+ */
 void Server::change_epoll_event(int socketFD, uint32_t EVENT)
 {
     int epollFD = _epoll_fd;
@@ -525,57 +441,12 @@ void Server::change_epoll_event(int socketFD, uint32_t EVENT)
     }
 }
 
+/*************************** DEBUG ***************************/
 
-
-
-
-//***************TEST DE REPONSE EN DUR TMP */
-
-
-// std::string extractFilePath(const std::string &request)
-// {
-//     size_t start = request.find("GET ") + 4;
-//     size_t end = request.find(" ", start);
-//     if (start == std::string::npos || end == std::string::npos)
-//         return "";
-//     std::string path = request.substr(start, end - start);
-//     if (path == "/")
-//         path = "/index.html"; // Par défaut, servir index.html
-//     return "www/main" + path; // Préfixer avec le répertoire racine
-// }
-
-// bool endsWith(const std::string &str, const std::string &suffix)
-// {
-//     if (str.length() >= suffix.length())
-//     {
-//         return str.compare(str.length() - suffix.length(), suffix.length(), suffix) == 0;
-//     }
-//     return false;
-// }
-
-
-// std::string getContentType(const std::string &filePath)
-// {
-//     if (endsWith(filePath, ".html"))
-//         return "text/html";
-//     if (endsWith(filePath, ".css"))
-//         return "text/css";
-//     if (endsWith(filePath, ".js"))
-//         return "application/javascript";
-//     if (endsWith(filePath, ".png"))
-//         return "image/png";
-//     if (endsWith(filePath, ".jpg") || endsWith(filePath, ".jpeg"))
-//         return "image/jpeg";
-//     if (endsWith(filePath, ".gif"))
-//         return "image/gif";
-//     if (endsWith(filePath, ".ico"))
-//         return "image/x-icon";
-//     return "application/octet-stream"; // Type par défaut
-// }
-
-
-////debug EPOLL**************************************
-
+/**
+ * @brief Afficher les descripteurs de fichiers actuellement dans epoll
+ * 
+ */
 void Server::log_epoll_fds()
 {
     LogManager::log(LogManager::DEBUG, "Listing FDs currently in epoll:");
@@ -597,7 +468,10 @@ void Server::log_epoll_fds()
     }
 }
 
-
+/**
+ * @brief Afficher les clients actuellement dans _clients_map
+ * 
+ */
 void Server::log_clients_map() const
 {
     if (_clients_map.empty())
@@ -622,35 +496,44 @@ void Server::log_clients_map() const
     }
 }
 
+/*************************************** UTILS **************************************************/
+
+/**
+ * @brief Récupérer le bloc serveur correspondant à la requête
+ * 
+ * @param request 
+ * @return BlocServer* 
+ */
 BlocServer* Server::getMatchingServer(const Request* request) const 
 {
-    if (!request) {
+    if (!request) 
         throw std::runtime_error("ERROR: Request object is not initialized");
-    }
 
     // Récupérer les en-têtes de la requête
     std::map<std::string, std::string> headers = request->getHeaders();
-    if (headers.find("Host") == headers.end()) {
+    if (headers.find("Host") == headers.end()) 
         throw std::runtime_error("ERROR: Missing Host Header");
-    }
 
     // Extraire le nom d'hôte et le port depuis l'en-tête Host
     std::string hostValue = headers["Host"];
     size_t colonPos = hostValue.find(':');
     std::string hostName = hostValue.substr(0, colonPos);
-    int port = (colonPos != std::string::npos) ? Utils::ft_stoi(hostValue.substr(colonPos + 1)) : 80;
+    int port = (colonPos != std::string::npos) ? ft_stoi(hostValue.substr(colonPos + 1)) : 80;
 
     // Trouver le bloc serveur correspondant
     const std::vector<BlocServer>& servers = _config.getServers();
     BlocServer* matchingServer = NULL;
 
-    for (size_t i = 0; i < servers.size(); ++i) {
+    for (size_t i = 0; i < servers.size(); ++i) 
+    {
         const BlocServer& server = _config.getServer(i); // Utilisation d'une référence constante
 
         // Vérifier si le port correspond
         bool portMatches = false;
-        for (size_t j = 0; j < server.getListen().size(); ++j) {
-            if (server.getListen()[j].getPort() == port) {
+        for (size_t j = 0; j < server.getListen().size(); ++j) 
+        {
+            if (server.getListen()[j].getPort() == port) 
+            {
                 portMatches = true;
                 break;
             }
@@ -658,28 +541,27 @@ BlocServer* Server::getMatchingServer(const Request* request) const
 
         // Vérifier si le server_name correspond
         bool serverNameMatches = false;
-        for (size_t j = 0; j < server.getServerName().size(); ++j) {
-            if (server.getServerName()[j] == hostName) {
+        for (size_t j = 0; j < server.getServerName().size(); ++j) 
+        {
+            if (server.getServerName()[j] == hostName) 
+            {
                 serverNameMatches = true;
                 break;
             }
         }
 
         // Si le port et le server_name correspondent, sélectionner ce bloc
-        if (portMatches && serverNameMatches) {
+        if (portMatches && serverNameMatches) 
             return const_cast<BlocServer*>(&server); // Suppression du const pour retourner un pointeur non-const
-        }
 
         // Si seul le port correspond, garder ce bloc comme fallback
-        if (portMatches && !matchingServer) {
+        if (portMatches && !matchingServer) 
             matchingServer = const_cast<BlocServer*>(&server); // Suppression du const pour fallback
-        }
     }
 
     // Si aucun bloc serveur ne correspond, lever une erreur
-    if (!matchingServer) {
+    if (!matchingServer) 
         throw std::runtime_error("ERROR: No matching server block found for the request");
-    }
 
     return matchingServer;
 }
@@ -691,6 +573,7 @@ void Server::checkRequestTimeouts()
     {
         Client *client = it->second;
         Request *request = client->getRequest();
+        // Response *response = client->getResponse();
 
         if (request)
         {
@@ -704,7 +587,8 @@ void Server::checkRequestTimeouts()
                 close_client(client_fd); // Fermez la connexion pour ce client
                 continue;
             }
-
+            
+            
             // Vérifier si la requête est dans un état d'erreur
             if (request->getState() == ERROR)
             {
@@ -716,6 +600,20 @@ void Server::checkRequestTimeouts()
             }
         }
 
+        // if (response)
+        // {
+        //     //verifier si la reponse a depasse le timeout
+        //     if (response->isTimeoutExceeded() && response->getResponseState() != R_END)
+        //     {
+        //         std::cout << "_r_state = " << response->getResponseState() << std::endl;
+        //         LogManager::log(LogManager::ERROR, "Request timeout exceeded for client FD %d", it->first);
+        //         int client_fd = it->first;
+        //         ++it;
+        //         close_client(client_fd); // Fermez la connexion pour ce client
+        //         continue;
+        //     }
+        // }
+        
         ++it; // Passer au client suivant
     }
 }

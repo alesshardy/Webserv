@@ -7,7 +7,7 @@ Request::Request(Request const & copy)
     *this = copy;
 }
 
-Request & Request::operator=(Request const & rhs)
+Request &Request::operator=(Request const & rhs)
 {
     if (this != &rhs)
     {
@@ -49,6 +49,7 @@ Request::~Request()
     }
 }
 
+// Getters & setters
 const std::string &Request::getMethod() const
 {
     return (this->_method);
@@ -109,12 +110,6 @@ void Request::parseRequest(std::string str)
     {
         this->_raw += str;
 
-        if (isTimeoutExceeded())
-        {
-            LogManager::log(LogManager::WARNING, "Request timeout exceeded (%d seconds)", std::time(NULL) - _timeOut);
-            throw std::runtime_error("ERROR: Request processing timeout exceeded");
-        }
-
         if (_state == START) 
             parseMethod();
         if (_state == URI) 
@@ -133,11 +128,14 @@ void Request::parseRequest(std::string str)
     }
     catch (const std::runtime_error &e)
     {
-        // LogManager::log(LogManager::ERROR, e.what());
         throw; // Rethrow the exception if needed
     }
 }
 
+/**
+ * @brief Parse la méthode HTTP.
+ * 
+ */
 void Request::parseMethod()
 {
     // LogManager::log(LogManager::DEBUG, "Parse method");
@@ -168,6 +166,10 @@ void Request::parseMethod()
     setState(URI);
 }
 
+/**
+ * @brief Parse l'URI de la requête HTTP.
+ * 
+ */
 void Request::parseUri()
 {
     if (_raw.empty())
@@ -203,6 +205,10 @@ void Request::parseUri()
     setState(QUERY);
 }
 
+/**
+ * @brief Parse le Query de la requête HTTP.
+ * 
+ */
 void Request::parseQuery()
 {
     size_t queryStart = _uri.find('?');
@@ -250,6 +256,10 @@ void Request::parseQuery()
     setState(VERSION);
 }
 
+/**
+ * @brief Parse la version de la requête HTTP.
+ * 
+ */
 void Request::parseVersion()
 {   
     if (_raw.empty())
@@ -273,8 +283,10 @@ void Request::parseVersion()
     _i = 0;
     setState(HEADER_KEY);
 }
-
-// NOUVELLE VERSION 
+/**
+ * @brief Parse le corps de la requête HTTP.
+ * 
+ */
 void Request::parseHeaderKey()
 {
     _inHeader = false;
@@ -304,6 +316,10 @@ void Request::parseHeaderKey()
     setState(HEADER_VALUE);
 }
 
+/**
+ * @brief  Parse la valeur de l'en-tête de la requête HTTP.
+ * 
+ */
 void Request::parseHeaderValue()
 {
     if (_raw.empty())
@@ -332,6 +348,10 @@ void Request::parseHeaderValue()
     setState(HEADER_KEY);
 }
 
+/**
+ * @brief Parse les en-têtes de la requête HTTP.
+ * 
+ */
 void   Request::parseHeader()
 {
     while (_state >= HEADER_KEY && _state <= HEADER_VALUE)
@@ -360,7 +380,7 @@ void Request::parseHeaderKeyValue(const std::string& headerKey, const std::strin
         _headers[headerKey] = headerValue;
     }
 
-    // VOIR POUR LES AUTRES SI ECRASER OU CONCATENER
+    //SIUUU VOIR POUR LES AUTRES SI ECRASER OU CONCATENER
     
     // // Gérer les en-têtes multiples autorisés
     // else if (headerKey == "Accept" || headerKey == "Accept-Encoding" || headerKey == "Cookie")
@@ -382,15 +402,7 @@ void Request::parseHeaderKeyValue(const std::string& headerKey, const std::strin
 
 // CHECK HEADER
 void    Request::checkHeader()
-{
-    // std::time_t now = std::time(NULL);
-    // if (now - _timeOut > 60)
-    // {
-    //     LogManager::log(LogManager::WARNING, "Header timeout exceeded (%d seconds)", now - _timeOut);
-    //     return ;
-    // }
-    // std::cout << "\033[31m" << now - _timeOut << "\033[0m" << std::endl; // Affichage en rouge
-        
+{        
     LogManager::log(LogManager::DEBUG, "Checking headers ...");
 
     if (_headers.find("Host") == _headers.end())
@@ -404,7 +416,7 @@ void    Request::checkHeader()
         long long contentLength;
         
         try{
-            contentLength = Utils::ft_stolonglong(_headers["Content-Length"]);
+            contentLength = ft_stoll(_headers["Content-Length"]);
         }
         catch (const std::exception &e){
             throw std::runtime_error("ERROR : Invalid Content-Length value"); 
@@ -429,9 +441,9 @@ void    Request::checkHeader()
     // Passer la séquence \r\n\r\n si elle n'a pas encore été sautée
     if (_raw.substr(_i, 2) == "\r\n")
     {
-        _i += 2; // Sauter \r\n\r\n
-        _raw.erase(0, _i); // Nettoyer les caractères déjà traités
-        _i = 0; // Réinitialiser l'index
+        _i += 2;
+        _raw.erase(0, _i);
+        _i = 0;
     }
 
     setState(BODY);
@@ -440,72 +452,23 @@ void    Request::checkHeader()
 }
 
 
-// RePASSER VERIFIER CETTE FONCTION SIUUUUUUU
+/**
+ * @brief Récupère la taille maximale du corps de la requête à partir du bloc serveur correspondant.
+ * 
+ */
 void Request::getMaxBodySize()
 {
-    // Vérifier la présence de l'en-tête Host
-    if (_headers.find("Host") == _headers.end())
-        throw std::runtime_error("ERROR: Missing Host Header");
-
-    // Extraire le nom d'hôte et le port depuis l'en-tête Host
-    std::string hostValue = _headers["Host"];
-    size_t colonPos = hostValue.find(':');
-    std::string hostName = hostValue.substr(0, colonPos);
-    int port = (colonPos != std::string::npos) ? Utils::ft_stoi(hostValue.substr(colonPos + 1)) : 80;
-
-    // Conversion du port en chaîne (C++98 compatible)
-    std::ostringstream oss;
-    oss << port;
-    std::string portStr = oss.str();
-    LogManager::log(LogManager::DEBUG, ("Extracted Host: " + hostName + ", Port: " + portStr).c_str());
-
-    // Accéder à la configuration via le getter
-    Config config = _server->get_config();
-
-    // Trouver le bloc server correspondant
-    BlocServer* matchingServer = NULL; // Utiliser NULL au lieu de nullptr
-    for (size_t i = 0; i < config.getServers().size(); ++i) {
-        BlocServer& server = config.getServer(i);
-
-        // Vérifier si le port correspond
-        bool portMatches = false;
-        for (size_t j = 0; j < server.getListen().size(); ++j) {
-            if (server.getListen()[j].getPort() == port) {
-                portMatches = true;
-                break;
-            }
-        }
-
-        // Vérifier si le server_name correspond
-        bool serverNameMatches = false;
-        for (size_t j = 0; j < server.getServerName().size(); ++j) {
-            if (server.getServerName()[j] == hostName) {
-                serverNameMatches = true;
-                break;
-            }
-        }
-
-        // Si le port et le server_name correspondent, sélectionner ce bloc
-        if (portMatches && serverNameMatches) {
-            matchingServer = &server;
-            break;
-        }
-
-        // Si seul le port correspond, garder ce bloc comme fallback
-        if (portMatches && !matchingServer) {
-            matchingServer = &server;
-        }
-    }
-
+    // trouver le bloc serveur correspondant
+    BlocServer* matchingServer = _server->getMatchingServer(this);
     // Si aucun bloc server ne correspond, lever une erreur
-    if (!matchingServer) {
+    if (!matchingServer) 
         throw std::runtime_error("ERROR: No matching server block found for the request");
-    }
 
     // Récupérer client_max_body_size
     _maxBodySize = matchingServer->getClientMaxBodySize();
 
     // Conversion de _maxBodySize en chaîne (C++98 compatible)
+    std::ostringstream oss;
     oss.str(""); // Réinitialiser le flux
     oss.clear(); // Réinitialiser les flags d'erreur
     oss << _maxBodySize;
@@ -513,7 +476,12 @@ void Request::getMaxBodySize()
     LogManager::log(LogManager::DEBUG, ("Max body size set to: " + maxBodySizeStr).c_str());
 }
 
-// BODYYYYYYYYYYYYY
+/******************************* PARSING DU BODY *****************************/
+
+/**
+ * @brief Parse le corps de la requête HTTP.
+ * 
+ */
 void Request::parseBody()
 {   
     LogManager::log(LogManager::DEBUG, "Parse Body");
@@ -530,7 +498,6 @@ void Request::parseBody()
         _body = new RequestBody(_maxBodySize, _isChunked);
         
     try{
-        
         size_t startIndex = _i;
         
         if (_isChunked)
@@ -555,14 +522,16 @@ void Request::parseBody()
         }
         
     } catch (const std::exception &e) {
-        // LogManager::log(LogManager::ERROR, e.what()); //affichage en double des erreur car catch au dessus
         _state = ERROR;
         throw; // Relancer l'exception pour traitement en amont
     }
-    
 }
 
-
+/**
+ * @brief Supprime les données traitées de la requête.
+ * 
+ * @param processedBytes 
+ */
 void Request::clearProcessedData(size_t processedBytes)
 {
     if (processedBytes > 0 && processedBytes <= _raw.size())
@@ -574,6 +543,12 @@ void Request::clearProcessedData(size_t processedBytes)
     }
 }
 
+/**
+ * @brief Vérifie si le délai d'attente est dépassé.
+ * 
+ * @return true 
+ * @return false 
+ */
 bool Request::isTimeoutExceeded() const
 {
     std::time_t now = std::time(NULL);

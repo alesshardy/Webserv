@@ -24,6 +24,7 @@
 
 class   Client;
 class   Request;
+class   Response;
 
 #define MAX_EVENTS 10
 
@@ -39,6 +40,7 @@ class Server
 {
     friend class Client;
     friend class Request;
+    friend class Response;
 
     private:
         int                         _state;
@@ -64,18 +66,17 @@ class Server
         void                        remove_from_epoll(int fd);
 
         void                        change_epoll_event(int socketFD, uint32_t EVENT);
+
+        // Debug
         void                        log_epoll_fds();
         void                        log_clients_map() const;
         
         //run 
         void                        handleNewConnection(int socket_fd);
         void                        handleClientData(int client_fd);
-        void                        handleGetRequest(int client_fd, const char *buffer);
         void                        handleEpollEvents();
         void                        checkAndStart();
         
-
-
         // Getters
         int                         get_state() const { return _state; }
         int                         get_socket() const { return _socket; }
@@ -84,9 +85,6 @@ class Server
         const std::map<int, Client*>      &get_clients_map() const { return _clients_map; }
         const std::map<int, Socket*>      &get_sockets_map() const { return _sockets_map; }
 
-
-        BlocServer*                 getMatchingServer(const Request* request) const;
-
         // Setters
         void                        set_state(int state) { _state = state; }
         void                        set_socket(int socket) { _socket = socket; }
@@ -94,8 +92,10 @@ class Server
         void                        set_config(Config config) { _config = config; }
         void                        set_clients_map(std::map<int, Client*> clients_map) { _clients_map = clients_map; }
         void                        set_sockets_map(std::map<int, Socket*> sockets_map) { _sockets_map = sockets_map; }
-
-        void checkRequestTimeouts();
+        
+        // utils
+        BlocServer*                 getMatchingServer(const Request* request) const;
+        void                        checkRequestTimeouts();
 
 
 };
