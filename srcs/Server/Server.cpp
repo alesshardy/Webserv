@@ -291,7 +291,7 @@ void Server::handleNewConnection(int socket_fd)
  */
 void Server::handleClientData(int client_fd)
 {
-    char buffer[1024] = {0};
+    char buffer[8192] = {0};
     int bytes = read(client_fd, buffer, sizeof(buffer));
     if (bytes == -1)
     {
