@@ -31,11 +31,13 @@ void Config::addServer(const BlocServer &server)
 }
 
 //Getters
-BlocServer &Config::getServer(size_t index) {
+BlocServer &Config::getServer(size_t index) 
+{
     return _server[index];
 }
 
-const BlocServer &Config::getServer(size_t index) const {
+const BlocServer &Config::getServer(size_t index) const 
+{
     return _server[index];
 }
 
@@ -44,8 +46,17 @@ const std::vector<BlocServer> &Config::getServers() const
     return (_server);
 }
 
-//Parsing
+// DEfault Config
+void    Config::handleDefaultConfig()
+{
+    BlocServer current = BlocServer();
+    current.addIndex("index.html");
+    current.setRoot("/www/main");
+    current.addListen(Listen("0.0.0.0", 1234));
+    _server.push_back(current);
+}
 
+/************************************************* PARSING *******************************************************/
 // VERIF KEY
 bool    Config::verifKeyServer(std::string token)
 {
@@ -64,14 +75,7 @@ bool    Config::verifKeyOther(std::string token)
     return false;
 }
 
-// FONCTION UTILS AU VERIF DE L'ARG
-/**
- * @brief verifie si un chemin donne est un repertoire valid sur le systeme de fichier
- * 
- * @param path 
- * @return true 
- * @return false 
- */
+//SIUUU FONCTION UTILS AU VERIF DE L'ARG
 bool        Config::isValidRoot(const std::string &path) // enlever com pour l'utiliser
 {
     // struct stat info;
@@ -80,6 +84,14 @@ bool        Config::isValidRoot(const std::string &path) // enlever com pour l'u
     return true;
 }
 
+
+/**
+ * @brief Vérifie si une chaîne de caractères est une adresse IPv4 valide.
+ * 
+ * @param ip 
+ * @return true 
+ * @return false 
+ */
 bool Config::isValidIPv4(const std::string &ip)
 {
     std::istringstream iss(ip);
@@ -114,7 +126,14 @@ bool Config::isValidIPv4(const std::string &ip)
     return count == 4; // Doit avoir exactement 4 segments
 }
 
-// SOUS FONCTION D'AJOUT AU BLOC SERVEUR && DE PARSING DE L'ARGUMENT DE CHAQUE KEY
+/**************  SOUS FONCTION D'AJOUT AU BLOC SERVEUR && DE PARSING DE L'ARGUMENT DE CHAQUE KEY ***********/
+
+/**
+ * @brief Ajoute un argument au bloc serveur en fonction de la clé fournie.
+ * 
+ * @param arg 
+ * @param current 
+ */
 void    Config::handleListen(const std::string &arg, BlocServer &current)
 {
     size_t colonPos = arg.find(':');
@@ -123,7 +142,7 @@ void    Config::handleListen(const std::string &arg, BlocServer &current)
         if (colonPos != std::string::npos)
         {
             ip = arg.substr(0, colonPos);
-            try { port = Utils::ft_stoi(arg.substr(colonPos + 1));
+            try { port = ft_stoi(arg.substr(colonPos + 1));
             }
             catch (const std::exception &e){
                 throw std::runtime_error("ERROR : arg Listen not correct");
@@ -132,7 +151,7 @@ void    Config::handleListen(const std::string &arg, BlocServer &current)
         else
         {
             try {
-                port = Utils::ft_stoi(arg);
+                port = ft_stoi(arg);
             }
             catch (const std::exception &e){
                 throw std::runtime_error("ERROR : arg Listen not correct");
@@ -145,11 +164,24 @@ void    Config::handleListen(const std::string &arg, BlocServer &current)
         current.addListen(Listen(ip, port));
 }
 
+
+/**
+ * @brief  Ajoute un nom de serveur au bloc serveur.
+ * 
+ * @param arg 
+ * @param current 
+ */
 void    Config::handleServerName(const std::string &arg, BlocServer &current)
 {
     current.addServerName(arg);
 }
 
+/**
+ * @brief  Ajoute un chemin racine au bloc serveur.
+ * 
+ * @param arg 
+ * @param current 
+ */
 void    Config::handleRootBlocServer(const std::string &arg, BlocServer &current, int argNb)
 {
     if (argNb > 1)
@@ -161,11 +193,23 @@ void    Config::handleRootBlocServer(const std::string &arg, BlocServer &current
     current.setRoot(arg);
 }
 
+/**
+ * @brief  Ajoute un chemin d'index au bloc serveur.
+ * 
+ * @param arg 
+ * @param current 
+ */
 void    Config::handleIndexBlocServer(const std::string &arg, BlocServer &current)
 {
     current.addIndex(arg);
 }
 
+/**
+ * @brief  Ajoute une page d'erreur au bloc serveur.
+ * 
+ * @param arg 
+ * @param current 
+ */
 void    Config::handleErrorPage(const std::string &arg, BlocServer &current, int argNb)
 {
     //Choisi d'ecraser si plusieurs code erreur car nginx accepte doublon
@@ -175,7 +219,7 @@ void    Config::handleErrorPage(const std::string &arg, BlocServer &current, int
             throw std::runtime_error("ERROR : key error_page without arg");
         int code ;
         try {
-            code = Utils::ft_stoi(arg);
+            code = ft_stoi(arg);
         }
         catch (const std::exception &e){
             throw std::runtime_error("ERROR : wrong error_page code");   
@@ -197,6 +241,12 @@ void    Config::handleErrorPage(const std::string &arg, BlocServer &current, int
         throw std::runtime_error("ERROR : too many arg for error_page");   
 }
 
+/**
+ * @brief  Définit la taille maximale du corps de la requête du client.
+ * 
+ * @param arg 
+ * @param current 
+ */
 void Config::handleClientMaxBodySize(const std::string &arg, BlocServer &current, int argNb)
 {
     std::string numberPart;
@@ -221,7 +271,7 @@ void Config::handleClientMaxBodySize(const std::string &arg, BlocServer &current
 
     long long value;
     try {
-        value = Utils::ft_stolonglong(numberPart);
+        value = ft_stoll(numberPart);
     }
     catch (const std::exception &e){
         throw std::runtime_error("ERROR : client_max_body_size key incompatible value");
@@ -251,7 +301,17 @@ void Config::handleClientMaxBodySize(const std::string &arg, BlocServer &current
             throw std::runtime_error("ERROR : client_max_body_size must be a positive value");
     current.setClientMaxBodySize(value);
 }
-// SOUS FONCTION D'AJOUT AU BLOC LOCATION && DE PARSING DE L'ARGUMENT DE CHAQUE KEY
+
+
+/********************** SOUS FONCTION D'AJOUT AU BLOC LOCATION && DE PARSING DE L'ARGUMENT DE CHAQUE KEY ********************/
+
+/**
+ * @brief  Ajoute un chemin racine au bloc location.
+ * 
+ * @param arg 
+ * @param current 
+ * @param argNb 
+ */
 void    Config::handleRootBlocLocation(const std::string &arg, BlocLocation &current, int argNb)
 {
     if (argNb > 1)
@@ -265,6 +325,13 @@ void    Config::handleRootBlocLocation(const std::string &arg, BlocLocation &cur
     current.setRoot(arg);
 }
 
+/**
+ * @brief  Ajoute un alias pour le bloc location.
+ * 
+ * @param arg 
+ * @param current 
+ * @param argNb 
+ */
 void    Config::handleAlias(const std::string &arg, BlocLocation &current, int argNb)
 {
     if (argNb > 1)
@@ -276,11 +343,23 @@ void    Config::handleAlias(const std::string &arg, BlocLocation &current, int a
     current.setAlias(arg);
 }
 
+/**
+ * @brief  Ajoute un chemin d'index au bloc location.
+ * 
+ * @param arg 
+ * @param current 
+ */
 void    Config::handleIndexBlocLocation(const std::string &arg, BlocLocation &current)
 {
     current.addIndex(arg);
 }
 
+/**
+ * @brief  Ajoute une méthode autorisée au bloc location.
+ * 
+ * @param arg 
+ * @param current 
+ */
 void    Config::handleAllowMethods(const std::string &arg, BlocLocation &current)
 {
     const std::set<std::string> &methods = current.getAllowMethod();
@@ -292,11 +371,24 @@ void    Config::handleAllowMethods(const std::string &arg, BlocLocation &current
         throw std::runtime_error("ERROR : bad argument for allow_methods key");
 }
 
+/**
+ * @brief  Définit le chemin de téléchargement pour le bloc location.
+ * 
+ * @param arg 
+ * @param current 
+ */
 void    Config::handleUploadPath(const std::string &arg, BlocLocation &current)
 {
     current.setUploadPath(arg);
 }
 
+/**
+ * @brief  Définit l'index automatique pour le bloc location.
+ * 
+ * @param arg 
+ * @param current 
+ * @param argNb 
+ */
 void    Config::handleAutoIndex(const std::string &arg, BlocLocation &current, int argNb)
 {
     if (argNb > 1)
@@ -309,6 +401,13 @@ void    Config::handleAutoIndex(const std::string &arg, BlocLocation &current, i
         throw std::runtime_error("ERROR : bad argument for autoindex key");
 }
 
+/**
+ * @brief  Ajoute l'extension CGI pour le bloc location.
+ * 
+ * @param arg 
+ * @param current 
+ * @param argNb 
+ */
 void    Config::handleCgiExtension(const std::string &arg, BlocLocation &current, int argNb)
 {
     if (argNb == 1)
@@ -331,6 +430,13 @@ void    Config::handleCgiExtension(const std::string &arg, BlocLocation &current
         throw std::runtime_error("ERROR :too many argument for CgiExtension key");
 }
 
+/**
+ * @brief  Ajoute la directive de retour pour le bloc location.
+ * 
+ * @param arg 
+ * @param current 
+ * @param argNb 
+ */
 void    Config::handleReturnDirective(const std::string &arg, BlocLocation &current, int argNb)
 {
     //Choisi d'ecraser si plusieurs code erreur car nginx accepte doublon
@@ -340,7 +446,7 @@ void    Config::handleReturnDirective(const std::string &arg, BlocLocation &curr
             throw std::runtime_error("ERROR : key return without arg");
         int code ;
         try {
-            code = Utils::ft_stoi(arg);
+            code = ft_stoi(arg);
         }
         catch (const std::exception &e){
             throw std::runtime_error("ERROR : wrong return code");   
@@ -362,7 +468,16 @@ void    Config::handleReturnDirective(const std::string &arg, BlocLocation &curr
         throw std::runtime_error("ERROR : too many arg for return");   
 }
 
-// MAIN FONCTION D'AJOUT AU BLOC SERVEUR
+/********************* MAIN FONCTION D'AJOUT AU BLOC SERVEUR *******************/
+
+/**
+ * @brief  Ajoute un argument au bloc serveur ou au bloc location en fonction de la clé fournie.
+ * 
+ * @param arg 
+ * @param lastKey 
+ * @param current 
+ * @param argNb 
+ */
 void        Config::addArgToServerBloc(std::string arg, std::string lastKey, BlocServer &current, int argNb)
 {
     if (lastKey == "listen")
@@ -381,6 +496,14 @@ void        Config::addArgToServerBloc(std::string arg, std::string lastKey, Blo
         throw std::runtime_error("ERROR : bad key " + lastKey + " for server bloc ");    
 }
 
+/**
+ * @brief  Ajoute un argument au bloc location en fonction de la clé fournie.
+ * 
+ * @param arg 
+ * @param lastKey 
+ * @param current 
+ * @param argNb 
+ */
 void        Config::addArgToLocationBloc(std::string arg, std::string lastKey, BlocLocation &current, int argNb)
 {
     if (lastKey == "root")
@@ -403,17 +526,13 @@ void        Config::addArgToLocationBloc(std::string arg, std::string lastKey, B
         throw std::runtime_error("ERROR : bad key " + lastKey + " for location bloc");
 }
 
-// DEfault Config
-void    Config::handleDefaultConfig()
-{
-    BlocServer current = BlocServer();
-    current.addIndex("index.html");
-    current.setRoot("/www/main");
-    current.addListen(Listen("0.0.0.0", 1234));
-    _server.push_back(current);
-}
-
-//A decouper fonction principale pour verifier que le fichier config est correct
+/*********************************** Fonction principale de parsing du fichier config *******************************************/
+/**
+ * @brief  Parse le fichier de configuration et remplit la structure de configuration.
+ * 
+ * @param filePath 
+ * @param config 
+ */
 void    Config::parseConfigFile(const std::string &filePath, Config &config) 
 {
     std::ifstream file(filePath.c_str());
@@ -429,16 +548,15 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
     int depth = 0; // Niveau d'imbrication
     int semicolonCount = 0; // Compteur de points-virgules par ligne
     bool isKey = true; // Indique si le mot actuel est une clé (premier mot d'une ligne ou d'un bloc)
-
-    bool    emptyBloc = true;
+    bool emptyBloc = true;
     bool inLocBloc = false;
     bool inLocLine = false;
     std::string lastKey;
-    char    lastC;
+    char lastC;
     BlocLocation    currentLocation;
     BlocServer      currentServer;
     std::string     currentLocationPath;
-    int    argNb = 0;
+    int argNb = 0;
 
     while (file.get(c)) 
     {
@@ -474,7 +592,7 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                     // FIX
                     if (depth != 0)
                         throw std::runtime_error("ERROR : server key inside a server bloc ");
-                    currentServer = BlocServer(); //SIUUU
+                    currentServer = BlocServer();
                 } 
                 else 
                 {
@@ -655,8 +773,12 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
     file.close();
 }
 
-/******************************************PRINT********************************************* */
+/****************************************** PRINT **********************************************/
 
+/**
+ * @brief  Affiche la configuration actuelle.
+ * 
+ */
 void Config::printConfig() const
 {
     LogManager::log(LogManager::DEBUG, ("PRINT PARSE CONFIGURATION :"));
