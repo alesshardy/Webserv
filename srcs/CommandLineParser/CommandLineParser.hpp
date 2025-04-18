@@ -3,19 +3,17 @@
 
 #include <iostream>
 #include <string>
-
-#include "LogManager.hpp"
-
 #include <vector>
 #include <map>
+#include "LogManager.hpp"
 
 #define DEFAULT_CONFIG_FILE "testConfig/default.conf"
 
 class CommandLineParser
 {
     private:
-        std::map<std::string, std::string> _options;
-        std::string _configFilePath;
+        std::map<std::string, std::string>  _options;
+        std::string                         _configFilePath;
 
         void       _parseCommandLine(int argc, char **argv);
     
@@ -29,6 +27,5 @@ class CommandLineParser
         std::string getConfigFilePath() const;
         void        printHelp() const;
 };
-
 
 #endif // COMMANDLINEPARSER_HPP
