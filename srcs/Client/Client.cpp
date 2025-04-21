@@ -92,6 +92,9 @@ void    Client::handleResponse(int epoll_fd)
         return;
     }
 
+    // Log the response sent to the client
+    LogManager::log(LogManager::DEBUG, "Response sent to client %d: %s", _client_fd, _response->getResponse().c_str());
+
     LogManager::log(LogManager::DEBUG, "Response sent to client %d", _client_fd);
     
 

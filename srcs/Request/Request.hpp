@@ -94,6 +94,7 @@ class Request{
         const int                                   &getStatusCode() const;
         const std::map<std::string, std::string>    &getHeaders() const;
         const int                                   &getState() const;
+        RequestBody*                                getBody() const;
         
         void setCode(int const & code);
         void setState(int const & state);
