@@ -277,11 +277,45 @@ void Response::_sendFullResponse(const std::string& filePath, const std::string&
     LogManager::log(LogManager::INFO, "Full response prepared for client %d: %s", _client_fd, filePath.c_str());
 }
 
+
 void Response::_handlePost()
 {
-    // Handle POST request
     LogManager::log(LogManager::INFO, "Handling POST request");
-    // Implement POST logic here
+
+    // Vérifier si le corps de la requête est complet
+    RequestBody* body = _request->getBody();
+    if (!body || !body->isComplete())
+    {
+        LogManager::log(LogManager::ERROR, "POST request body is incomplete or missing");
+        _response = "HTTP/1.1 400 Bad Request\r\n\r\n";
+        setRState(R_END);
+        return;
+    }
+
+    // Lire le corps de la requête (si nécessaire pour traitement)
+    try
+    {
+        std::string requestBody = body->readBody();
+        LogManager::log(LogManager::DEBUG, ("POST request body: " + requestBody).c_str());
+        // Traitez les données ici si nécessaire
+    }
+    catch (const std::exception& e)
+    {
+        LogManager::log(LogManager::ERROR, ("Failed to read POST request body: " + std::string(e.what())).c_str());
+        _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
+        setRState(R_END);
+        return;
+    }
+
+    // Construire une réponse simple
+    _response = "HTTP/1.1 200 OK\r\n";
+    _response += "Content-Type: text/plain\r\n";
+    _response += "Content-Length: 19\r\n";
+    _response += "\r\n";
+    _response += "POST request received";
+
+    setRState(R_END);
+    LogManager::log(LogManager::INFO, "POST response prepared for client %d", _client_fd);
 }
 void Response::_handleDelete()
 {
@@ -355,6 +389,34 @@ std::string getContentType(const std::string &filePath)
         return "image/gif";
     if (endsWith(filePath, ".ico"))
         return "image/x-icon";
+    if (endsWith(filePath, ".txt"))
+        return "text/plain";
+    if (endsWith(filePath, ".json"))
+        return "application/json";
+    if (endsWith(filePath, ".xml"))
+        return "application/xml";
+    if (endsWith(filePath, ".pdf"))
+        return "application/pdf";
+    if (endsWith(filePath, ".zip"))
+        return "application/zip";
+    if (endsWith(filePath, ".mp4"))
+        return "video/mp4";
+    if (endsWith(filePath, ".mp3"))
+        return "audio/mpeg";
+    if (endsWith(filePath, ".svg"))
+        return "image/svg+xml";
+    if (endsWith(filePath, ".woff"))
+        return "font/woff";
+    if (endsWith(filePath, ".woff2"))
+        return "font/woff2";
+    if (endsWith(filePath, ".ttf"))
+        return "font/ttf";
+    if (endsWith(filePath, ".otf"))
+        return "font/otf";
+    if (endsWith(filePath, ".eot"))
+        return "font/eot";
+    if (endsWith(filePath, ".webp"))
+        return "image/webp";
     return "application/octet-stream"; // Type par défaut
 }
 
