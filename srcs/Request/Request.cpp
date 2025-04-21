@@ -85,6 +85,11 @@ const int &Request::getState() const
     return (this->_state);
 }
 
+RequestBody *Request::getBody() const
+{
+    return (this->_body);
+}
+
 void Request::setCode(int const & code)
 {
     this->_statusCode = code;
