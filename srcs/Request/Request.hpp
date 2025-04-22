@@ -89,7 +89,6 @@ class Request{
         const std::string                           &getMethod() const;
         const std::string                           &getUri() const;
         const std::string                           &getVersion() const;
-        const std::string                           &getPath() const;
         const std::map<std::string, std::string>    &getQuery() const;
         const int                                   &getStatusCode() const;
         const std::map<std::string, std::string>    &getHeaders() const;

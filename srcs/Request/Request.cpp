@@ -104,7 +104,7 @@ void Request::handleError(int code, int state, const std::string& errorMessage)
 {
     setCode(code);      
     setState(state);     
-    LogManager::log(LogManager::ERROR, errorMessage.c_str()); 
+    // LogManager::log(LogManager::ERROR, errorMessage.c_str()); 
     throw std::runtime_error(errorMessage);
 }
 
@@ -379,27 +379,18 @@ void Request::parseHeaderKeyValue(const std::string& headerKey, const std::strin
     if (headerKey == "Host" || headerKey == "Content-Length" || headerKey == "Transfer-Encoding")
     {
         if (_headers.find(headerKey) != _headers.end())
-        {
-            throw std::runtime_error("ERROR: Duplicate header: " + headerKey);
-        }
+            return (handleError(400, ERROR, "ERROR: Duplicate header: " + headerKey));
         _headers[headerKey] = headerValue;
     }
 
-    //SIUUU VOIR POUR LES AUTRES SI ECRASER OU CONCATENER
-    
-    // // Gérer les en-têtes multiples autorisés
-    // else if (headerKey == "Accept" || headerKey == "Accept-Encoding" || headerKey == "Cookie")
-    // {
-    //     if (_headers.find(headerKey) != _headers.end())
-    //     {
-    //         _headers[headerKey] += ", " + headerValue;
-    //     }
-    //     else
-    //     {
-    //         _headers[headerKey] = headerValue;
-    //     }
-    // }
-    // En-têtes génériques
+    // Gérer les en-têtes multiples autorisés
+    else if (headerKey == "Accept" || headerKey == "Accept-Encoding" || headerKey == "Cookie")
+    {
+        if (_headers.find(headerKey) != _headers.end())
+            _headers[headerKey] += ", " + headerValue;
+        else
+            _headers[headerKey] = headerValue;
+    }
     else
         _headers[headerKey] = headerValue;
 }
