@@ -24,6 +24,7 @@ enum parseState
     HEADER_VALUE,
     HEADER_CHECK,
     BODY,
+    CGI,
     END,
     ERROR
 };
@@ -41,6 +42,8 @@ class Request{
         Client                              *_client;
         Server                              *_server;
         RequestBody                         *_body;
+        BlocServer                          *_matchingServer;// inint
+        BlocLocation                        *_matchingLocation;
         std::string                         _raw;
         std::string                         _method;
         std::string                         _uri;
@@ -51,12 +54,12 @@ class Request{
         int                                 _statusCode;
         int                                 _state;
         int                                 _inHeader;
-        // BlocLocation                        *_location;
         size_t  _i;
         bool _isChunked;
         unsigned long long _maxBodySize;
         unsigned long long _contentLength;
         std::time_t _timeOut;
+        bool _isCgi;
         
 
     public:                     
@@ -80,8 +83,9 @@ class Request{
         void clearProcessedData(size_t processedBytes);
         bool isTimeoutExceeded() const;
         void handleError(int code, int state, const std::string& errorMessage);
-
-
+        void parseCgi();
+        
+        bool isCgi() {return _isCgi;};
         
         // void parsePath(int & state, int & idx, std::string const & str);
         // void parseBody(int & state, int & idx, std::string const & str);
@@ -95,6 +99,9 @@ class Request{
         const std::map<std::string, std::string>    &getHeaders() const;
         const int                                   &getState() const;
         RequestBody*                                getBody() const;
+        std::string getUriExtension() const;
+        BlocServer* getMatchingServer() const;
+        BlocLocation* getMatchingLocation() const;
         
         void setCode(int const & code);
         void setState(int const & state);
