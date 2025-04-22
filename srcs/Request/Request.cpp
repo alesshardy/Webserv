@@ -1,6 +1,6 @@
 #include "Request.hpp"
 
-Request::Request(Client *client, Server *server): _client(client), _server(server), _body(),_raw(""), _method(""), _uri(""), _version(""), _currentHeaderKey(""), _statusCode(200), _state(0), _inHeader(false), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0), _timeOut(std::time(NULL)){}
+Request::Request(Client *client, Server *server): _client(client), _server(server), _body(),_raw(""), _method(""), _uri(""), _version(""), _currentHeaderKey(""), _statusCode(200), _state(0), _inHeader(false), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0), _timeOut(std::time(NULL)), _isCgi(false){}
 
 Request::Request(Request const & copy)
 {
@@ -28,6 +28,7 @@ Request &Request::operator=(Request const & rhs)
         this->_maxBodySize = rhs._maxBodySize;
         this->_contentLength = rhs._contentLength;
         this->_timeOut = rhs._timeOut;
+        this->_isCgi = rhs._isCgi;
 
         if (this->_body)
         {
@@ -90,6 +91,16 @@ RequestBody *Request::getBody() const
     return (this->_body);
 }
 
+BlocServer *Request::getMatchingServer() const
+{
+    return (this->_matchingServer);
+}
+
+BlocLocation *Request::getMatchingLocation() const
+{
+    return (this->_matchingLocation);
+}
+
 void Request::setCode(int const & code)
 {
     this->_statusCode = code;
@@ -130,9 +141,12 @@ void Request::parseRequest(std::string str)
             checkHeader();
         if (_state == BODY)
             parseBody();
+        if (_state == CGI)
+            parseCgi();
     }
     catch (const std::runtime_error &e)
     {
+        setState(ERROR);
         throw; // Rethrow the exception if needed
     }
 }
@@ -396,13 +410,32 @@ void Request::parseHeaderKeyValue(const std::string& headerKey, const std::strin
 }
 
 
-// CHECK HEADER
+// CHECK HEADER / SIUUUUUUUUU decoupercette fonction propre 
 void    Request::checkHeader()
 {        
     LogManager::log(LogManager::DEBUG, "Checking headers ...");
 
     if (_headers.find("Host") == _headers.end())
         throw std::runtime_error("ERROR: Missing Host Header");
+    
+    //WAAAAA
+    // Trouver le bloc serveur correspondant
+    _matchingServer = _server->getMatchingServer(this);
+    if (!_matchingServer)
+        throw std::runtime_error("ERROR: No matching server block found for the request");
+
+    // Vérifier si l'URI correspond à un CGI
+    _matchingLocation = _matchingServer->getMatchingLocation(_uri);
+    if (_matchingLocation && _matchingLocation->getCgiExtensions().count(getUriExtension()))
+    {
+        _isCgi = true; // Marquer la requête comme CGI
+        LogManager::log(LogManager::DEBUG, "Request targets a CGI script");
+    }
+    else
+    {
+        _isCgi = false; // Marquer la requête comme non CGI
+        LogManager::log(LogManager::DEBUG, "Request does not target a CGI script");
+    }
     
     // FInd max Body size
     getMaxBodySize();
@@ -442,9 +475,38 @@ void    Request::checkHeader()
         _i = 0;
     }
 
-    setState(BODY);
+    // CHECK ALLOW METHOD DANS LE BLOC LOCATION
+    if (_matchingLocation && !_matchingLocation->getAllowMethod().empty())
+    {
+        const std::set<std::string>& allowMethods = _matchingLocation->getAllowMethod();
+        if (allowMethods.find(_method) == allowMethods.end())
+            throw std::runtime_error("ERROR: Method ["+ getMethod() + "] not allowed in this location");
+        else
+            LogManager::log(LogManager::DEBUG, "Good AllowMethod: [%s] find in bloc location ", getMethod().c_str());
+    }
+
+    //WAAAAAAAAA
+    // Passer à l'état BODY ou CGI
+    if (_isCgi && _contentLength == 0)
+        setState(CGI); // Passer directement à l'exécution du CGI
+    else
+        setState(BODY);
     _timeOut = std::time(NULL); // Reset timmer pour le body
     LogManager::log(LogManager::DEBUG, "Checking headers DONE");
+}
+
+//WAAAAA
+std::string Request::getUriExtension() const
+{
+    // Trouver la position du dernier point dans l'URI
+    size_t dotPos = _uri.find_last_of('.');
+
+    // Si aucun point n'est trouvé ou si le point est à la fin de l'URI, retourner une chaîne vide
+    if (dotPos == std::string::npos || dotPos == _uri.size() - 1)
+        return "";
+
+    // Retourner l'extension (à partir du dernier point jusqu'à la fin de l'URI)
+    return _uri.substr(dotPos);
 }
 
 
@@ -455,13 +517,13 @@ void    Request::checkHeader()
 void Request::getMaxBodySize()
 {
     // trouver le bloc serveur correspondant
-    BlocServer* matchingServer = _server->getMatchingServer(this);
-    // Si aucun bloc server ne correspond, lever une erreur
-    if (!matchingServer) 
-        throw std::runtime_error("ERROR: No matching server block found for the request");
+    // BlocServer* matchingServer = _server->getMatchingServer(this);
+    // // Si aucun bloc server ne correspond, lever une erreur
+    // if (!matchingServer) 
+    //     throw std::runtime_error("ERROR: No matching server block found for the request");
 
     // Récupérer client_max_body_size
-    _maxBodySize = matchingServer->getClientMaxBodySize();
+    _maxBodySize = _matchingServer->getClientMaxBodySize();
 
     // Conversion de _maxBodySize en chaîne (C++98 compatible)
     std::ostringstream oss;
@@ -512,7 +574,10 @@ void Request::parseBody()
         
         if (_body->isComplete())
         {
-            _state = END;
+            if (isCgi())
+                _state = CGI;
+            else
+                _state = END;
             LogManager::log(LogManager::DEBUG, "Parse body DONE!");
             std::cout << "ReadtmpFIle :\n" << _body->readBody() << std::endl;
         }
@@ -538,6 +603,25 @@ void Request::clearProcessedData(size_t processedBytes)
         _i -= processedBytes; // Ajuster l'index pour refléter le nettoyage
     }
 }
+
+/************************************** CGI *******************************************/
+
+void    Request::parseCgi()
+{
+    LogManager::log(LogManager::DEBUG, "Parse CGI");
+    std::string cgiPath = _matchingLocation->getCgiPath(getUriExtension());
+    std::cout << "CgiPAth = " << cgiPath << std::endl;
+    std::string scriptCgi = getUri();
+    std::cout << "scriptCgi = " << scriptCgi << std::endl;
+
+    //siuuu continuer ca mere jppp
+    
+
+    _state = END;
+}
+
+
+/******************************************* TIMER *******************************************/
 
 /**
  * @brief Vérifie si le délai d'attente est dépassé.

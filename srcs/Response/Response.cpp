@@ -188,8 +188,8 @@ void Response::_handleGet()
         {
             // Si l'accès est refusé, retourner une réponse 403
             LogManager::log(LogManager::ERROR, "Access denied: %s", filePath.c_str());
-            BlocServer* matchingServer = _server->getMatchingServer(_request);
-            _response = ErrorPage::getErrorPage(403, matchingServer->getErrorPage());
+            // BlocServer* matchingServer = _server->getMatchingServer(_request);
+            _response = ErrorPage::getErrorPage(403, _request->getMatchingServer()->getErrorPage());
             setRState(R_END);
             return;
         }
@@ -198,8 +198,8 @@ void Response::_handleGet()
     {
         // Si le fichier ou le répertoire n'existe pas, retourner une réponse 404
         LogManager::log(LogManager::ERROR, "File not found: %s", filePath.c_str());
-        BlocServer* matchingServer = _server->getMatchingServer(_request);
-        _response = ErrorPage::getErrorPage(404, matchingServer->getErrorPage());
+        // BlocServer* matchingServer = _server->getMatchingServer(_request);
+        _response = ErrorPage::getErrorPage(404, _request->getMatchingServer()->getErrorPage());
         setRState(R_END);
         return;
     }

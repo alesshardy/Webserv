@@ -46,6 +46,7 @@ class BlocLocation
             const std::vector<std::string>              &getIndex() const {return _index;};
             const std::set<std::string>                 &getAllowMethod() const {return _allowMethod;};
             const std::map<std::string, std::string>    &getCgiExtensions() const {return _cgiExtension;}
+            const std::string                           &getCgiPath(const std::string &extension) const {return _cgiExtension.at(extension);};
             const std::string                           &getUploadPath() const {return _uploadPath;};
             bool                                        getAutoIndex() const {return _autoIndex;};
             const std::map<int, std::string>            &getReturnDirectives() const {return _returnDirectives;};
