@@ -51,6 +51,8 @@ class BlocServer
             long long                                   getClientMaxBodySize() const {return _clientMaxBodySize;};
             const std::map<std::string, BlocLocation>   &getLocation() const {return _location;};
 
+            BlocLocation* getMatchingLocation(const std::string& uri) const;
+
             //Validation
             bool    validateServer() const;
 
