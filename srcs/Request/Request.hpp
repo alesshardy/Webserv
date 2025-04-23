@@ -85,25 +85,21 @@ class Request{
         void handleError(int code, int state, const std::string& errorMessage);
         void parseCgi();
         
-        bool isCgi() {return _isCgi;};
-        
-        // void parsePath(int & state, int & idx, std::string const & str);
-        // void parseBody(int & state, int & idx, std::string const & str);
-        
-        const std::string                           &getMethod() const;
-        const std::string                           &getUri() const;
-        const std::string                           &getVersion() const;
-        const std::map<std::string, std::string>    &getQuery() const;
-        const int                                   &getStatusCode() const;
-        const std::map<std::string, std::string>    &getHeaders() const;
-        const int                                   &getState() const;
-        RequestBody*                                getBody() const;
+        bool isCgi() {return _isCgi;}
+
+        const std::string &getMethod() const {return _method;}
+        const std::string &getUri() const {return _uri;}
+        const std::string &getVersion() const {return _version;}
+        const int &getStatusCode() const {return _statusCode;}
+        const std::map<std::string, std::string> &getHeaders() const {return _headers;}
+        const std::map<std::string, std::string> &getQuery() const {return _query;}
+        const int &getState() const {return _state;}
+        RequestBody *getBody() const {return _body;}
         std::string getUriExtension() const;
-        BlocServer* getMatchingServer() const;
-        BlocLocation* getMatchingLocation() const;
-        
-        void setCode(int const & code);
-        void setState(int const & state);
+        BlocServer *getMatchingServer() const {return _matchingServer;}
+        BlocLocation *getMatchingLocation() const {return _matchingLocation;}
+        void setCode(int const &code) {_statusCode = code;}
+        void setState(int const &state) {_state = state;}
 };
 
 #endif

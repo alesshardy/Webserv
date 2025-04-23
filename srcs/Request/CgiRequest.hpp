@@ -5,9 +5,9 @@
 
 class CgiRequest
 {
-    
 
-}
+
+};
 
 
 #endif
