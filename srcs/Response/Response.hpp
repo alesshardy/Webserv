@@ -74,6 +74,8 @@ class   Response
         void                setClientSocket(Socket* client_socket);
         void                setTimeStartResponse(){_timeOut = std::time(NULL);};
 
+        std::string         resolveFilePath();
+
         // Getters
         int                 getClientFd() const { return _client_fd; }
         Socket*             getClientSocket() const { return _client_socket; }

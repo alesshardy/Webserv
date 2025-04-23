@@ -51,7 +51,7 @@ void    Config::handleDefaultConfig()
 {
     BlocServer current = BlocServer();
     current.addIndex("index.html");
-    current.setRoot("/www/main");
+    current.setRoot("./www/main");
     current.addListen(Listen("0.0.0.0", 1234));
     _server.push_back(current);
 }
@@ -557,6 +557,7 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
     BlocServer      currentServer;
     std::string     currentLocationPath;
     int argNb = 0;
+    bool theFlag = false; // SIUUUUUUUUU aller voir ce que ca a casser de rajouter ca pour proteger 
 
     while (file.get(c)) 
     {
@@ -564,7 +565,9 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
         if (inComment)
         {
             if (c == '\n')
-            {
+            {   
+                if (lastC == ';')
+                    theFlag = true;
                 inComment = false; // Fin du commentaire
                 semicolonCount = 0; // Réinitialiser le compteur pour la nouvelle ligne
                 isKey = true; // Réinitialiser pour la nouvelle ligne
@@ -606,9 +609,10 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                 }
                 token.clear(); // Vider le token à la fin de la ligne
             }
-            if (semicolonCount != 1 && lastKey != "server" && lastKey != "location" && lastC != '\n' && lastC != '}' && lastKey != "")
+            if (semicolonCount != 1 && lastKey != "server" && lastKey != "location" && lastC != '\n' && lastC != '}' && lastKey != "" && theFlag == false)
             {
-                throw std::runtime_error("ERROR : line request must end by ';'");
+                std::cout << "lastC =" << lastC << " semiValue= " <<  semicolonCount <<  std::endl;
+                throw std::runtime_error("ERROR : Line request must end by ';'");
             }
             semicolonCount = 0; // Réinitialiser le compteur pour la nouvelle ligne
             isKey = true; // Réinitialiser pour la nouvelle ligne
@@ -706,7 +710,8 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
         // requete doit finir par ';' partie 2
         else if (semicolonCount == 1 && !isspace(c) && c != '\n')
         {
-            throw std::runtime_error("ERROR : line request must end by ';' ");
+            std::cout << "lastC =" << lastC << " semiValue= " <<  semicolonCount <<  std::endl;
+            throw std::runtime_error("ERROR : lIne request must end by ';' ");
         }
         // Gestion des espaces
         else if (isspace(c)) 
