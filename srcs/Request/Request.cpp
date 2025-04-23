@@ -50,66 +50,66 @@ Request::~Request()
     }
 }
 
-// Getters & setters
-const std::string &Request::getMethod() const
-{
-    return (this->_method);
-}
+// // Getters & setters
+// const std::string &Request::getMethod() const
+// {
+//     return (this->_method);
+// }
 
-const std::string &Request::getUri() const
-{
-    return (this->_uri);
-}
+// const std::string &Request::getUri() const
+// {
+//     return (this->_uri);
+// }
 
-const std::string &Request::getVersion() const
-{
-    return (this->_version);
-}
+// const std::string &Request::getVersion() const
+// {
+//     return (this->_version);
+// }
 
-const int &Request::getStatusCode() const
-{
-    return (this->_statusCode);
-}
+// const int &Request::getStatusCode() const
+// {
+//     return (this->_statusCode);
+// }
 
-const std::map<std::string, std::string> &Request::getHeaders() const
-{
-    return (this->_headers);
-}
+// const std::map<std::string, std::string> &Request::getHeaders() const
+// {
+//     return (this->_headers);
+// }
 
-const std::map<std::string, std::string> &Request::getQuery() const
-{
-    return (this->_query);
-}
+// const std::map<std::string, std::string> &Request::getQuery() const
+// {
+//     return (this->_query);
+// }
 
-const int &Request::getState() const 
-{
-    return (this->_state);
-}
+// const int &Request::getState() const 
+// {
+//     return (this->_state);
+// }
 
-RequestBody *Request::getBody() const
-{
-    return (this->_body);
-}
+// RequestBody *Request::getBody() const
+// {
+//     return (this->_body);
+// }
 
-BlocServer *Request::getMatchingServer() const
-{
-    return (this->_matchingServer);
-}
+// BlocServer *Request::getMatchingServer() const
+// {
+//     return (this->_matchingServer);
+// }
 
-BlocLocation *Request::getMatchingLocation() const
-{
-    return (this->_matchingLocation);
-}
+// BlocLocation *Request::getMatchingLocation() const
+// {
+//     return (this->_matchingLocation);
+// }
 
-void Request::setCode(int const & code)
-{
-    this->_statusCode = code;
-}
+// void Request::setCode(int const & code)
+// {
+//     this->_statusCode = code;
+// }
 
-void Request::setState(int const & state)
-{
-    this->_state = state;
-}
+// void Request::setState(int const & state)
+// {
+//     this->_state = state;
+// }
 
 void Request::handleError(int code, int state, const std::string& errorMessage)
 {
