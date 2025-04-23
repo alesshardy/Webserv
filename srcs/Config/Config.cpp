@@ -557,6 +557,7 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
     BlocServer      currentServer;
     std::string     currentLocationPath;
     int argNb = 0;
+    bool theFlag = false; // SIUUUUUUUUU aller voir ce que ca a casser de rajouter ca pour proteger 
 
     while (file.get(c)) 
     {
@@ -565,6 +566,8 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
         {
             if (c == '\n')
             {
+                if (lastC == ';')
+                    theFlag = true;
                 inComment = false; // Fin du commentaire
                 semicolonCount = 0; // Réinitialiser le compteur pour la nouvelle ligne
                 isKey = true; // Réinitialiser pour la nouvelle ligne
@@ -606,11 +609,12 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                 }
                 token.clear(); // Vider le token à la fin de la ligne
             }
-            if (semicolonCount != 1 && lastKey != "server" && lastKey != "location" && lastC != '\n' && lastC != '}' && lastKey != "")
+            if (semicolonCount != 1 && lastKey != "server" && lastKey != "location" && lastC != '\n' && lastC != '}' && lastKey != "" && theFlag == false)
             {
                 throw std::runtime_error("ERROR : line request must end by ';'");
             }
             semicolonCount = 0; // Réinitialiser le compteur pour la nouvelle ligne
+            theFlag = false;
             isKey = true; // Réinitialiser pour la nouvelle ligne
             argNb = 0;
             lastC = c;
