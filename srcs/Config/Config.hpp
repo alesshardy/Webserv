@@ -58,6 +58,8 @@ class Config
             void        handleIndexBlocServer(const std::string &arg, BlocServer &current);
             void        handleErrorPage(const std::string &arg, BlocServer &current, int argNb);
             void        handleClientMaxBodySize(const std::string &arg, BlocServer &current, int argNb);
+            void        handleReturnDirectiveBlocServer(const std::string &arg, BlocServer &current, int argNb);
+
 
             void        handleRootBlocLocation(const std::string &arg, BlocLocation &current, int argNb);
             void        handleAlias(const std::string &arg, BlocLocation &current, int argNb);
@@ -66,7 +68,7 @@ class Config
             void        handleUploadPath(const std::string &arg, BlocLocation &current);
             void        handleAutoIndex(const std::string &arg, BlocLocation &current, int argNb);
             void        handleCgiExtension(const std::string &arg, BlocLocation &current, int argNb);
-            void        handleReturnDirective(const std::string &arg, BlocLocation &current, int argNb);
+            void        handleReturnDirectiveBlocLocation(const std::string &arg, BlocLocation &current, int argNb);
         
             void        handleDefaultConfig();
             
