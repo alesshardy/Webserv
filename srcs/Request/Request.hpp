@@ -3,13 +3,14 @@
 
 #include "RequestBody.hpp"
 #include "Client.hpp"
+#include "Server.hpp"
+#include "CgiRequest.hpp"
 #include <iostream>
 #include <map>
 #include <string>
 #include <ctime>
-
-#include "Server.hpp"
 #include <sstream>
+
 # define URI_MAX_SIZE 2048
 # define REQUETE_LINE_MAX_SIZE 8192
 
@@ -33,6 +34,7 @@ enum parseState
 class Client;
 class Server;
 class RequestBody;
+class CgiRequest;
 
 class Request{
     friend class Client;
@@ -60,29 +62,9 @@ class Request{
         unsigned long long _contentLength;
         std::time_t _timeOut;
         bool _isCgi;
-        
-
-    public:                     
-        Request(Client *client, Server *server);                      
-        Request(Request const & copy);
-        Request & operator=(Request const & rhs);
-        ~Request();
-        
-        // Getters
-        const std::string &getMethod() const {return _method;}
-        const std::string &getUri() const {return _uri;}
-        const std::string &getVersion() const {return _version;}
-        const int &getStatusCode() const {return _statusCode;}
-        const std::map<std::string, std::string> &getHeaders() const {return _headers;}
-        const std::map<std::string, std::string> &getQuery() const {return _query;}
-        const int &getState() const {return _state;}
-        RequestBody *getBody() const {return _body;}
-        BlocServer *getMatchingServer() const {return _matchingServer;}
-        BlocLocation *getMatchingLocation() const {return _matchingLocation;}
-    
-        // Setters
-        void setCode(int const &code) {_statusCode = code;}
-        void setState(int const &state) {_state = state;}
+        std::string _queryString;
+        int _port;
+        CgiRequest  *_cgi;
         
         // Method
         void parseRequest(std::string request);
@@ -113,6 +95,33 @@ class Request{
         bool isTimeoutExceeded() const;
         bool isCgi() {return _isCgi;}
         std::string getUriExtension() const;
+
+    public:                     
+        Request(Client *client, Server *server);                      
+        Request(Request const & copy);
+        Request & operator=(Request const & rhs);
+        ~Request();
+        
+        // Getters
+        const std::string &getMethod() const {return _method;}
+        const std::string &getUri() const {return _uri;}
+        const std::string &getVersion() const {return _version;}
+        const int &getStatusCode() const {return _statusCode;}
+        const std::map<std::string, std::string> &getHeaders() const {return _headers;}
+        const std::map<std::string, std::string> &getQuery() const {return _query;}
+        const int &getState() const {return _state;}
+        RequestBody *getBody() const {return _body;}
+        BlocServer *getMatchingServer() const {return _matchingServer;}
+        BlocLocation *getMatchingLocation() const {return _matchingLocation;}
+        const int &getPort() const {return _port;}
+        const std::string &getQueryString() const {return _queryString;}
+
+    
+        // Setters
+        void setCode(int const &code) {_statusCode = code;}
+        void setState(int const &state) {_state = state;}
+        void setPort(int const &port) {_port = port;}
+
     };
 
 #endif
