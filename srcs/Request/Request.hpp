@@ -42,7 +42,7 @@ class Request{
         Client                              *_client;
         Server                              *_server;
         RequestBody                         *_body;
-        BlocServer                          *_matchingServer;// inint
+        BlocServer                          *_matchingServer;// siuuu inint
         BlocLocation                        *_matchingLocation;
         std::string                         _raw;
         std::string                         _method;
@@ -68,6 +68,23 @@ class Request{
         Request & operator=(Request const & rhs);
         ~Request();
         
+        // Getters
+        const std::string &getMethod() const {return _method;}
+        const std::string &getUri() const {return _uri;}
+        const std::string &getVersion() const {return _version;}
+        const int &getStatusCode() const {return _statusCode;}
+        const std::map<std::string, std::string> &getHeaders() const {return _headers;}
+        const std::map<std::string, std::string> &getQuery() const {return _query;}
+        const int &getState() const {return _state;}
+        RequestBody *getBody() const {return _body;}
+        BlocServer *getMatchingServer() const {return _matchingServer;}
+        BlocLocation *getMatchingLocation() const {return _matchingLocation;}
+    
+        // Setters
+        void setCode(int const &code) {_statusCode = code;}
+        void setState(int const &state) {_state = state;}
+        
+        // Method
         void parseRequest(std::string request);
         void parseMethod();
         void parseUri(void);
@@ -77,33 +94,25 @@ class Request{
         void parseHeader(void);
         void checkHeader(void);
         void parseHeaderKeyValue(const std::string &headerKey, const std::string &headerValue);
-        void getMaxBodySize();
         void parseQuery();
         void parseBody();
         void clearProcessedData(size_t processedBytes);
-        bool isTimeoutExceeded() const;
         void handleError(int code, int state, const std::string& errorMessage);
         void parseCgi();
+        void getMaxBodySize();
         
-        bool isCgi() {return _isCgi;};
+        // Check avant body
+        void checkHostHeader();
+        void findMatchingServerAndLocation();
+        void checkCgi();
+        void validateContentLengthAndEncoding();
+        void skipHeaderEndSequence();
+        void checkAllowedMethods();    
         
-        // void parsePath(int & state, int & idx, std::string const & str);
-        // void parseBody(int & state, int & idx, std::string const & str);
-        
-        const std::string                           &getMethod() const;
-        const std::string                           &getUri() const;
-        const std::string                           &getVersion() const;
-        const std::map<std::string, std::string>    &getQuery() const;
-        const int                                   &getStatusCode() const;
-        const std::map<std::string, std::string>    &getHeaders() const;
-        const int                                   &getState() const;
-        RequestBody*                                getBody() const;
+        // utils
+        bool isTimeoutExceeded() const;
+        bool isCgi() {return _isCgi;}
         std::string getUriExtension() const;
-        BlocServer* getMatchingServer() const;
-        BlocLocation* getMatchingLocation() const;
-        
-        void setCode(int const & code);
-        void setState(int const & state);
-};
+    };
 
 #endif
