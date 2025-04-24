@@ -7,6 +7,7 @@
 #include <vector>
 #include <map>
 #include <unistd.h>
+#include <dirent.h>
 
 #include "Request.hpp"
 #include "LogManager.hpp"
@@ -55,7 +56,7 @@ class   Response
         void                _handlePost();
         void                _handleDelete();
         void                _handlePut();
-        void                _handleHead();
+        bool                _isRedirect();
 
     public:
         Response(Client* client);
@@ -73,6 +74,9 @@ class   Response
         void                setClientFd(int client_fd);
         void                setClientSocket(Socket* client_socket);
         void                setTimeStartResponse(){_timeOut = std::time(NULL);};
+
+        std::string         resolveFilePath();
+        std::string         generateDirectoryListing(const std::string& directoryPath, const std::string& uri);
 
         // Getters
         int                 getClientFd() const { return _client_fd; }

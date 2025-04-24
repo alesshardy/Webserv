@@ -27,6 +27,7 @@ BlocServer &BlocServer::operator=(const BlocServer &assign)
         _errorPage = assign._errorPage;
         _clientMaxBodySize = assign._clientMaxBodySize;
         _location = assign._location;
+        _returnDirectives = assign._returnDirectives;
     }
     return (*this);
 }
