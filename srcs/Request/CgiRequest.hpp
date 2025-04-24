@@ -2,6 +2,7 @@
 #define CGIREQUEST_H
 
 #include "Request.hpp"
+#include "sys/wait.h"
 
 class Request;
 
@@ -13,10 +14,14 @@ class CgiRequest
             char**      _envp;
             std::string _cgiPath;
             std::string _scriptCgi;
-            char **args[3];
+            char *_args[3];
             pid_t _pid;
             int _stdin;
             int _stdout;
+            int _fd;
+            std::string _tmpFilePath;
+
+
 
             void _initEnv();
             void _CgiConvertEnvToChar();
