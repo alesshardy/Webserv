@@ -302,6 +302,36 @@ void Config::handleClientMaxBodySize(const std::string &arg, BlocServer &current
     current.setClientMaxBodySize(value);
 }
 
+void    Config::handleReturnDirectiveBlocServer(const std::string &arg, BlocServer &current, int argNb)
+{
+    //Choisi d'ecraser si plusieurs code erreur car nginx accepte doublon
+    if (argNb == 1)
+    {
+        if (current.hasTmpReturnDirective())
+            throw std::runtime_error("ERROR : key return without arg");
+        int code ;
+        try {
+            code = ft_stoi(arg);
+        }
+        catch (const std::exception &e){
+            throw std::runtime_error("ERROR : wrong return code");   
+        }
+        if (code >= 1 && code <= 999)
+            current.setTmpReturnDirective(code);
+        else
+            throw std::runtime_error("ERROR : wrong return code must be between 1 && 999");   
+    }
+    else if (argNb == 2)
+    {
+        if (!current.hasTmpReturnDirective())
+            throw std::runtime_error("ERROR : no code define before arg");
+        int code = current.getTmpReturnDirective();
+        current.addReturnDirectives(code, arg);
+        current.clearTmpReturnDirective();
+    }
+    else
+        throw std::runtime_error("ERROR : too many arg for return");   
+}
 
 /********************** SOUS FONCTION D'AJOUT AU BLOC LOCATION && DE PARSING DE L'ARGUMENT DE CHAQUE KEY ********************/
 
@@ -437,7 +467,7 @@ void    Config::handleCgiExtension(const std::string &arg, BlocLocation &current
  * @param current 
  * @param argNb 
  */
-void    Config::handleReturnDirective(const std::string &arg, BlocLocation &current, int argNb)
+void    Config::handleReturnDirectiveBlocLocation(const std::string &arg, BlocLocation &current, int argNb)
 {
     //Choisi d'ecraser si plusieurs code erreur car nginx accepte doublon
     if (argNb == 1)
@@ -492,6 +522,8 @@ void        Config::addArgToServerBloc(std::string arg, std::string lastKey, Blo
         handleErrorPage(arg, current, argNb);
     else if (lastKey == "client_max_body_size")
         handleClientMaxBodySize(arg, current, argNb);
+    else if (lastKey == "return")
+        handleReturnDirectiveBlocServer(arg, current, argNb);
     else
         throw std::runtime_error("ERROR : bad key " + lastKey + " for server bloc ");    
 }
@@ -521,7 +553,7 @@ void        Config::addArgToLocationBloc(std::string arg, std::string lastKey, B
     else if (lastKey == "cgi_extension")
         handleCgiExtension(arg, current, argNb);
     else if (lastKey == "return")
-        handleReturnDirective(arg, current, argNb);
+        handleReturnDirectiveBlocLocation(arg, current, argNb);
     else
         throw std::runtime_error("ERROR : bad key " + lastKey + " for location bloc");
 }
@@ -565,7 +597,7 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
         if (inComment)
         {
             if (c == '\n')
-            {   
+            {
                 if (lastC == ';')
                     theFlag = true;
                 inComment = false; // Fin du commentaire
@@ -615,6 +647,7 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
                 throw std::runtime_error("ERROR : Line request must end by ';'");
             }
             semicolonCount = 0; // Réinitialiser le compteur pour la nouvelle ligne
+            theFlag = false;
             isKey = true; // Réinitialiser pour la nouvelle ligne
             argNb = 0;
             lastC = c;
@@ -827,6 +860,13 @@ void Config::printConfig() const
 
         std::cout << "  Error Pages: ";
         for (std::map<int, std::string>::const_iterator it = server.getErrorPage().begin(); it != server.getErrorPage().end(); ++it)
+        {
+            std::cout << it->first << " -> " << it->second << "; ";
+        }
+        std::cout << std::endl;
+
+        std::cout << "  Return Directive: ";
+        for (std::map<int, std::string>::const_iterator it = server.getReturnDirectives().begin(); it != server.getReturnDirectives().end(); ++it)
         {
             std::cout << it->first << " -> " << it->second << "; ";
         }
