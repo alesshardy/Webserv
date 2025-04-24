@@ -29,6 +29,13 @@ int Response::buildResponse(int epoll_fd)
 
     if (_r_state != R_CHUNK)
         setRState(R_PROCESSING);
+    
+    if (_isRedirect())
+    {
+        LogManager::log(LogManager::DEBUG, "Redirecting request");
+        setRState(R_END);
+        return 0;
+    }
 
     // Build the response based on the request method
     if (_request->getMethod() == "GET")
@@ -249,12 +256,48 @@ std::string Response::resolveFilePath()
         else
         {
             LogManager::log(LogManager::ERROR, "No index file found and autoindex is disabled for directory: %s", filePath.c_str());
-            throw std::runtime_error("403"); // Retourner une erreur 403
+            BlocServer* matchingServer = _server->getMatchingServer(_request);
+            _response = ErrorPage::getErrorPage(403, matchingServer->getErrorPage());
+            setRState(R_END);
         }
     }
 
     // Retourner le chemin du fichier si ce n'est pas un répertoire
     return filePath;
+}
+
+std::string Response::generateDirectoryListing(const std::string& directoryPath, const std::string& uri)
+{
+    DIR* dir = opendir(directoryPath.c_str());
+    if (!dir)
+        throw std::runtime_error("ERROR: Failed to open directory");
+
+    std::ostringstream html;
+    html << "<!DOCTYPE html>\n<html>\n<head>\n<title>Index of " << uri << "</title>\n</head>\n<body>\n";
+    html << "<h1>Index of " << uri << "</h1>\n<ul>\n";
+
+    struct dirent* entry;
+    while ((entry = readdir(dir)) != NULL)
+    {
+        std::string name = entry->d_name;
+        if (name == "." || name == "..")
+            continue;
+
+        std::string fullPath = directoryPath + "/" + name;
+        struct stat fileStat;
+        if (stat(fullPath.c_str(), &fileStat) == 0)
+        {
+            if (S_ISDIR(fileStat.st_mode))
+                name += "/"; // Ajouter un slash pour les répertoires
+        }
+
+        html << "<li><a href=\"" << uri << "/" << name << "\">" << name << "</a></li>\n";
+    }
+
+    closedir(dir);
+
+    html << "</ul>\n</body>\n</html>";
+    return html.str();
 }
 
 void Response::_handleGet()
@@ -265,8 +308,34 @@ void Response::_handleGet()
         std::string filePath = resolveFilePath();
         LogManager::log(LogManager::DEBUG, "Resolved file path: %s", filePath.c_str());
 
-        // Vérifier si le fichier existe et est accessible
+        // Vérifier si le chemin correspond à un répertoire
         struct stat fileStat;
+        if (stat(filePath.c_str(), &fileStat) == 0 && S_ISDIR(fileStat.st_mode))
+        {
+            const BlocLocation* location = _request->getMatchingLocation();
+            if (location && location->getAutoIndex())
+            {
+                LogManager::log(LogManager::DEBUG, "Autoindex is enabled, generating directory listing for: %s", filePath.c_str());
+                std::string directoryListing = generateDirectoryListing(filePath, _request->getUri());
+                _response = "HTTP/1.1 200 OK\r\n";
+                _response += "Content-Type: text/html\r\n";
+                _response += "Content-Length: " + toString(directoryListing.size()) + "\r\n";
+                _response += "\r\n";
+                _response += directoryListing;
+                setRState(R_END);
+                return;
+            }
+            else
+            {
+                LogManager::log(LogManager::ERROR, "Access denied: Autoindex is disabled for directory: %s", filePath.c_str());
+                BlocServer* matchingServer = _server->getMatchingServer(_request);
+                _response = ErrorPage::getErrorPage(403, matchingServer->getErrorPage());
+                setRState(R_END);
+                return;
+            }
+        }
+
+        // Vérifier si le fichier existe et est accessible
         if (stat(filePath.c_str(), &fileStat) != 0)
         {
             LogManager::log(LogManager::ERROR, "File not found: %s", filePath.c_str());
@@ -302,23 +371,6 @@ void Response::_handleGet()
             setRState(R_CHUNK); // Passer à l'état CHUNK
         }
     }
-    catch (const std::runtime_error& e)
-    {
-        // Gérer les erreurs spécifiques
-        if (std::string(e.what()) == "403")
-        {
-            LogManager::log(LogManager::ERROR, "403 Forbidden: No index file and autoindex disabled");
-            BlocServer* matchingServer = _server->getMatchingServer(_request);
-            _response = ErrorPage::getErrorPage(403, matchingServer->getErrorPage());
-        }
-        else
-        {
-            LogManager::log(LogManager::ERROR, "404 Not Found: %s", e.what());
-            BlocServer* matchingServer = _server->getMatchingServer(_request);
-            _response = ErrorPage::getErrorPage(404, matchingServer->getErrorPage());
-        }
-        setRState(R_END);
-    }
     catch (const std::exception& e)
     {
         LogManager::log(LogManager::ERROR, "Error in _handleGet: %s", e.what());
@@ -326,6 +378,54 @@ void Response::_handleGet()
         setRState(R_END);
     }
 }
+
+bool Response::_isRedirect()
+{
+    // Vérifier si l'URI correspond à une redirection dans un bloc location
+    const BlocLocation* location = _request->getMatchingLocation();
+    if (location && !location->getReturnDirectives().empty())
+    {
+        const std::map<int, std::string>& returnDirectives = location->getReturnDirectives();
+        if (!returnDirectives.empty())
+        {
+            int redirectCode = returnDirectives.begin()->first;
+            const std::string& redirectUrl = returnDirectives.begin()->second;
+
+            LogManager::log(LogManager::DEBUG, "Redirect found in location block: code=%d, url=%s", redirectCode, redirectUrl.c_str());
+
+            // Construire la réponse HTTP pour la redirection
+            _response = "HTTP/1.1 " + toString(redirectCode) + " Redirect\r\n";
+            _response += "Location: " + redirectUrl + "\r\n\r\n";
+            setRState(R_END);
+            return true; // Retourner immédiatement après avoir trouvé une redirection
+        }
+    }
+
+    // Vérifier si l'URI correspond à une redirection dans un bloc server
+    BlocServer* server = _request->getMatchingServer();
+    if (server && !server->getReturnDirectives().empty())
+    {
+        const std::map<int, std::string>& returnDirectives = server->getReturnDirectives();
+        if (!returnDirectives.empty())
+        {
+            int redirectCode = returnDirectives.begin()->first;
+            const std::string& redirectUrl = returnDirectives.begin()->second;
+
+            LogManager::log(LogManager::DEBUG, "Redirect found in server block: code=%d, url=%s", redirectCode, redirectUrl.c_str());
+
+            // Construire la réponse HTTP pour la redirection
+            _response = "HTTP/1.1 " + toString(redirectCode) + " Redirect\r\n";
+            _response += "Location: " + redirectUrl + "\r\n\r\n";
+            setRState(R_END);
+            return true;
+        }
+    }
+
+    // Aucun cas de redirection trouvé
+    return false;
+}
+
+
 /**************************************Ancienne version handle get************* */
 // void Response::_handleGet()
 // {

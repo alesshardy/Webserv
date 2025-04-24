@@ -50,67 +50,6 @@ Request::~Request()
     }
 }
 
-// Getters & setters
-const std::string &Request::getMethod() const
-{
-    return (this->_method);
-}
-
-const std::string &Request::getUri() const
-{
-    return (this->_uri);
-}
-
-const std::string &Request::getVersion() const
-{
-    return (this->_version);
-}
-
-const int &Request::getStatusCode() const
-{
-    return (this->_statusCode);
-}
-
-const std::map<std::string, std::string> &Request::getHeaders() const
-{
-    return (this->_headers);
-}
-
-const std::map<std::string, std::string> &Request::getQuery() const
-{
-    return (this->_query);
-}
-
-const int &Request::getState() const 
-{
-    return (this->_state);
-}
-
-RequestBody *Request::getBody() const
-{
-    return (this->_body);
-}
-
-BlocServer *Request::getMatchingServer() const
-{
-    return (this->_matchingServer);
-}
-
-BlocLocation *Request::getMatchingLocation() const
-{
-    return (this->_matchingLocation);
-}
-
-void Request::setCode(int const & code)
-{
-    this->_statusCode = code;
-}
-
-void Request::setState(int const & state)
-{
-    this->_state = state;
-}
-
 void Request::handleError(int code, int state, const std::string& errorMessage)
 {
     setCode(code);      
@@ -409,23 +348,62 @@ void Request::parseHeaderKeyValue(const std::string& headerKey, const std::strin
         _headers[headerKey] = headerValue;
 }
 
+/******************************* CHEcK AVANT BODY/CGI *****************************/
 
-// CHECK HEADER / SIUUUUUUUUU decoupercette fonction propre 
-void    Request::checkHeader()
-{        
+/**
+ * @brief Vérifie les en-têtes de la requête HTTP.
+ * 
+ */
+void Request::checkHeader()
+{
     LogManager::log(LogManager::DEBUG, "Checking headers ...");
 
+    checkHostHeader();
+    findMatchingServerAndLocation();
+    checkCgi();
+    getMaxBodySize();
+    validateContentLengthAndEncoding();
+    skipHeaderEndSequence();
+    checkAllowedMethods();
+
+    if (_isCgi && _contentLength == 0)
+        setState(CGI); // Passer directement à l'exécution du CGI
+    else
+        setState(BODY);
+
+    _timeOut = std::time(NULL); // Reset timer pour le body
+    LogManager::log(LogManager::DEBUG, "Checking headers DONE");
+}
+
+/**
+ * @brief Vérifie si l'en-tête "Host" est présent dans la requête.
+ * 
+ */
+void Request::checkHostHeader()
+{
     if (_headers.find("Host") == _headers.end())
         throw std::runtime_error("ERROR: Missing Host Header");
-    
-    //WAAAAA
-    // Trouver le bloc serveur correspondant
+}
+
+/**
+ * @brief Trouve le serveur et la localisation correspondants à la requête.
+ * 
+ */
+void Request::findMatchingServerAndLocation()
+{
     _matchingServer = _server->getMatchingServer(this);
     if (!_matchingServer)
         throw std::runtime_error("ERROR: No matching server block found for the request");
 
-    // Vérifier si l'URI correspond à un CGI
     _matchingLocation = _matchingServer->getMatchingLocation(_uri);
+}
+
+/**
+ * @brief Vérifie si la requête cible un script CGI.
+ * 
+ */
+void Request::checkCgi()
+{
     if (_matchingLocation && _matchingLocation->getCgiExtensions().count(getUriExtension()))
     {
         _isCgi = true; // Marquer la requête comme CGI
@@ -436,26 +414,31 @@ void    Request::checkHeader()
         _isCgi = false; // Marquer la requête comme non CGI
         LogManager::log(LogManager::DEBUG, "Request does not target a CGI script");
     }
-    
-    // FInd max Body size
-    getMaxBodySize();
-    
+}
+
+/**
+ * @brief Vérifie la validité de la longueur et de l'encodage du contenu.
+ * 
+ */
+void Request::validateContentLengthAndEncoding()
+{
     if (_headers.find("Content-Length") != _headers.end())
     {
         long long contentLength;
-        
-        try{
+        try
+        {
             contentLength = ft_stoll(_headers["Content-Length"]);
         }
-        catch (const std::exception &e){
-            throw std::runtime_error("ERROR : Invalid Content-Length value"); 
+        catch (const std::exception &e)
+        {
+            throw std::runtime_error("ERROR: Invalid Content-Length value");
         }
         if (contentLength < 0)
             throw std::runtime_error("ERROR: Invalid Content-Length value");
-        _contentLength = contentLength; // stocker la taille du content length
+        _contentLength = contentLength; // Stocker la taille du content length
     }
 
-    if (_headers.find("Transfer-Encoding") != _headers.end()) 
+    if (_headers.find("Transfer-Encoding") != _headers.end())
     {
         std::string transferEncoding = _headers["Transfer-Encoding"];
         if (transferEncoding.find("chunked") == std::string::npos)
@@ -466,36 +449,43 @@ void    Request::checkHeader()
     if (_headers.find("Content-Length") != _headers.end() &&
         _headers.find("Transfer-Encoding") != _headers.end())
         throw std::runtime_error("ERROR: Both Content-Length and Transfer-Encoding are present");
+}
 
-    // Passer la séquence \r\n\r\n si elle n'a pas encore été sautée
+/**
+ * @brief Ignore la séquence de fin d'en-tête "\r\n\r\n".
+ * 
+ */
+void Request::skipHeaderEndSequence()
+{
     if (_raw.substr(_i, 2) == "\r\n")
     {
         _i += 2;
         _raw.erase(0, _i);
         _i = 0;
     }
+}
 
-    // CHECK ALLOW METHOD DANS LE BLOC LOCATION
+/**
+ * @brief Vérifie les méthodes autorisées dans le bloc de localisation.
+ * 
+ */
+void Request::checkAllowedMethods()
+{
     if (_matchingLocation && !_matchingLocation->getAllowMethod().empty())
     {
         const std::set<std::string>& allowMethods = _matchingLocation->getAllowMethod();
         if (allowMethods.find(_method) == allowMethods.end())
-            throw std::runtime_error("ERROR: Method ["+ getMethod() + "] not allowed in this location");
+            throw std::runtime_error("ERROR: Method [" + getMethod() + "] not allowed in this location");
         else
-            LogManager::log(LogManager::DEBUG, "Good AllowMethod: [%s] find in bloc location ", getMethod().c_str());
+            LogManager::log(LogManager::DEBUG, "Good AllowMethod: [%s] found in bloc location", getMethod().c_str());
     }
-
-    //WAAAAAAAAA
-    // Passer à l'état BODY ou CGI
-    if (_isCgi && _contentLength == 0)
-        setState(CGI); // Passer directement à l'exécution du CGI
-    else
-        setState(BODY);
-    _timeOut = std::time(NULL); // Reset timmer pour le body
-    LogManager::log(LogManager::DEBUG, "Checking headers DONE");
 }
 
-//WAAAAA
+/**
+ * @brief Récupère l'URI de la requête HTTP.
+ * 
+ * @return std::string 
+ */
 std::string Request::getUriExtension() const
 {
     // Trouver la position du dernier point dans l'URI
@@ -509,19 +499,12 @@ std::string Request::getUriExtension() const
     return _uri.substr(dotPos);
 }
 
-
 /**
  * @brief Récupère la taille maximale du corps de la requête à partir du bloc serveur correspondant.
  * 
  */
 void Request::getMaxBodySize()
 {
-    // trouver le bloc serveur correspondant
-    // BlocServer* matchingServer = _server->getMatchingServer(this);
-    // // Si aucun bloc server ne correspond, lever une erreur
-    // if (!matchingServer) 
-    //     throw std::runtime_error("ERROR: No matching server block found for the request");
-
     // Récupérer client_max_body_size
     _maxBodySize = _matchingServer->getClientMaxBodySize();
 
@@ -619,7 +602,6 @@ void    Request::parseCgi()
 
     _state = END;
 }
-
 
 /******************************************* TIMER *******************************************/
 

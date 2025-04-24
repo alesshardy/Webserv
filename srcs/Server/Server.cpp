@@ -132,17 +132,12 @@ void Server::handleEpollEvents()
     int timeout = 1000; // SIUUU voir si changer le temps / timeout de 1sec pour relancer epoll_wait
     int nfds = epoll_wait(_epoll_fd, events, MAX_EVENTS, timeout);
 
-    if (nfds == -1)
+    // Vérifier le résultat de epoll_wait
+    if (nfds < 0) // Erreur
     {
-        if (errno == EINTR)
-        {
-            LogManager::log(LogManager::INFO, "epoll_wait interrupted by signal");
-            return; // Reprendre la boucle
-        }
-        LogManager::log(LogManager::ERROR, "Error in epoll_wait");
+        LogManager::log(LogManager::ERROR, "epoll_wait failed");
         throw std::runtime_error("Error in epoll_wait");
     }
-
     if (nfds == 0)
     {
         checkRequestTimeouts();
