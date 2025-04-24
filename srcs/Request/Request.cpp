@@ -1,6 +1,9 @@
 #include "Request.hpp"
 
-Request::Request(Client *client, Server *server): _client(client), _server(server), _body(),_raw(""), _method(""), _uri(""), _version(""), _currentHeaderKey(""), _statusCode(200), _state(0), _inHeader(false), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0), _timeOut(std::time(NULL)), _isCgi(false){}
+Request::Request(Client *client, Server *server): _client(client), _server(server), _body(NULL),_raw(""), _method(""), _uri(""), _version(""), _currentHeaderKey(""), _statusCode(200), _state(0), _inHeader(false), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0), _timeOut(std::time(NULL)), _isCgi(false), _queryString(""), _port(0), _cgi(NULL)
+{
+    setPort(_client->getClientSocket()->get_port());
+}
 
 Request::Request(Request const & copy)
 {
@@ -29,6 +32,8 @@ Request &Request::operator=(Request const & rhs)
         this->_contentLength = rhs._contentLength;
         this->_timeOut = rhs._timeOut;
         this->_isCgi = rhs._isCgi;
+        this->_queryString = rhs._queryString;
+        this->_port = rhs._port;
 
         if (this->_body)
         {
@@ -36,7 +41,15 @@ Request &Request::operator=(Request const & rhs)
             this->_body = NULL;
         }
         if (rhs._body)
-            this->_body = new RequestBody(*rhs._body); 
+            this->_body = new RequestBody(*rhs._body);
+
+        if (this->_cgi)
+        {
+            delete this->_cgi;
+            this->_cgi = NULL;
+        }
+        if (rhs._cgi)
+            this->_cgi = new CgiRequest(*rhs._cgi); 
     }
     return (*this);
 }
@@ -47,6 +60,11 @@ Request::~Request()
     {
         delete _body;
         _body = NULL;
+    }
+    if (_cgi)
+    {
+        delete _cgi;
+        _cgi = NULL;
     }
 }
 
@@ -173,31 +191,31 @@ void Request::parseQuery()
     if (queryStart == std::string::npos)
         return (setState(VERSION));
 
-    std::string queryString = _uri.substr(queryStart + 1);
+    _queryString = _uri.substr(queryStart + 1);
     _uri.erase(queryStart);
 
     std::string key, value;
     size_t pos = 0;
-    size_t length = queryString.length();
+    size_t length = _queryString.length();
 
     while (pos < length)
     {
         // Trouve la prochaine '=' ou '&'
-        size_t equalPos = queryString.find('=', pos);
-        size_t ampersandPos = queryString.find('&', pos);
+        size_t equalPos = _queryString.find('=', pos);
+        size_t ampersandPos = _queryString.find('&', pos);
 
         // Cas 1: Pas de '=' avant '&' (clé sans valeur)
         if (equalPos == std::string::npos || (ampersandPos != std::string::npos && ampersandPos < equalPos))
         {
-            key = queryString.substr(pos, ampersandPos - pos);
+            key = _queryString.substr(pos, ampersandPos - pos);
             value.clear(); // Pas de valeur
             pos = (ampersandPos == std::string::npos) ? length : ampersandPos + 1;
         }
         // Cas 2: '=' trouvé avant '&' (clé + valeur)
         else
         {
-            key = queryString.substr(pos, equalPos - pos);
-            value = queryString.substr(equalPos + 1, 
+            key = _queryString.substr(pos, equalPos - pos);
+            value = _queryString.substr(equalPos + 1, 
                 (ampersandPos == std::string::npos) ? length - equalPos - 1 : ampersandPos - equalPos - 1);
             pos = (ampersandPos == std::string::npos) ? length : ampersandPos + 1;
         }
@@ -229,7 +247,6 @@ void Request::parseVersion()
 
     _version = _raw.substr(_i, endLine - _i);
 
-    std::cout << "version: " << _version << std::endl;
     _i = endLine + 2; // Passer "\r\n"
     if (_version != "HTTP/1.1")
         return (handleError(400, ERROR, "ERROR: Bad Version"));
@@ -528,7 +545,10 @@ void Request::parseBody()
     LogManager::log(LogManager::DEBUG, "Parse Body");
     if (_method == "GET")
     {
-        _state = END;
+        if (isCgi())
+            _state = CGI;
+        else
+            _state = END;
         return;
     }
     
@@ -597,9 +617,10 @@ void    Request::parseCgi()
     std::string scriptCgi = getUri();
     std::cout << "scriptCgi = " << scriptCgi << std::endl;
 
-    //siuuu continuer ca mere jppp
+    _cgi = new CgiRequest(this, cgiPath, scriptCgi);
+    _cgi->executeCgi();
     
-
+        
     _state = END;
 }
 
