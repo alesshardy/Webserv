@@ -64,6 +64,7 @@ SRCS 			=	srcs/main.cpp \
 					srcs/CommandLineParser/CommandLineParser.cpp \
 					srcs/Request/Request.cpp \
 					srcs/Request/RequestBody.cpp \
+					srcs/Request/CgiRequest.cpp \
 					srcs/Response/Response.cpp \
 					srcs/Response/ErrorPage.cpp \
 

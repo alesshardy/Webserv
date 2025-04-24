@@ -39,7 +39,6 @@ unsigned long long ft_stoll(const std::string &input)
     return ret;
 }
 
-
 std::string toString(int value)
 {
 	std::ostringstream oss;
