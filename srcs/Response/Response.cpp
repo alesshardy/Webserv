@@ -29,6 +29,13 @@ int Response::buildResponse(int epoll_fd)
 
     if (_r_state != R_CHUNK)
         setRState(R_PROCESSING);
+
+    if (_request->_isCgi)
+    {
+        LogManager::log(LogManager::DEBUG, "Request is CGI, processing CGI response");
+        _handleCgi();
+        return 0;
+    }
     
     if (_isRedirect())
     {
@@ -423,6 +430,79 @@ bool Response::_isRedirect()
 
     // Aucun cas de redirection trouvé
     return false;
+}
+
+void Response::_handleCgi()
+{
+    try
+    {
+        // Open the temporary file containing the CGI output
+        std::ifstream cgiOutputFile(_request->getCgi()->getTmpFilePath().c_str(), std::ios::binary);
+        if (!cgiOutputFile.is_open())
+        {
+            LogManager::log(LogManager::ERROR, "Failed to open CGI output file: %s", _request->getCgi()->getTmpFilePath().c_str());
+            _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
+            setRState(R_END);
+            return;
+        }
+
+        // Read the content of the CGI file
+        std::string cgiOutput((std::istreambuf_iterator<char>(cgiOutputFile)), std::istreambuf_iterator<char>());
+        cgiOutputFile.close();
+
+        // Separate headers and body of the CGI response
+        size_t headerEnd = cgiOutput.find("\r\n\r\n");
+        if (headerEnd == std::string::npos)
+        {
+            LogManager::log(LogManager::ERROR, "Invalid CGI response format");
+            _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
+            setRState(R_END);
+            return;
+        }
+
+        std::string cgiHeaders = cgiOutput.substr(0, headerEnd + 4);
+        std::string cgiBody = cgiOutput.substr(headerEnd + 4);
+
+        // Validate and fix CGI headers
+        std::istringstream headerStream(cgiHeaders);
+        std::ostringstream fixedHeaders;
+        std::string line;
+        bool hasContentType = false;
+
+        while (std::getline(headerStream, line))
+        {
+            if (!line.empty() && line[line.size() - 1] == '\r') // Check the last character
+                line.erase(line.size() - 1); // Remove the last character
+
+            if (line.empty())
+                continue;
+
+            if (line.find("Content-type:") == 0 || line.find("Content-Type:") == 0)
+                hasContentType = true;
+
+            fixedHeaders << line << "\r\n";
+        }
+
+        if (!hasContentType)
+        {
+            LogManager::log(LogManager::WARNING, "CGI response missing Content-Type header, adding default");
+            fixedHeaders << "Content-Type: text/html\r\n";
+        }
+
+        fixedHeaders << "\r\n"; // Ensure headers end with a blank line
+
+        // Build the HTTP response
+        _response = "HTTP/1.1 200 OK\r\n" + fixedHeaders.str() + cgiBody;
+
+        LogManager::log(LogManager::INFO, "CGI response prepared for client %d", _client_fd);
+        setRState(R_END);
+    }
+    catch (const std::exception& e)
+    {
+        LogManager::log(LogManager::ERROR, "Error in _handleCgi: %s", e.what());
+        _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
+        setRState(R_END);
+    }
 }
 
 

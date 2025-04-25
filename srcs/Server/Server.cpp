@@ -657,10 +657,10 @@ void Server::checkRequestTimeouts()
 
         if (request)
         {
+            std::cout << "_state = " << request->getState() << " for client FD = " << it->first << std::endl;
             // Vérifier si la requête a dépassé le timeout
             if (request->isTimeoutExceeded() && request->getState() != END)
             {
-                std::cout << "_state = " << request->getState() << std::endl;
                 LogManager::log(LogManager::ERROR, "Request timeout exceeded for client FD %d", it->first);
                 int client_fd = it->first;
                 ++it;
@@ -678,10 +678,16 @@ void Server::checkRequestTimeouts()
                 continue;
             }
 
-            if (request->getState() == CGI)
+            if (request->getState() == CGI && request->getState() != END)
             {
-                LogManager::log(LogManager::ERROR, "CGI CHECK CALL");
+                LogManager::log(LogManager::DEBUG, "CGI CHECK CALL");
                 request->getCgi()->checkEnd();
+                if (request->getState() == END)
+                {
+                    int client_fd = it->first;
+                    change_epoll_event(client_fd, RESPONSE_EVENTS);
+                    LogManager::log(LogManager::INFO, "Request complete For client %d", client_fd);
+                }
             }
         }
 

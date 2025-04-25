@@ -40,6 +40,7 @@ class Request{
     friend class Client;
     friend class Server;
     friend class CgiRequest;
+    friend class Response;
 
     
     private:

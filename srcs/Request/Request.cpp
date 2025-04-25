@@ -100,6 +100,8 @@ void Request::parseRequest(std::string str)
             parseBody();
         if (_state == CGI)
             parseCgi();
+        if  (_state == END)
+                return ;
     }
     catch (const std::runtime_error &e)
     {
@@ -619,9 +621,6 @@ void    Request::parseCgi()
 
     _cgi = new CgiRequest(this, cgiPath, scriptCgi);
     _cgi->executeCgi();
-    
-        
-    _state = END;
 }
 
 /******************************************* TIMER *******************************************/
