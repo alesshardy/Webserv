@@ -18,12 +18,13 @@ RequestBody::RequestBody(size_t maxBodySize, bool isChunked)
     }
     
     _tmpFilePath = tmpFileName;
+    _ntm = "test";
 }
 
 RequestBody::~RequestBody()
 {
     if (_fd != -1)
-    close (_fd);
+        close (_fd);
     if (!_tmpFilePath.empty())
     std::remove(_tmpFilePath.c_str());
 }

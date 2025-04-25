@@ -6,6 +6,7 @@
 
 class RequestBody
 {
+    friend class CgiRequest;
     private:
         std::string             _tmpFilePath;
         int                     _fd;
@@ -13,6 +14,7 @@ class RequestBody
         size_t                  _maxBodySize;
         bool                    _isChunked;
         bool                    _isComplete;
+        std::string             _ntm; 
     
     public:
         RequestBody(size_t maxBodySize, bool isChunked);
@@ -24,8 +26,9 @@ class RequestBody
         //getters
         bool isComplete() const {return _isComplete;};
         size_t getCurrentSize() const {return _currentSize;};
+        int getFd () const{return _fd;};
         
-        //print      
+        //print
         std::string readBody() const;
 };
 

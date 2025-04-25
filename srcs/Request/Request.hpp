@@ -39,6 +39,8 @@ class CgiRequest;
 class Request{
     friend class Client;
     friend class Server;
+    friend class CgiRequest;
+
     
     private:
         Client                              *_client;
@@ -115,6 +117,8 @@ class Request{
         BlocLocation *getMatchingLocation() const {return _matchingLocation;}
         const int &getPort() const {return _port;}
         const std::string &getQueryString() const {return _queryString;}
+        CgiRequest *getCgi() const {return _cgi;}
+
 
     
         // Setters

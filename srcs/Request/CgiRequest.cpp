@@ -78,68 +78,66 @@ void CgiRequest::executeCgi()
     _CgiConvertEnvToChar();
 
     // Préparer les arguments pour execve
-    _args[0] = const_cast<char*>(_cgiPath.c_str());
-    _args[1] = const_cast<char*>(_scriptCgi.c_str());
-    _args[2] = NULL;
+    _argv[0] = const_cast<char*>(_cgiPath.c_str());
+    _argv[1] = const_cast<char*>(_scriptCgi.c_str());
+    _argv[2] = NULL;
+    
+    _stdin = dup(STDIN_FILENO);
+    _stdout = dup(STDOUT_FILENO);
 
-    // Créer des pipes pour stdin et stdout
-    int pipeIn[2];
-    int pipeOut[2];
-    if (pipe(pipeIn) == -1 || pipe(pipeOut) == -1)
-        throw std::runtime_error("Failed to create pipes");
+    
+    std::cout << "Jessaye daafficher le fd : "<<_request->_body->_fd << std::endl;
+    LogManager::log(LogManager::DEBUG, ("Reset le body a 0 pour cgi"));
+    // si body le reset au debut pour lecture complete necessaire pour les cgi
+    if (_request->_body->_fd != -1)
+        if (lseek(_request->_body->_fd, 0, SEEK_SET) == -1) // remet a 0 lecture
+            throw std::runtime_error("reset lecture body failed");
+    
+    std::cout << "SIUUUUUUUU " << std::endl;
 
-    // Stocker les descripteurs dans les membres de la classe
-    _stdin = pipeIn[1];  // Écriture dans le pipe d'entrée
-    _stdout = pipeOut[0]; // Lecture depuis le pipe de sortie
-
-    // Créer un processus enfant
+    LogManager::log(LogManager::DEBUG, ("Execution du cgi"));
     _pid = fork();
     if (_pid == -1)
+        throw (std::runtime_error("Fork failed "));
+    if (_pid == 0)
     {
-        throw std::runtime_error("Failed to fork process");
+        // 1 lire le body
+        if (_request->_body->_fd != -1)
+            if (dup2(_request->_body->_fd, STDIN_FILENO) == -1)
+                throw (std::runtime_error("fail dans l'enfant lecture body"));
+        if (dup2(_fd, STDOUT_FILENO) == -1)
+            throw (std::runtime_error("fail dans l'enfant sortie"));
+        execve(_argv[0], _argv, _envp);
+        throw (std::runtime_error("fail childdd execve"));
     }
-    else if (_pid == 0) // Processus enfant
+    else
     {
-        // Rediriger stdin et stdout
-        dup2(pipeIn[0], STDIN_FILENO);
-        dup2(pipeOut[1], STDOUT_FILENO);
-
-        // Fermer les extrémités inutilisées des pipes
-        close(pipeIn[0]);
-        close(pipeIn[1]);
-        close(pipeOut[0]);
-        close(pipeOut[1]);
-
-        // Exécuter le script CGI
-        execve(_cgiPath.c_str(), _args, _envp);
-
-        // Si execve échoue
-        exit(1);
-    }
-    else // Processus parent
-    {
-        // Fermer les extrémités inutilisées des pipes
-        close(pipeIn[0]);
-        close(pipeOut[1]);
-
-        // Écrire dans le pipe d'entrée si nécessaire (par exemple, pour POST)
-        if (_request->getMethod() == "POST")
-        {
-            const std::string &body = _request->getBody()->readBody();
-            write(_stdin, body.c_str(), body.size());
-        }
-        close(_stdin); // Fermer l'écriture après avoir envoyé les données
-
-        // Attendre la fin du processus CGI
-        int status;
-        waitpid(_pid, &status, 0); // SIUUUUU FLAg WUANG
-
-        // Fermer la lecture depuis le pipe de sortie
-        close(_stdout);
-        _stdout = -1;
+        // pas de wait ici mise en etat cgi en cours
+        LogManager::log(LogManager::DEBUG, ("CGI PROCESS EN COURS"));
     }
 }
 
+void    CgiRequest::checkEnd()
+{
+    if (_request->getState() == END)
+        return ;
+    int status;
+    pid_t wpid = waitpid(_pid, &status, WNOHANG);
+    if (wpid == -1)
+        throw (std::runtime_error("Error dans waitpid"));
+    if (wpid == 0)
+        return ; // encore en cours
+    if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
+    {
+        LogManager::log(LogManager::DEBUG, ("cgi done ! State set on END"));
+        _request->setState(END);
+    }
+    else
+    {
+        LogManager::log(LogManager::DEBUG, ("cgi script crash"));
+        _request->handleError(502, ERROR, "cgi script crash");
+    }
+}
 
 // print env
 void   CgiRequest::_printEnv()

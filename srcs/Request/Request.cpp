@@ -492,7 +492,7 @@ void Request::checkAllowedMethods()
     {
         const std::set<std::string>& allowMethods = _matchingLocation->getAllowMethod();
         if (allowMethods.find(_method) == allowMethods.end())
-            throw std::runtime_error("ERROR: Method [" + getMethod() + "] not allowed in this location");
+            handleError(405, ERROR, "ERROR: Method [" + getMethod() + "] not allowed in this location");
         else
             LogManager::log(LogManager::DEBUG, "Good AllowMethod: [%s] found in bloc location", getMethod().c_str());
     }
