@@ -667,8 +667,7 @@ void Server::checkRequestTimeouts()
                 close_client(client_fd); // Fermez la connexion pour ce client
                 continue;
             }
-            
-            
+
             // Vérifier si la requête est dans un état d'erreur
             if (request->getState() == ERROR)
             {
@@ -677,6 +676,12 @@ void Server::checkRequestTimeouts()
                 ++it;
                 close_client(client_fd); // Fermez la connexion pour ce client
                 continue;
+            }
+
+            if (request->getState() == CGI)
+            {
+                LogManager::log(LogManager::ERROR, "CGI CHECK CALL");
+                request->getCgi()->checkEnd();
             }
         }
 
