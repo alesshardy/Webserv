@@ -8,6 +8,7 @@ class Request;
 
 class CgiRequest
 {
+        friend class Response;
     private:
             Request *_request;
             std::map <std::string, std::string> _env;
@@ -29,6 +30,8 @@ class CgiRequest
             CgiRequest(Request *request, std::string cgiPath, std::string scriptCgi);
             CgiRequest(CgiRequest const & copy);
             ~CgiRequest();
+
+            std::string getTmpFilePath() const {return _tmpFilePath;};
             
             void executeCgi();
             void checkEnd();

@@ -14,6 +14,7 @@
 #include "BlocServer.hpp"
 #include "Client.hpp"
 #include "ErrorPage.hpp"
+#include "CgiRequest.hpp"
 
 enum    r_state
 {
@@ -26,6 +27,7 @@ enum    r_state
 class   Client;
 class   Request;
 class   Server;
+class   CgiRequest;
 
 class   Response
 {
@@ -55,6 +57,7 @@ class   Response
         void                _sendChunkedResponse(const std::string& filePath, const std::string& contentType);
         void                _handlePost();
         void                _handleDelete();
+        void                _handleCgi();
         void                _handlePut();
         bool                _isRedirect();
 

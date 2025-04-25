@@ -47,6 +47,7 @@ void CgiRequest::_initEnv()
     _env["SERVER_PORT"] = toString(_request->getPort());
     _env["PATH_INFO"] = _request->getUri();
     _env["PATH_TRANSLATED"] = _request->getMatchingLocation()->getRoot() + _request->getUri();
+    _env["REDIRECT_STATUS"] = "200";
 }
 
 void    CgiRequest::_CgiConvertEnvToChar()
@@ -89,8 +90,11 @@ void CgiRequest::executeCgi()
     // si body le reset au debut pour lecture complete necessaire pour les cgi
     if (_request->_body != NULL)
         if (_request->_body->_fd != -1)
+        {
+            std::cout << " SIUUUUUU BABYYY " << std::endl;
             if (lseek(_request->_body->_fd, 0, SEEK_SET) == -1) // remet a 0 lecture
-                throw std::runtime_error("reset lecture body failed");
+               throw std::runtime_error("reset lecture body failed");
+        }
     
     LogManager::log(LogManager::DEBUG, ("Execution du cgi"));
     _pid = fork();
