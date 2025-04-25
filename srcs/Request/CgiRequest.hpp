@@ -12,16 +12,14 @@ class CgiRequest
             Request *_request;
             std::map <std::string, std::string> _env;
             char**      _envp;
+            char *_argv[3];
             std::string _cgiPath;
             std::string _scriptCgi;
-            char *_args[3];
             pid_t _pid;
             int _stdin;
             int _stdout;
             int _fd;
             std::string _tmpFilePath;
-
-
 
             void _initEnv();
             void _CgiConvertEnvToChar();
@@ -33,6 +31,7 @@ class CgiRequest
             ~CgiRequest();
             
             void executeCgi();
+            void checkEnd();
 };
 
 #endif
