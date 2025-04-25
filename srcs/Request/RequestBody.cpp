@@ -18,7 +18,6 @@ RequestBody::RequestBody(size_t maxBodySize, bool isChunked)
     }
     
     _tmpFilePath = tmpFileName;
-    _ntm = "test";
 }
 
 RequestBody::~RequestBody()

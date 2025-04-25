@@ -14,7 +14,6 @@ class RequestBody
         size_t                  _maxBodySize;
         bool                    _isChunked;
         bool                    _isComplete;
-        std::string             _ntm; 
     
     public:
         RequestBody(size_t maxBodySize, bool isChunked);

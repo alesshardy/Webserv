@@ -85,16 +85,13 @@ void CgiRequest::executeCgi()
     _stdin = dup(STDIN_FILENO);
     _stdout = dup(STDOUT_FILENO);
 
-    
-    std::cout << "Jessaye daafficher le fd : "<<_request->_body->_fd << std::endl;
     LogManager::log(LogManager::DEBUG, ("Reset le body a 0 pour cgi"));
     // si body le reset au debut pour lecture complete necessaire pour les cgi
-    if (_request->_body->_fd != -1)
-        if (lseek(_request->_body->_fd, 0, SEEK_SET) == -1) // remet a 0 lecture
-            throw std::runtime_error("reset lecture body failed");
+    if (_request->_body != NULL)
+        if (_request->_body->_fd != -1)
+            if (lseek(_request->_body->_fd, 0, SEEK_SET) == -1) // remet a 0 lecture
+                throw std::runtime_error("reset lecture body failed");
     
-    std::cout << "SIUUUUUUUU " << std::endl;
-
     LogManager::log(LogManager::DEBUG, ("Execution du cgi"));
     _pid = fork();
     if (_pid == -1)
@@ -102,9 +99,10 @@ void CgiRequest::executeCgi()
     if (_pid == 0)
     {
         // 1 lire le body
-        if (_request->_body->_fd != -1)
-            if (dup2(_request->_body->_fd, STDIN_FILENO) == -1)
-                throw (std::runtime_error("fail dans l'enfant lecture body"));
+        if (_request->_body != NULL)
+            if (_request->_body->_fd != -1)
+                if (dup2(_request->_body->_fd, STDIN_FILENO) == -1)
+                    throw (std::runtime_error("fail dans l'enfant lecture body"));
         if (dup2(_fd, STDOUT_FILENO) == -1)
             throw (std::runtime_error("fail dans l'enfant sortie"));
         execve(_argv[0], _argv, _envp);
