@@ -584,7 +584,7 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
     bool inLocBloc = false;
     bool inLocLine = false;
     std::string lastKey;
-    char lastC;
+    char lastC = 0;
     BlocLocation    currentLocation;
     BlocServer      currentServer;
     std::string     currentLocationPath;
@@ -643,7 +643,6 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
             }
             if (semicolonCount != 1 && lastKey != "server" && lastKey != "location" && lastC != '\n' && lastC != '}' && lastKey != "" && theFlag == false)
             {
-                std::cout << "lastC =" << lastC << " semiValue= " <<  semicolonCount <<  std::endl;
                 throw std::runtime_error("ERROR : Line request must end by ';'");
             }
             semicolonCount = 0; // Réinitialiser le compteur pour la nouvelle ligne

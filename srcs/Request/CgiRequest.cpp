@@ -97,7 +97,6 @@ void CgiRequest::executeCgi()
     if (_request->_body != NULL)
         if (_request->_body->_fd != -1)
         {
-            std::cout << " SIUUUUUU BABYYY " << std::endl;
             if (lseek(_request->_body->_fd, 0, SEEK_SET) == -1) // remet a 0 lecture
                throw std::runtime_error("reset lecture body failed");
         }
