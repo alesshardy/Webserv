@@ -1,0 +1,59 @@
+[2025-04-28 17:55:35] [DEBUG] Checking headers ...
+locationPath = /
+uri = /42logo.png
+[2025-04-28 17:55:35] [DEBUG] Matching location found: /
+[2025-04-28 17:55:35] [DEBUG] Request does not target a CGI script
+[2025-04-28 17:55:35] [DEBUG] Max body size set to: 1048576
+[2025-04-28 17:55:35] [DEBUG] Checking headers DONE
+[2025-04-28 17:55:35] [DEBUG] Parse Body
+[2025-04-28 17:55:35] [INFO] Request complete for client 9
+[2025-04-28 17:55:35] [INFO] Client 9 disconnected
+[2025-04-28 17:55:35] [DEBUG] Closing client FD 9
+[2025-04-28 17:55:35] [DEBUG] Attempting to remove FD 9 from epoll
+[2025-04-28 17:55:35] [DEBUG] Successfully removed FD 9 from epoll
+[2025-04-28 17:55:35] [INFO] Deleting client object for FD 9
+[2025-04-28 17:55:35] [DEBUG] Destroying request
+[2025-04-28 17:55:35] [DEBUG] Destroying response
+[2025-04-28 17:55:35] [DEBUG] Destroying client 9
+[2025-04-28 17:55:35] [DEBUG] Successfully closed FD 9
+[2025-04-28 17:55:35] [WARNING] EPOLLOUT event on invalid or closed FD 9, skipping
+^C[2025-04-28 17:55:37] [INFO] Interrupt signal received, shutting down...
+[2025-04-28 17:55:37] [ERROR] epoll_wait failed
+[2025-04-28 17:55:37] [DEBUG] Closing all sockets and clients started
+[2025-04-28 17:55:37] [DEBUG] Listing clients in _clients_map:
+[2025-04-28 17:55:37] [DEBUG] Client FD: 8, Client Pointer: 0x4f1a950
+[2025-04-28 17:55:37] [DEBUG] Client FD: 10, Client Pointer: 0x4e26dd0
+[2025-04-28 17:55:37] [DEBUG] Closing client FD 8
+[2025-04-28 17:55:37] [DEBUG] Attempting to remove FD 8 from epoll
+[2025-04-28 17:55:37] [WARNING] Failed to remove FD 8 from epoll: Bad file descriptor
+[2025-04-28 17:55:37] [INFO] Deleting client object for FD 8
+[2025-04-28 17:55:37] [DEBUG] Destroying request
+[2025-04-28 17:55:37] [DEBUG] Destroying response
+[2025-04-28 17:55:37] [DEBUG] Destroying client 8
+[2025-04-28 17:55:37] [WARNING] Failed to close FD 8: Bad file descriptor
+[2025-04-28 17:55:37] [DEBUG] Closing client FD 10
+[2025-04-28 17:55:37] [DEBUG] Attempting to remove FD 10 from epoll
+[2025-04-28 17:55:37] [WARNING] Failed to remove FD 10 from epoll: Bad file descriptor
+[2025-04-28 17:55:37] [INFO] Deleting client object for FD 10
+[2025-04-28 17:55:37] [DEBUG] Destroying request
+[2025-04-28 17:55:37] [DEBUG] Destroying response
+[2025-04-28 17:55:37] [DEBUG] Destroying client 10
+[2025-04-28 17:55:37] [WARNING] Failed to close FD 10: Bad file descriptor
+[2025-04-28 17:55:37] [DEBUG] Clients closed
+[2025-04-28 17:55:37] [DEBUG] Closing socket 4
+[2025-04-28 17:55:37] [INFO] Closing socket 4
+[2025-04-28 17:55:37] [WARNING] Failed to close FD 4: Bad file descriptor
+[2025-04-28 17:55:37] [DEBUG] Closing socket 5
+[2025-04-28 17:55:37] [INFO] Closing socket 5
+[2025-04-28 17:55:37] [WARNING] Failed to close FD 5: Bad file descriptor
+[2025-04-28 17:55:37] [DEBUG] Closing socket 6
+[2025-04-28 17:55:37] [INFO] Closing socket 6
+[2025-04-28 17:55:37] [WARNING] Failed to close FD 6: Bad file descriptor
+[2025-04-28 17:55:37] [DEBUG] Closing socket 7
+[2025-04-28 17:55:37] [INFO] Closing socket 7
+[2025-04-28 17:55:37] [WARNING] Failed to close FD 7: Bad file descriptor
+[2025-04-28 17:55:37] [DEBUG] Sockets closed
+[2025-04-28 17:55:37] [DEBUG] Epoll instance closed
+Config destructor called
+Config destructor called
+[2025-04-28 17:55:37] [ERROR] Error in epoll_wait
