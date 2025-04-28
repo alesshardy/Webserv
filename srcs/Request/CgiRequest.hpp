@@ -16,6 +16,7 @@ class CgiRequest
             char *_argv[3];
             std::string _cgiPath;
             std::string _scriptCgi;
+            bool _flagLog;
             pid_t _pid;
             int _stdin;
             int _stdout;
@@ -32,9 +33,12 @@ class CgiRequest
             ~CgiRequest();
 
             std::string getTmpFilePath() const {return _tmpFilePath;};
+            bool getLogFlag() const {return _flagLog;};
+            pid_t getPid() const {return _pid;};
             
             void executeCgi();
             void checkEnd();
+            void setFlagLog() {_flagLog = true;};
 };
 
 #endif

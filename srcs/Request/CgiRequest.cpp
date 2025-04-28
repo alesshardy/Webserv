@@ -1,6 +1,6 @@
 #include "CgiRequest.hpp"
 
-CgiRequest::CgiRequest(Request *request, std::string cgiPath, std::string scriptCgi): _request(request), _cgiPath(cgiPath), _scriptCgi(scriptCgi)
+CgiRequest::CgiRequest(Request *request, std::string cgiPath, std::string scriptCgi): _request(request), _cgiPath(cgiPath), _scriptCgi(scriptCgi), _flagLog(false)
 {
     _initEnv();
 
@@ -27,6 +27,12 @@ CgiRequest::~CgiRequest()
             free(_envp[i]);
         delete [] _envp;
     }
+
+    if (_fd != -1)
+        close (_fd);
+
+    if (!_tmpFilePath.empty())
+    std::remove(_tmpFilePath.c_str());
 }
 
 void CgiRequest::_initEnv()
@@ -116,6 +122,13 @@ void CgiRequest::executeCgi()
     {
         // pas de wait ici mise en etat cgi en cours
         LogManager::log(LogManager::DEBUG, ("CGI PROCESS EN COURS"));
+        // Vérifier si la requête est complète
+        if (_request->getState() == CGI)
+        {
+            _request->_server->change_epoll_event(_request->_client->getClientFd(), RESPONSE_EVENTS);
+            LogManager::log(LogManager::INFO, "Request complete for client %d", _request->_client->getClientFd());
+            // Passer à la gestion de la réponse
+        }
     }
 }
 

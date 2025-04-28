@@ -620,6 +620,7 @@ void    Request::parseCgi()
     std::cout << "scriptCgi = " << scriptCgi << std::endl;
 
     _cgi = new CgiRequest(this, cgiPath, scriptCgi);
+    _timeOut = std::time(NULL); // Reset timer pour le Cgi
     _cgi->executeCgi();
 }
 
