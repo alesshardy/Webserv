@@ -25,7 +25,7 @@ Response::~Response()
 
 int Response::buildResponse(int epoll_fd)
 {
-    (void)epoll_fd; // Suppress unused parameter warning
+    (void)epoll_fd; // Suppress unused parameter warning SIUU
 
     if (_r_state != R_CHUNK)
         setRState(R_PROCESSING);
@@ -494,7 +494,7 @@ void Response::_handleCgi()
         // Build the HTTP response
         _response = "HTTP/1.1 200 OK\r\n" + fixedHeaders.str() + cgiBody;
 
-        LogManager::log(LogManager::INFO, "CGI response prepared for client %d", _client_fd);
+        LogManager::log(LogManager::DEBUG, "CGI response prepared for client %d", _client_fd);
         setRState(R_END);
     }
     catch (const std::exception& e)
@@ -665,7 +665,7 @@ void Response::_sendChunkedResponse(const std::string& filePath, const std::stri
     _response += "0\r\n\r\n"; // Chunk final
     file.close();
 
-    LogManager::log(LogManager::INFO, "Chunked response prepared for client %d: %s", _client_fd, filePath.c_str());
+    LogManager::log(LogManager::DEBUG, "Chunked response prepared for client %d: %s", _client_fd, filePath.c_str());
 }
 
 void Response::_sendFullResponse(const std::string& filePath, const std::string& contentType)
@@ -687,13 +687,13 @@ void Response::_sendFullResponse(const std::string& filePath, const std::string&
     _response_body = content;
     _response = _response_header + _response_body;
 
-    LogManager::log(LogManager::INFO, "Full response prepared for client %d: %s", _client_fd, filePath.c_str());
+    LogManager::log(LogManager::DEBUG, "Full response prepared for client %d: %s", _client_fd, filePath.c_str());
 }
 
 
 void Response::_handlePost()
 {
-    LogManager::log(LogManager::INFO, "Handling POST request");
+    LogManager::log(LogManager::DEBUG, "Handling POST request");
 
     // Vérifier si le corps de la requête est complet
     RequestBody* body = _request->getBody();
@@ -728,18 +728,18 @@ void Response::_handlePost()
     _response += "POST request received";
 
     setRState(R_END);
-    LogManager::log(LogManager::INFO, "POST response prepared for client %d", _client_fd);
+    LogManager::log(LogManager::DEBUG, "POST response prepared for client %d", _client_fd);
 }
 void Response::_handleDelete()
 {
     // Handle DELETE request
-    LogManager::log(LogManager::INFO, "Handling DELETE request");
+    LogManager::log(LogManager::DEBUG, "Handling DELETE request");
     // Implement DELETE logic here
 }
 void Response::_handlePut()
 {
     // Handle PUT request
-    LogManager::log(LogManager::INFO, "Handling PUT request");
+    LogManager::log(LogManager::DEBUG, "Handling PUT request");
     // Implement PUT logic here
 }
 
