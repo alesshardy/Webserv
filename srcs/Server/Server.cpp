@@ -135,8 +135,11 @@ void Server::handleEpollEvents()
     // Vérifier le résultat de epoll_wait
     if (nfds < 0) // Erreur
     {
-        LogManager::log(LogManager::ERROR, "epoll_wait failed");
-        throw std::runtime_error("Error in epoll_wait");
+        if (running)
+        {    
+            LogManager::log(LogManager::ERROR, "epoll_wait failed");
+            throw std::runtime_error("Error in epoll_wait");
+        }
     }
     if (nfds == 0)
     {
