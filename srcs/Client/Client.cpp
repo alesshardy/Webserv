@@ -49,7 +49,7 @@ void Client::handleRequest(std::string const & str)
         if (_request->getState() == END)
         {
             _server->change_epoll_event(_client_fd, RESPONSE_EVENTS);
-            LogManager::log(LogManager::INFO, "Request complete for client %d", _client_fd);
+            LogManager::log(LogManager::DEBUG, "Request complete for client %d", _client_fd);
             // Passer à la gestion de la réponse
         }
         else
