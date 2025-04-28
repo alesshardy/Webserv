@@ -102,8 +102,8 @@ BlocLocation* BlocServer::getMatchingLocation(const std::string& uri) const
             // Trouver le chemin le plus long correspondant
             if (locationPath.size() > bestMatchLength || bestMatch == NULL)
             {
-                std::cout << "locationPath = " << locationPath << std::endl;
-                std::cout << "uri = " << uri << std::endl;
+                // std::cout << "locationPath = " << locationPath << std::endl;
+                // std::cout << "uri = " << uri << std::endl;
                 bestMatch = const_cast<BlocLocation*>(&it->second);
                 bestMatchLength = locationPath.size();
                 LogManager::log(LogManager::DEBUG, ("Matching location found: " + locationPath).c_str());

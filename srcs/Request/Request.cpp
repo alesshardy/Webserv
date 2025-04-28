@@ -123,6 +123,7 @@ void Request::parseMethod()
     size_t endLine = _raw.find("\r\n", _i);
     if (endLine == std::string::npos)
         return ;
+    LogManager::log(LogManager::INFO, "%.*s", 25, _raw.substr(0, _raw.find("\n")).c_str());
     while (_i < endLine && _raw[_i] != ' ')
     {
         _method += _raw[_i];

@@ -125,7 +125,7 @@ void CgiRequest::executeCgi()
         if (_request->getState() == CGI)
         {
             _request->_server->change_epoll_event(_request->_client->getClientFd(), RESPONSE_EVENTS);
-            LogManager::log(LogManager::INFO, "Request complete for client %d", _request->_client->getClientFd());
+            LogManager::log(LogManager::DEBUG, "Request complete for client %d", _request->_client->getClientFd());
             // Passer à la gestion de la réponse
         }
     }

@@ -12,7 +12,6 @@ Config::Config(const Config &copy)
 
 Config::~Config()
 {
-    std::cout << "Config destructor called" << std::endl;
 }
 
 Config &Config::operator=(const Config &assign)

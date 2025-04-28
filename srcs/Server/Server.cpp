@@ -46,7 +46,7 @@ void Server::init()
             {
                 // Créer un socket pour chaque port (utilisation de new)
                 Socket *socket = new Socket(port, ip);
-                LogManager::log(LogManager::INFO, "Socket created for port %d", port);
+                LogManager::log(LogManager::DEBUG, "Socket created for port %d", port);
 
                 // Ajouter le socket à la map des sockets
                 _sockets_map[socket->get_socket_fd()] = socket;
@@ -68,7 +68,7 @@ void Server::init()
                     throw std::runtime_error("Failed to add socket to epoll");
                 }
 
-                LogManager::log(LogManager::INFO, "Socket added to epoll for port %d", port);
+                LogManager::log(LogManager::DEBUG, "Socket added to epoll for port %d", port);
             }
             catch (const std::exception &e)
             {
@@ -212,7 +212,7 @@ void Server::handleEpollEvents()
             }
             else
             {
-                LogManager::log(LogManager::WARNING, "EPOLLOUT event on invalid or closed FD %d, skipping", fd);
+                LogManager::log(LogManager::DEBUG, "EPOLLOUT event on invalid or closed FD %d, skipping", fd);
             }
         }
     }
@@ -238,7 +238,7 @@ void Server::handleNewConnection(int socket_fd)
     //SIUUU chelou le client ce fait ecraser / Vérifier si le client existe déjà dans _clients_map
     if (_clients_map.find(client_fd) != _clients_map.end())
     {
-        LogManager::log(LogManager::WARNING, "Client %d already exists, deleting old client", client_fd);
+        LogManager::log(LogManager::DEBUG, "Client %d already exists, deleting old client", client_fd);
         delete _clients_map[client_fd]; // Supprimer l'ancien client
         _clients_map.erase(client_fd);  // Retirer l'entrée de la map
     }
@@ -259,7 +259,7 @@ void Server::handleNewConnection(int socket_fd)
         return;
     }
 
-    LogManager::log(LogManager::INFO, "New client connected: %d", client_fd);
+    LogManager::log(LogManager::DEBUG, "New client connected: %d", client_fd);
 }
 
 /**
@@ -280,7 +280,7 @@ void Server::handleClientData(int client_fd)
     }
     else if (bytes == 0)
     {
-        LogManager::log(LogManager::INFO, "Client %d disconnected", client_fd);
+        LogManager::log(LogManager::DEBUG, "Client %d disconnected", client_fd);
         close_client(client_fd);
         return;
     }
@@ -363,7 +363,7 @@ void Server::close_client(int client_fd)
         Client *client = _clients_map[client_fd];
         if (client != NULL)
         {
-            LogManager::log(LogManager::INFO, "Deleting client object for FD %d", client_fd);
+            LogManager::log(LogManager::DEBUG, "Deleting client object for FD %d", client_fd);
             delete client;
             _clients_map.erase(client_fd);
         }
@@ -376,7 +376,7 @@ void Server::close_client(int client_fd)
     // Fermer le descripteur de fichier
     if (close(client_fd) == -1)
     {
-        LogManager::log(LogManager::WARNING, "Failed to close FD %d: %s", client_fd, strerror(errno));
+        LogManager::log(LogManager::DEBUG, "Failed to close FD %d: %s", client_fd, strerror(errno));
     }
     else
     {
@@ -399,7 +399,7 @@ void Server::close_socket(int socket_fd)
         Socket *socket = _sockets_map[socket_fd];
         if (socket != NULL)
         {
-            LogManager::log(LogManager::INFO, "Closing socket %d", socket_fd);
+            LogManager::log(LogManager::DEBUG, "Closing socket %d", socket_fd);
             delete socket; // Supprime le socket
             _sockets_map.erase(socket_fd);
         }
@@ -411,7 +411,7 @@ void Server::close_socket(int socket_fd)
     // Fermer le descripteur de fichier
     if (close(socket_fd) == -1)
     {
-        LogManager::log(LogManager::WARNING, "Failed to close FD %d: %s", socket_fd, strerror(errno));
+        LogManager::log(LogManager::DEBUG, "Failed to Close FD %d: %s", socket_fd, strerror(errno));
     }
 }
 
@@ -430,7 +430,7 @@ void Server::remove_from_epoll(int fd)
     LogManager::log(LogManager::DEBUG, "Attempting to remove FD %d from epoll", fd);
     if (epoll_ctl(_epoll_fd, EPOLL_CTL_DEL, fd, NULL) == -1)
     {
-        LogManager::log(LogManager::WARNING, "Failed to remove FD %d from epoll: %s", fd, strerror(errno));
+        LogManager::log(LogManager::DEBUG, "Failed to remove FD %d from epoll: %s", fd, strerror(errno));
     }
     else
     {
