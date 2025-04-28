@@ -177,10 +177,29 @@ void Server::handleEpollEvents()
             if (_clients_map.find(fd) != _clients_map.end())
             {
                 Client *client = _clients_map[fd];
-                if (client->getRequest() && client->getRequest()->getState() == END)
+                if (client->getRequest() && client->getRequest()->getState() == CGI)
+                {
+                    // Vérifier si le CGI est terminé
+                    client->getRequest()->getCgi()->checkEnd();
+                    if (client->getRequest()->getState() == END)
+                    {
+                        LogManager::log(LogManager::DEBUG, "CGI finished, ready to send response for FD %d", fd);
+                        client->getResponse()->setTimeStartResponse();
+                        client->handleResponse(_epoll_fd);
+                    }
+                    else
+                    {
+                        if (!client->getRequest()->getCgi()->getLogFlag())
+                        {
+                            LogManager::log(LogManager::DEBUG, "CGI not finished yet for FD %d, waiting", fd);
+                            client->getRequest()->getCgi()->setFlagLog();
+                        }
+                    }
+                }
+                else if (client->getRequest() && client->getRequest()->getState() == END)
                 {
                     LogManager::log(LogManager::DEBUG, "Request is complete, sending response for FD %d", fd);
-                    client->getResponse()->setTimeStartResponse();//SIUUU set le temps de debut response
+                    client->getResponse()->setTimeStartResponse();
                     client->handleResponse(_epoll_fd);
                 }
                 else
@@ -653,14 +672,31 @@ void Server::checkRequestTimeouts()
     {
         Client *client = it->second;
         Request *request = client->getRequest();
-        // Response *response = client->getResponse();
+        Response *response = client->getResponse();
 
         if (request)
         {
-            std::cout << "_state = " << request->getState() << " for client FD = " << it->first << std::endl;
             // Vérifier si la requête a dépassé le timeout
             if (request->isTimeoutExceeded() && request->getState() != END)
             {
+                if (request->getState() == CGI)
+                {
+                    // Tuer le processus CGI
+                    CgiRequest *cgi = request->getCgi();
+                    if (cgi)
+                    {
+                        pid_t cgiPid = cgi->getPid();
+                        if (kill(cgiPid, SIGKILL) == 0)
+                        {
+                            LogManager::log(LogManager::ERROR, "Killed CGI process %d for client FD %d due to timeout", cgiPid, it->first);
+                        }
+                        else
+                        {
+                            LogManager::log(LogManager::ERROR, "Failed to kill CGI process %d for client FD %d", cgiPid, it->first);
+                        }
+                    }
+                }
+
                 LogManager::log(LogManager::ERROR, "Request timeout exceeded for client FD %d", it->first);
                 int client_fd = it->first;
                 ++it;
@@ -678,32 +714,32 @@ void Server::checkRequestTimeouts()
                 continue;
             }
 
-            if (request->getState() == CGI && request->getState() != END)
+            // if (request->getState() == CGI && request->getState() != END)
+            // {
+            //     LogManager::log(LogManager::DEBUG, "CGI CHECK CALL");
+            //     request->getCgi()->checkEnd();
+            //     if (request->getState() == END)
+            //     {
+            //         int client_fd = it->first;
+            //         change_epoll_event(client_fd, RESPONSE_EVENTS);
+            //         LogManager::log(LogManager::INFO, "Request complete For client %d", client_fd);
+            //     }
+            // }
+        }
+        //ajouter check de temps
+
+        if (response)
+        {
+            //verifier si la reponse a depasse le timeout
+            if (response->isTimeoutExceeded() && response->getResponseState() != R_END && response->getResponseState() > R_INIT)
             {
-                LogManager::log(LogManager::DEBUG, "CGI CHECK CALL");
-                request->getCgi()->checkEnd();
-                if (request->getState() == END)
-                {
-                    int client_fd = it->first;
-                    change_epoll_event(client_fd, RESPONSE_EVENTS);
-                    LogManager::log(LogManager::INFO, "Request complete For client %d", client_fd);
-                }
+                LogManager::log(LogManager::ERROR, "Request timeout exceeded for client FD %d", it->first);
+                int client_fd = it->first;
+                ++it;
+                close_client(client_fd); // Fermez la connexion pour ce client
+                continue;
             }
         }
-
-        // if (response)
-        // {
-        //     //verifier si la reponse a depasse le timeout
-        //     if (response->isTimeoutExceeded() && response->getResponseState() != R_END)
-        //     {
-        //         std::cout << "_r_state = " << response->getResponseState() << std::endl;
-        //         LogManager::log(LogManager::ERROR, "Request timeout exceeded for client FD %d", it->first);
-        //         int client_fd = it->first;
-        //         ++it;
-        //         close_client(client_fd); // Fermez la connexion pour ce client
-        //         continue;
-        //     }
-        // }
         
         ++it; // Passer au client suivant
     }

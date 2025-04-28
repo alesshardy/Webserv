@@ -77,6 +77,9 @@ class BlocServer
             
             // check double location
             bool        locationExists(const std::string &locationPath) const;
+
+            int _checkPathsMatch(const std::string &path, const std::string &parentPath) const;
+
 };
 
 #endif
