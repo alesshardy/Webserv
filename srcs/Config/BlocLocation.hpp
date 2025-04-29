@@ -63,8 +63,6 @@ class BlocLocation
             bool                hasTmpReturnDirective() const {return _hasTmpReturnDirective;};
             void                clearTmpReturnDirective() {_hasTmpReturnDirective = false;};
 
-            //Validation
-            bool    validateLocation() const;
 };
 
 #endif

@@ -129,7 +129,7 @@ void Server::checkAndStart()
 void Server::handleEpollEvents()
 {
     struct epoll_event events[MAX_EVENTS];
-    int timeout = 1000; // SIUUU voir si changer le temps / timeout de 1sec pour relancer epoll_wait
+    int timeout = 1000; // timeout de 1sec pour relancer epoll_wait
     int nfds = epoll_wait(_epoll_fd, events, MAX_EVENTS, timeout);
 
     // Vérifier le résultat de epoll_wait
@@ -235,7 +235,7 @@ void Server::handleNewConnection(int socket_fd)
         throw std::runtime_error("Error accepting connection");
     }
 
-    //SIUUU chelou le client ce fait ecraser / Vérifier si le client existe déjà dans _clients_map
+    // Vérifier si le client existe déjà dans _clients_map
     if (_clients_map.find(client_fd) != _clients_map.end())
     {
         LogManager::log(LogManager::DEBUG, "Client %d already exists, deleting old client", client_fd);
@@ -459,32 +459,6 @@ void Server::change_epoll_event(int socketFD, uint32_t EVENT)
 }
 
 /*************************** DEBUG ***************************/
-
-/**
- * @brief Afficher les descripteurs de fichiers actuellement dans epoll
- * 
- */
-void Server::log_epoll_fds()
-{
-    LogManager::log(LogManager::DEBUG, "Listing FDs currently in epoll:");
-    struct epoll_event events[MAX_EVENTS];
-    int nfds = epoll_wait(_epoll_fd, events, MAX_EVENTS, 0); // Timeout 0 to avoid blocking
-
-    if (nfds == -1)
-    {
-        if (errno != EINTR)
-        {
-            LogManager::log(LogManager::ERROR, "Error listing epoll FDs: %s", strerror(errno));
-        }
-        return;
-    }
-
-    for (int i = 0; i < nfds; ++i)
-    {
-        LogManager::log(LogManager::DEBUG, "FD in epoll: %d", events[i].data.fd);
-    }
-}
-
 /**
  * @brief Afficher les clients actuellement dans _clients_map
  * 
@@ -667,8 +641,6 @@ BlocServer* Server::getMatchingServer(const Request* request) const
 
     return matchingServer;
 }
-
-// SIUUU rajouter check etat reponse FINISH
 void Server::checkRequestTimeouts()
 {
     for (std::map<int, Client*>::iterator it = _clients_map.begin(); it != _clients_map.end();)
@@ -716,18 +688,6 @@ void Server::checkRequestTimeouts()
                 close_client(client_fd); // Fermez la connexion pour ce client
                 continue;
             }
-
-            // if (request->getState() == CGI && request->getState() != END)
-            // {
-            //     LogManager::log(LogManager::DEBUG, "CGI CHECK CALL");
-            //     request->getCgi()->checkEnd();
-            //     if (request->getState() == END)
-            //     {
-            //         int client_fd = it->first;
-            //         change_epoll_event(client_fd, RESPONSE_EVENTS);
-            //         LogManager::log(LogManager::INFO, "Request complete For client %d", client_fd);
-            //     }
-            // }
         }
         //ajouter check de temps
 
