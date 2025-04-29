@@ -60,6 +60,7 @@ class   Response
         void                _handleCgi();
         void                _handlePut();
         bool                _isRedirect();
+       // void                _handleUploads();
 
     public:
         Response(Client* client);
@@ -79,8 +80,7 @@ class   Response
         void                setTimeStartResponse(){_timeOut = std::time(NULL);};
 
         std::string         resolveFilePath();
-        std::string         generateDirectoryListing(const std::string& directoryPath, const std::string& uri);
-
+        std::string         generateDirectoryListing(const std::string& directoryPath, const std::string& uri, const std::string& format);
         // Getters
         int                 getClientFd() const { return _client_fd; }
         Socket*             getClientSocket() const { return _client_socket; }
