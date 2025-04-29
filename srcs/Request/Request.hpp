@@ -111,6 +111,13 @@ class Request{
         const std::string &getVersion() const {return _version;}
         const int &getStatusCode() const {return _statusCode;}
         const std::map<std::string, std::string> &getHeaders() const {return _headers;}
+        const std::pair<std::string, std::string> getHeader(const std::string &key) const
+        {
+            std::map<std::string, std::string>::const_iterator it = _headers.find(key);
+            if (it != _headers.end())
+                return *it;
+            return std::make_pair("", "");
+        }
         const std::map<std::string, std::string> &getQuery() const {return _query;}
         const int &getState() const {return _state;}
         RequestBody *getBody() const {return _body;}
