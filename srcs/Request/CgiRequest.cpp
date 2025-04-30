@@ -53,6 +53,7 @@ void CgiRequest::_initEnv()
     _env["SERVER_PORT"] = toString(_request->getPort());
     _env["PATH_INFO"] = _request->getUri();
     _env["PATH_TRANSLATED"] = _request->getMatchingLocation()->getRoot() + _request->getUri();
+    // _env["PATH_TRANSLATED"] =  _request->getUri();
     _env["REDIRECT_STATUS"] = "200";
 }
 
@@ -85,7 +86,9 @@ void CgiRequest::executeCgi()
     _CgiConvertEnvToChar();
 
     // Préparer les arguments pour execve
-    _argv[0] = const_cast<char*>(_cgiPath.c_str());
+    // _argv[0] = const_cast<char*>(_cgiPath.c_str());
+    // _argv[0] = const_cast<char*>(_request->getMatchingLocation()->getRoot() + _request->getUri());
+    _argv[0] = const_cast<char*>("./www/main/cgi-bin/cartoonize_face.py");
     _argv[1] = const_cast<char*>(_scriptCgi.c_str());
     _argv[2] = NULL;
     
