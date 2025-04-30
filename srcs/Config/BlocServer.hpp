@@ -6,7 +6,7 @@
 
 # include "BlocLocation.hpp"
 
-# define DEFAULT_CLIENT_MAX_BODY_SIZE 1048576 // 1MB
+# define DEFAULT_CLIENT_MAX_BODY_SIZE 10485760 // 1MB
 
 class BlocLocation;
 class Listen;
