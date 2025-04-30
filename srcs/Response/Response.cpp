@@ -764,9 +764,21 @@ void Response::_handleCgi()
         // Read the content of the CGI file
         std::string cgiOutput((std::istreambuf_iterator<char>(cgiOutputFile)), std::istreambuf_iterator<char>());
         cgiOutputFile.close();
+        
+        LogManager::log(LogManager::DEBUG, "CGI Output:\n%s", cgiOutput.c_str());
+        // Separate headers and body of the CGI response
+        // Normalize line endings to \r\n
+        std::string normalizedCgiOutput;
+        for (size_t i = 0; i < cgiOutput.size(); ++i)
+        {
+            if (cgiOutput[i] == '\n' && (i == 0 || cgiOutput[i - 1] != '\r'))
+                normalizedCgiOutput += "\r\n";
+            else
+                normalizedCgiOutput += cgiOutput[i];
+        }
 
         // Separate headers and body of the CGI response
-        size_t headerEnd = cgiOutput.find("\r\n\r\n");
+        size_t headerEnd = normalizedCgiOutput.find("\r\n\r\n");
         if (headerEnd == std::string::npos)
         {
             LogManager::log(LogManager::ERROR, "Invalid CGI response format");
