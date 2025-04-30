@@ -10,18 +10,18 @@ class CgiRequest
 {
         friend class Response;
     private:
-            Request *_request;
+            Request                             *_request;
             std::map <std::string, std::string> _env;
-            char**      _envp;
-            char *_argv[3];
-            std::string _cgiPath;
-            std::string _scriptCgi;
-            bool _flagLog;
-            pid_t _pid;
-            int _stdin;
-            int _stdout;
-            int _fd;
-            std::string _tmpFilePath;
+            char                                **_envp;
+            char                                *_argv[3];
+            std::string                          _cgiPath;
+            std::string                         _scriptCgi;
+            bool                                _flagLog;
+            pid_t                               _pid;
+            int                                 _stdin;
+            int                                 _stdout;
+            int                                 _fd;
+            std::string                         _tmpFilePath;
 
             void _initEnv();
             void _CgiConvertEnvToChar();
