@@ -101,20 +101,5 @@ void    Client::handleResponse(int epoll_fd)
     _server->change_epoll_event(_client_fd, REQUEST_EVENTS); // Revenir à l'état de lecture
     // Close the client socket after sending the response
     close(_client_fd);
-    
-    // SIUUUU a voir si reset utile ou non
-    // if (_request)
-    // {
-    //     delete _request;
-    //     _request = NULL;
-    // }
-    // if (_response)
-    // {
-    //     delete _response;
-    //     _response = NULL;
-    // }
-
-    // _request = new Request(this, _server);
-    // _response = new Response(this);
 }
 

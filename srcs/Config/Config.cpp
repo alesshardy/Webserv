@@ -74,7 +74,6 @@ bool    Config::verifKeyOther(std::string token)
     return false;
 }
 
-//SIUUU FONCTION UTILS AU VERIF DE L'ARG
 bool        Config::isValidRoot(const std::string &path) // enlever com pour l'utiliser
 {
     // struct stat info;
@@ -588,7 +587,7 @@ void    Config::parseConfigFile(const std::string &filePath, Config &config)
     BlocServer      currentServer;
     std::string     currentLocationPath;
     int argNb = 0;
-    bool theFlag = false; // SIUUUUUUUUU aller voir ce que ca a casser de rajouter ca pour proteger 
+    bool theFlag = false;
 
     while (file.get(c)) 
     {

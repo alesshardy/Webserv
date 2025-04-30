@@ -1,59 +1,35 @@
-[2025-04-28 17:55:35] [DEBUG] Checking headers ...
-locationPath = /
-uri = /42logo.png
-[2025-04-28 17:55:35] [DEBUG] Matching location found: /
-[2025-04-28 17:55:35] [DEBUG] Request does not target a CGI script
-[2025-04-28 17:55:35] [DEBUG] Max body size set to: 1048576
-[2025-04-28 17:55:35] [DEBUG] Checking headers DONE
-[2025-04-28 17:55:35] [DEBUG] Parse Body
-[2025-04-28 17:55:35] [INFO] Request complete for client 9
-[2025-04-28 17:55:35] [INFO] Client 9 disconnected
-[2025-04-28 17:55:35] [DEBUG] Closing client FD 9
-[2025-04-28 17:55:35] [DEBUG] Attempting to remove FD 9 from epoll
-[2025-04-28 17:55:35] [DEBUG] Successfully removed FD 9 from epoll
-[2025-04-28 17:55:35] [INFO] Deleting client object for FD 9
-[2025-04-28 17:55:35] [DEBUG] Destroying request
-[2025-04-28 17:55:35] [DEBUG] Destroying response
-[2025-04-28 17:55:35] [DEBUG] Destroying client 9
-[2025-04-28 17:55:35] [DEBUG] Successfully closed FD 9
-[2025-04-28 17:55:35] [WARNING] EPOLLOUT event on invalid or closed FD 9, skipping
-^C[2025-04-28 17:55:37] [INFO] Interrupt signal received, shutting down...
-[2025-04-28 17:55:37] [ERROR] epoll_wait failed
-[2025-04-28 17:55:37] [DEBUG] Closing all sockets and clients started
-[2025-04-28 17:55:37] [DEBUG] Listing clients in _clients_map:
-[2025-04-28 17:55:37] [DEBUG] Client FD: 8, Client Pointer: 0x4f1a950
-[2025-04-28 17:55:37] [DEBUG] Client FD: 10, Client Pointer: 0x4e26dd0
-[2025-04-28 17:55:37] [DEBUG] Closing client FD 8
-[2025-04-28 17:55:37] [DEBUG] Attempting to remove FD 8 from epoll
-[2025-04-28 17:55:37] [WARNING] Failed to remove FD 8 from epoll: Bad file descriptor
-[2025-04-28 17:55:37] [INFO] Deleting client object for FD 8
-[2025-04-28 17:55:37] [DEBUG] Destroying request
-[2025-04-28 17:55:37] [DEBUG] Destroying response
-[2025-04-28 17:55:37] [DEBUG] Destroying client 8
-[2025-04-28 17:55:37] [WARNING] Failed to close FD 8: Bad file descriptor
-[2025-04-28 17:55:37] [DEBUG] Closing client FD 10
-[2025-04-28 17:55:37] [DEBUG] Attempting to remove FD 10 from epoll
-[2025-04-28 17:55:37] [WARNING] Failed to remove FD 10 from epoll: Bad file descriptor
-[2025-04-28 17:55:37] [INFO] Deleting client object for FD 10
-[2025-04-28 17:55:37] [DEBUG] Destroying request
-[2025-04-28 17:55:37] [DEBUG] Destroying response
-[2025-04-28 17:55:37] [DEBUG] Destroying client 10
-[2025-04-28 17:55:37] [WARNING] Failed to close FD 10: Bad file descriptor
-[2025-04-28 17:55:37] [DEBUG] Clients closed
-[2025-04-28 17:55:37] [DEBUG] Closing socket 4
-[2025-04-28 17:55:37] [INFO] Closing socket 4
-[2025-04-28 17:55:37] [WARNING] Failed to close FD 4: Bad file descriptor
-[2025-04-28 17:55:37] [DEBUG] Closing socket 5
-[2025-04-28 17:55:37] [INFO] Closing socket 5
-[2025-04-28 17:55:37] [WARNING] Failed to close FD 5: Bad file descriptor
-[2025-04-28 17:55:37] [DEBUG] Closing socket 6
-[2025-04-28 17:55:37] [INFO] Closing socket 6
-[2025-04-28 17:55:37] [WARNING] Failed to close FD 6: Bad file descriptor
-[2025-04-28 17:55:37] [DEBUG] Closing socket 7
-[2025-04-28 17:55:37] [INFO] Closing socket 7
-[2025-04-28 17:55:37] [WARNING] Failed to close FD 7: Bad file descriptor
-[2025-04-28 17:55:37] [DEBUG] Sockets closed
-[2025-04-28 17:55:37] [DEBUG] Epoll instance closed
-Config destructor called
-Config destructor called
-[2025-04-28 17:55:37] [ERROR] Error in epoll_wait
+➜  Webserv git:(apintus) ✗ valgrind --leak-check=full ./WebServ testConfig/loup.conf
+==1392643== Memcheck, a memory error detector
+==1392643== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==1392643== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==1392643== Command: ./WebServ testConfig/loup.conf
+==1392643== 
+^C==1392643== 
+==1392643== Process terminating with default action of signal 2 (SIGINT)
+==1392643==    at 0x4CC1A1A: __open_nocancel (open64_nocancel.c:39)
+==1392643==    by 0x4C34164: _IO_file_open (fileops.c:185)
+==1392643==    by 0x4C34411: _IO_file_fopen@@GLIBC_2.2.5 (fileops.c:280)
+==1392643==    by 0x4C276AD: __fopen_internal (iofopen.c:75)
+==1392643==    by 0x4C276AD: fopen@@GLIBC_2.2.5 (iofopen.c:86)
+==1392643==    by 0x4C83852: __tzfile_read (tzfile.c:162)
+==1392643==    by 0x4C82C23: tzset_internal (tzset.c:405)
+==1392643==    by 0x4C835A6: __tz_convert (tzset.c:577)
+==1392643==    by 0x406AEF: LogManager::log(LogManager::LogLevel, char const*, ...) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
+==1392643==    by 0x40630F: main (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
+==1392643== 
+==1392643== HEAP SUMMARY:
+==1392643==     in use at exit: 73,243 bytes in 5 blocks
+==1392643==   total heap usage: 6 allocs, 1 frees, 73,264 bytes allocated
+==1392643== 
+==1392643== LEAK SUMMARY:
+==1392643==    definitely lost: 0 bytes in 0 blocks
+==1392643==    indirectly lost: 0 bytes in 0 blocks
+==1392643==      possibly lost: 0 bytes in 0 blocks
+==1392643==    still reachable: 73,243 bytes in 5 blocks
+==1392643==         suppressed: 0 bytes in 0 blocks
+==1392643== Reachable blocks (those to which a pointer was found) are not shown.
+==1392643== To see them, rerun with: --leak-check=full --show-leak-kinds=all
+==1392643== 
+==1392643== For lists of detected and suppressed errors, rerun with: -s
+==1392643== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+
