@@ -133,7 +133,7 @@ void Request::parseMethod()
     LogManager::log(LogManager::DEBUG, ("Http method: " + _method).c_str());
 
     if (_method != "GET" && _method != "POST" && _method != "DELETE" && _method != "PUT")
-        return (handleError(400, ERROR, "ERROR : unsupported HTTP method"));
+        return (handleError(501, ERROR, "ERROR : unsupported HTTP method"));
 
     while (_i < endLine && _raw[_i] == ' ')
         _i++;
@@ -178,7 +178,7 @@ void Request::parseUri()
     
     LogManager::log(LogManager::DEBUG, ("Http uri: " + _uri).c_str());
     if (_uri.size() > URI_MAX_SIZE)
-        return (handleError(400, ERROR, "ERROR: URI size exceeds 2048 characters"));
+        return (handleError(414, ERROR, "ERROR: URI size exceeds 2048 characters"));
     _raw.erase(0, _i);
     _i = 0;
     setState(QUERY);
@@ -250,11 +250,10 @@ void Request::parseVersion()
 
     _version = _raw.substr(_i, endLine - _i);
 
-    _i = endLine + 2; // Passer "\r\n"
+    _i = endLine + 2; 
     if (_version != "HTTP/1.1")
-        return (handleError(400, ERROR, "ERROR: Bad Version"));
+        return (handleError(505, ERROR, "ERROR: Bad Version"));
     LogManager::log(LogManager::DEBUG, ("Http version: " + _version).c_str());
-    // SECU 
     if (_raw.size() > 8192)
         return (handleError(400, ERROR, "ERROR: Request line exceeds 8 KB"));
     _raw.erase(0, _i);
@@ -284,6 +283,8 @@ void Request::parseHeaderKey()
 
     while (_i < colonPos)
     {
+        if (iswspace(_raw[_i]))
+            return (handleError(400, ERROR, "ERROR: Bad request"));
         _currentHeaderKey += _raw[_i];
         _i++;
     }
@@ -300,6 +301,7 @@ void Request::parseHeaderKey()
  */
 void Request::parseHeaderValue()
 {
+    bool checkString = false;
     if (_raw.empty())
         return ;
     // LogManager::log(LogManager::DEBUG, "Parse HeaderValue");
@@ -313,11 +315,14 @@ void Request::parseHeaderValue()
     std::string _currentHeaderValue;
     while (_i < endLine)
     {
+        if (!iswspace(_raw[_i]))
+            checkString = true;
         _currentHeaderValue += _raw[_i];
         _i++;
     }
+    if (!checkString)
+        return (handleError(400, ERROR, "ERROR: Bad request"));
     _i += 2;
-    // _headers[_currentHeaderKey] = _currentHeaderValue;
     parseHeaderKeyValue(_currentHeaderKey, _currentHeaderValue);
     LogManager::log(LogManager::DEBUG, ("HeaderValue " + _currentHeaderValue).c_str());
     _currentHeaderKey.clear();
@@ -440,10 +445,52 @@ void Request::checkCgi()
  * @brief Vérifie la validité de la longueur et de l'encodage du contenu.
  * 
  */
+// void Request::validateContentLengthAndEncoding()
+// {
+//     if (_headers.find("Content-Length") != _headers.end())
+//     {
+//         for (size_t i = 0; i < _headers["Content-Length"].length(); i++)
+//         {
+//             if (!isdigit(_headers["Content-Length"][i]))
+//                 handleError(400, ERROR, "ERROR: Bad request");
+//         }
+//         long long contentLength;
+//         try
+//         {
+//             contentLength = ft_stoll(_headers["Content-Length"]);
+//         }
+//         catch (const std::exception &e)
+//         {
+//             handleERROR()
+//             throw std::runtime_error("ERROR: Invalid Content-Length value");
+//         }
+//         if (contentLength < 0)
+//             throw std::runtime_error("ERROR: Invalid Content-Length value");
+//         _contentLength = contentLength; // Stocker la taille du content length
+//     }
+
+//     if (_headers.find("Transfer-Encoding") != _headers.end())
+//     {
+//         std::string transferEncoding = _headers["Transfer-Encoding"];
+//         if (transferEncoding.find("chunked") == std::string::npos)
+//             throw std::runtime_error("ERROR: Unsupported Transfer-Encoding (must include 'chunked')");
+//         _isChunked = true; // Mettre le flag chunked
+//     }
+
+//     if (_headers.find("Content-Length") != _headers.end() &&
+//         _headers.find("Transfer-Encoding") != _headers.end())
+//         throw std::runtime_error("ERROR: Both Content-Length and Transfer-Encoding are present");
+// }
+
 void Request::validateContentLengthAndEncoding()
 {
     if (_headers.find("Content-Length") != _headers.end())
     {
+        for (size_t i = 0; i < _headers["Content-Length"].length(); i++)
+        {
+            if (!isdigit(_headers["Content-Length"][i]))
+                return (handleError(400, ERROR, "Bad request: Content-Length must be a positive integer"));
+        }
         long long contentLength;
         try
         {
@@ -451,24 +498,26 @@ void Request::validateContentLengthAndEncoding()
         }
         catch (const std::exception &e)
         {
-            throw std::runtime_error("ERROR: Invalid Content-Length value");
+            return (handleError(400, ERROR, "Invalid Content-Length value: conversion failed"));
         }
+
         if (contentLength < 0)
-            throw std::runtime_error("ERROR: Invalid Content-Length value");
-        _contentLength = contentLength; // Stocker la taille du content length
+            return (handleError(400, ERROR, "Invalid Content-Length: negative value"));
+        _contentLength = contentLength;
     }
 
+    // Validation de Transfer-Encoding
     if (_headers.find("Transfer-Encoding") != _headers.end())
     {
         std::string transferEncoding = _headers["Transfer-Encoding"];
         if (transferEncoding.find("chunked") == std::string::npos)
-            throw std::runtime_error("ERROR: Unsupported Transfer-Encoding (must include 'chunked')");
-        _isChunked = true; // Mettre le flag chunked
+            return (handleError(400, ERROR, "Unsupported Transfer-Encoding (must include 'chunked')"));
+        _isChunked = true;
     }
 
     if (_headers.find("Content-Length") != _headers.end() &&
         _headers.find("Transfer-Encoding") != _headers.end())
-        throw std::runtime_error("ERROR: Both Content-Length and Transfer-Encoding are present");
+            return (handleError(400, ERROR, "Both Content-Length and Transfer-Encoding are present"));
 }
 
 /**
@@ -554,6 +603,9 @@ void Request::parseBody()
             _state = END;
         return;
     }
+
+    if (_headers.find("Content-Length") == _headers.end() && _headers.find("Transfer-Encoding") == _headers.end())
+        return (handleError(400, ERROR, "ERROR: Bad Request, missing Content-Length or Transfer-Encoding"));
     
     if (_contentLength > _maxBodySize)
         throw std::runtime_error("ERROR: Request body exceeds the maximum allowed size");
