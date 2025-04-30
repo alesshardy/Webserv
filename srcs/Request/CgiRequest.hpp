@@ -22,6 +22,7 @@ class CgiRequest
             int                                 _stdout;
             int                                 _fd;
             std::string                         _tmpFilePath;
+            std::string                         _realPath;
 
             void _initEnv();
             void _CgiConvertEnvToChar();

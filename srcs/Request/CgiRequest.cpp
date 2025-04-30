@@ -40,21 +40,47 @@ void CgiRequest::_initEnv()
     LogManager::log(LogManager::DEBUG, ("Init ENV pour CGI"));
 
     // Initialiser les variables d'environnement CGI
-    _env["SERVER_NAME"] = "Webserv";
     _env["SERVER_SOFTWARE"] = "Webserv/1.0";
-    _env["GATEWAY_INTERFACE"] = "CGI/1.1";
+    _env["SERVER_NAME"] = _request->getHeaders().count("Host") ? _request->getHeaders().at("Host") : "";
     _env["SERVER_PROTOCOL"] = "HTTP/1.1";
+    _env["SERVER_PORT"] = toString(_request->getPort());
+    _env["REDIRECT_STATUS"] = "200";
     _env["REQUEST_METHOD"] = _request->getMethod();
-    _env["SCRIPT_NAME"] = _request->getUri();
+    _env["GATEWAY_INTERFACE"] = "CGI/1.1";
+
+    // Récupérer le bloc location correspondant
+    BlocLocation* location = _request->getMatchingLocation();
+    if (!location)
+        throw std::runtime_error("ERROR: No matching location block found for the request");
+
+    // Construire le chemin réel du fichier CGI
+    std::string rootOrAlias = location->getAlias().empty() ? location->getRoot() : location->getAlias();
+
+    // Ajouter un '/' à rootOrAlias si nécessaire
+    if (!rootOrAlias.empty() && rootOrAlias[rootOrAlias.size() - 1] != '/')
+    {
+        rootOrAlias += '/';
+    }
+
+    std::string locationPath = location->getPath();
+
+    // Vérifier si le chemin de location se termine par un '/'
+    if (!locationPath.empty() && locationPath[locationPath.size() - 1] != '/')
+    {
+        locationPath += '/'; // Ajouter '/' si nécessaire
+    }
+
+    _realPath = rootOrAlias + _request->getUri().substr(locationPath.size());
+
+    // Définir les variables d'environnement CGI
+    _env["SCRIPT_NAME"] = _realPath; // L'URI de la requête
+    _env["SCRIPT_FILENAME"] = _realPath;      // Le chemin réel du fichier CGI
     _env["QUERY_STRING"] = _request->getQueryString().empty() ? "" : _request->getQueryString();
     _env["CONTENT_TYPE"] = _request->getHeaders().count("Content-Type") ? _request->getHeaders().at("Content-Type") : "";
     _env["CONTENT_LENGTH"] = _request->getHeaders().count("Content-Length") ? _request->getHeaders().at("Content-Length") : "";
     _env["HTTP_HOST"] = _request->getHeaders().count("Host") ? _request->getHeaders().at("Host") : "";
-    _env["SERVER_PORT"] = toString(_request->getPort());
-    _env["PATH_INFO"] = _request->getUri();
-    _env["PATH_TRANSLATED"] = _request->getMatchingLocation()->getRoot() + _request->getUri();
-    _env["REDIRECT_STATUS"] = "200";
-    //SIUU AJOUT COOKIE ICI
+    _env["PATH_INFO"] = _realPath;
+    _env["PATH_TRANSLATED"] = _realPath; // Le chemin réel du fichier CGI
 }
 
 void    CgiRequest::_CgiConvertEnvToChar()
@@ -86,8 +112,8 @@ void CgiRequest::executeCgi()
     _CgiConvertEnvToChar();
 
     // Préparer les arguments pour execve
-    _argv[0] = const_cast<char*>(_cgiPath.c_str());
-    _argv[1] = const_cast<char*>(_scriptCgi.c_str());
+    _argv[0] = const_cast<char*>(_cgiPath.c_str());    
+    _argv[1] = const_cast<char*>(_realPath.c_str());
     _argv[2] = NULL;
     
     _stdin = dup(STDIN_FILENO);

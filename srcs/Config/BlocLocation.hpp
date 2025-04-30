@@ -6,6 +6,7 @@
 class BlocLocation
 {
     private:
+            std::string                         _path;
             std::string                         _root;
             std::string                         _alias;
             std::vector<std::string>            _index;
@@ -62,6 +63,10 @@ class BlocLocation
             int                 getTmpReturnDirective() const {return _tmpReturnDirective;};
             bool                hasTmpReturnDirective() const {return _hasTmpReturnDirective;};
             void                clearTmpReturnDirective() {_hasTmpReturnDirective = false;};
+
+            // Nouveau setter et getter pour _path
+            void setPath(const std::string &path) { _path = path; }
+            const std::string &getPath() const { return _path; }
 
 };
 

@@ -585,7 +585,6 @@ void Request::parseBody()
             else
                 _state = END;
             LogManager::log(LogManager::DEBUG, "Parse body DONE!");
-            std::cout << "ReadtmpFIle :\n" << _body->readBody() << std::endl;
         }
         
     } catch (const std::exception &e) {
@@ -616,9 +615,7 @@ void    Request::parseCgi()
 {
     LogManager::log(LogManager::DEBUG, "Parse CGI");
     std::string cgiPath = _matchingLocation->getCgiPath(getUriExtension());
-    std::cout << "CgiPAth = " << cgiPath << std::endl;
     std::string scriptCgi = getUri();
-    std::cout << "scriptCgi = " << scriptCgi << std::endl;
 
     _cgi = new CgiRequest(this, cgiPath, scriptCgi);
     _timeOut = std::time(NULL); // Reset timer pour le Cgi
