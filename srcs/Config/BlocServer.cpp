@@ -35,7 +35,10 @@ BlocServer &BlocServer::operator=(const BlocServer &assign)
 //Setters
 void    BlocServer::addLocation(const std::string &path, const BlocLocation &location) 
 {
-    _location[path] = location;
+    // _location[path] = location;
+    BlocLocation newLocation = location; // Créer une copie du bloc location
+    newLocation.setPath(path);           // Définir le chemin dans le bloc location
+    _location[path] = newLocation;       // Ajouter le bloc location avec le chemin
 };
 
 //Validation
