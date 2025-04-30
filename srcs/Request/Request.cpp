@@ -544,7 +544,7 @@ void Request::getMaxBodySize()
  * 
  */
 void Request::parseBody()
-{   
+{
     LogManager::log(LogManager::DEBUG, "Parse Body");
     if (_method == "GET")
     {
@@ -554,16 +554,26 @@ void Request::parseBody()
             _state = END;
         return;
     }
-    
-    if (_contentLength > _maxBodySize)
-        throw std::runtime_error("ERROR: Request body exceeds the maximum allowed size");
 
+    if (isFileTransfer(_method, _headers) &&!isCgi())
+    {
+        std::string fileName = extractFileNameFromMultipart(_raw);
+        if (!fileName.empty())
+        {
+            LogManager::log(LogManager::DEBUG, "File transfer detected with filename: %s", fileName.c_str());
+            handleFileTransfer();
+            // _state = END;
+            return;
+        }
+    }
+
+    // Gestion normale du corps
     if (!_body)
         _body = new RequestBody(_maxBodySize, _isChunked);
-        
-    try{
+
+    try {
         size_t startIndex = _i;
-        
+
         if (_isChunked)
         {
             LogManager::log(LogManager::DEBUG, "Parse Body en mode CHUNKED");
@@ -575,9 +585,8 @@ void Request::parseBody()
             _body->parseContentLength(_raw, _i, _contentLength);
         }
 
-        // Nettoyer les données traitées dans _raw
         clearProcessedData(_i - startIndex);
-        
+
         if (_body->isComplete())
         {
             if (isCgi())
@@ -585,9 +594,7 @@ void Request::parseBody()
             else
                 _state = END;
             LogManager::log(LogManager::DEBUG, "Parse body DONE!");
-            std::cout << "ReadtmpFIle :\n" << _body->readBody() << std::endl;
         }
-        
     } catch (const std::exception &e) {
         _state = ERROR;
         throw; // Relancer l'exception pour traitement en amont
@@ -616,15 +623,43 @@ void    Request::parseCgi()
 {
     LogManager::log(LogManager::DEBUG, "Parse CGI");
     std::string cgiPath = _matchingLocation->getCgiPath(getUriExtension());
-    std::cout << "CgiPAth = " << cgiPath << std::endl;
     std::string scriptCgi = getUri();
-    std::cout << "scriptCgi = " << scriptCgi << std::endl;
 
     _cgi = new CgiRequest(this, cgiPath, scriptCgi);
     _timeOut = std::time(NULL); // Reset timer pour le Cgi
     _cgi->executeCgi();
 }
 
+
+/********************************file Transfert ****************************************** */
+
+void Request::handleFileTransfer()
+{
+    std::string uploadDir = "./www/uploads/";
+    if (!directoryExists(uploadDir))
+    {
+        if (!createDirectory(uploadDir))
+            throw std::runtime_error("ERROR: Unable to create upload directory");
+        LogManager::log(LogManager::DEBUG, "Upload directory created: %s", uploadDir.c_str());
+    }
+
+    std::string fileName = extractFileNameFromMultipart(_raw);
+    if (fileName.empty())
+        throw std::runtime_error("ERROR: Missing or invalid filename in multipart data");
+
+    std::string filePath = uploadDir + sanitizeFileName(fileName);
+    LogManager::log(LogManager::DEBUG, "Attempting to open file for writing: %s", filePath.c_str());
+
+    std::ofstream outFile(filePath.c_str(), std::ios::binary);
+    if (!outFile.is_open())
+        throw std::runtime_error("ERROR: Unable to open file for writing");
+
+    outFile.write(_raw.c_str(), _raw.size());
+    outFile.close();
+
+    LogManager::log(LogManager::DEBUG, "File uploaded successfully: %s", filePath.c_str());
+    _state = END;
+}
 /******************************************* TIMER *******************************************/
 
 /**
@@ -636,5 +671,5 @@ void    Request::parseCgi()
 bool Request::isTimeoutExceeded() const
 {
     std::time_t now = std::time(NULL);
-    return (now - _timeOut > 60); // SIUU CHANGER EN 60 sec
+    return (now - _timeOut > 60);
 }
