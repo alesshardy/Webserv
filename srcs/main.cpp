@@ -20,6 +20,7 @@ void signalHandler(int signum)
 
 int main(int ac, char **av)
 {
+    LogManager::log(LogManager::DEBUG, "Starting main");
     signal(SIGPIPE, SIG_IGN); // Ignorer SIGPIPE
     // Capturer les signaux pour arrêter proprement le serveur
     signal(SIGINT, signalHandler);
@@ -27,6 +28,7 @@ int main(int ac, char **av)
 
     //Initialisation du gestionnaire d'arguments de la ligne de commande
     CommandLineParser cmdParser(ac, av);
+    LogManager::log(LogManager::DEBUG, "CommandLineParser initialized");
 
     if (cmdParser.hasOption("help"))
     {

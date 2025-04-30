@@ -22,6 +22,7 @@ BlocLocation &BlocLocation::operator=(const BlocLocation &assign)
 {
     if (this != &assign)
     {
+        _path = assign._path;
         _root = assign._root;
         _alias = assign._alias;
         _index = assign._index;

@@ -3,11 +3,11 @@
 /* Palette de couleurs */
 :root {
     --primary-color: #2c3e50;
-    --secondary-color: #3498db;
+    --secondary-color: #e67e22;
     --background-color: #ecf0f1;
     --text-color: #333;
+    --highlight-color: #e74c3c;
     --light-color: #fff;
-    --accent-color: #e74c3c;
 }
 
 /* Global styles */
@@ -18,16 +18,25 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
     line-height: 1.6;
+    text-align: center;
     overflow-x: hidden;
 }
 
 header {
     background-color: var(--primary-color);
     color: var(--light-color);
-    text-align: center;
     padding: 20px 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     position: relative;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+}
+
+header .highlight {
+    color: var(--highlight-color);
 }
 
 header .logo-container {
@@ -42,21 +51,9 @@ header .logo {
     animation: fadeIn 2s ease-in-out;
 }
 
-header h1 {
-    margin: 0;
-    font-size: 2.5rem;
-    animation: slideInFromTop 1s ease-in-out;
-}
-
-header p {
-    margin: 10px 0 0;
-    font-size: 1.2rem;
-    animation: fadeIn 2s ease-in-out;
-}
-
 main {
     padding: 20px;
-    max-width: 1200px;
+    max-width: 800px;
     margin: 0 auto;
 }
 
@@ -66,12 +63,43 @@ section {
     background-color: var(--light-color);
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    animation: fadeIn 1.5s ease-in-out;
+    transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+section:hover {
+    transform: scale(1.05); /* Agrandit la section survolée */
+    z-index: 10; /* Assure que la section survolée est au-dessus des autres */
+}
+
+section.dimmed {
+    filter: blur(3px); /* Floute les sections non survolées */
+    opacity: 0.6; /* Réduit légèrement l'opacité */
 }
 
 section h2 {
     margin-top: 0;
     color: var(--primary-color);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromTop {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 /* Authors Section */
@@ -148,193 +176,6 @@ section h2 {
     font-size: 0.9rem;
 }
 
-/* Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
-
-@keyframes slideInFromTop {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-
-/* Effet de flou et agrandissement */
-section {
-    transition: transform 0.3s ease, filter 0.3s ease;
-}
-
-section:hover {
-    transform: scale(1.05); /* Agrandit la section survolée */
-    z-index: 10; /* Assure que la section survolée est au-dessus des autres */
-}
-
-section.dimmed {
-    filter: blur(3px); /* Floute les sections non survolées */
-    opacity: 0.6; /* Réduit légèrement l'opacité */
-}
-
-/******************************************************************************************/
-
-/* Palette de couleurs */
-:root {
-    --primary-color: #2c3e50;
-    --secondary-color: #3498db;
-    --background-color: #ecf0f1;
-    --text-color: #333;
-    --highlight-color: #e74c3c;
-    --light-color: #fff;
-}
-
-/* Global styles */
-body {
-    font-family: 'Montserrat', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    line-height: 1.6;
-    text-align: center;
-}
-
-header {
-    background-color: var(--primary-color);
-    color: var(--light-color);
-    padding: 20px 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-header h1 {
-    margin: 0;
-    font-size: 2.5rem;
-}
-
-header .highlight {
-    color: var(--highlight-color);
-}
-
-main {
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-section {
-    margin-bottom: 30px;
-    padding: 20px;
-    background-color: var(--light-color);
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-section h2 {
-    margin-top: 0;
-    color: var(--primary-color);
-}
-
-button {
-    background-color: var(--secondary-color);
-    color: var(--light-color);
-    border: none;
-    padding: 10px 20px;
-    font-size: 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-button:hover {
-    background-color: var(--highlight-color);
-    transform: scale(1.05);
-}
-
-.result-box {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: var(--background-color);
-    border: 1px solid var(--secondary-color);
-    border-radius: 5px;
-    font-size: 1rem;
-    color: var(--primary-color);
-}
-
-.gif-container img {
-    width: 100%;
-    max-width: 400px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-
-/******************************************************************************************/
-
-/* Palette de couleurs */
-:root {
-    --primary-color: #2c3e50;
-    --secondary-color: #e67e22;
-    --background-color: #ecf0f1;
-    --text-color: #333;
-    --highlight-color: #e74c3c;
-    --light-color: #fff;
-}
-
-/* Global styles */
-body {
-    font-family: 'Montserrat', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    line-height: 1.6;
-    text-align: center;
-}
-
-header {
-    background-color: var(--primary-color);
-    color: var(--light-color);
-    padding: 20px 0;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-header h1 {
-    margin: 0;
-    font-size: 2.5rem;
-}
-
-header .highlight {
-    color: var(--highlight-color);
-}
-
-main {
-    padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-section {
-    margin-bottom: 30px;
-    padding: 20px;
-    background-color: var(--light-color);
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-section h2 {
-    margin-top: 0;
-    color: var(--primary-color);
-}
-
 /* Formulaire POST */
 form {
     display: flex;
@@ -374,6 +215,7 @@ form button:hover {
     transform: scale(1.05);
 }
 
+/* Result Box */
 .result-box {
     margin-top: 20px;
     padding: 15px;
@@ -384,6 +226,7 @@ form button:hover {
     color: var(--primary-color);
 }
 
+/* GIF Container */
 .gif-container img {
     width: 100%;
     max-width: 400px;

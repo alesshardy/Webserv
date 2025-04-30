@@ -68,7 +68,6 @@ class Server
         void                        change_epoll_event(int socketFD, uint32_t EVENT);
 
         // Debug
-        void                        log_epoll_fds();
         void                        log_clients_map() const;
         
         //run 

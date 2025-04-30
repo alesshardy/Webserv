@@ -10,6 +10,7 @@
 #include <string>
 #include <ctime>
 #include <sstream>
+#include <filesystem>
 
 # define URI_MAX_SIZE 2048
 # define REQUETE_LINE_MAX_SIZE 8192
@@ -48,7 +49,7 @@ class Request{
         Server                              *_server;
         RequestBody                         *_body;
         BlocServer                          *_matchingServer;// siuuu inint
-        BlocLocation                        *_matchingLocation;
+        BlocLocation                        *_matchingLocation;// siuuu inint
         std::string                         _raw;
         std::string                         _method;
         std::string                         _uri;
@@ -59,15 +60,15 @@ class Request{
         int                                 _statusCode;
         int                                 _state;
         int                                 _inHeader;
-        size_t  _i;
-        bool _isChunked;
-        unsigned long long _maxBodySize;
-        unsigned long long _contentLength;
-        std::time_t _timeOut;
-        bool _isCgi;
-        std::string _queryString;
-        int _port;
-        CgiRequest  *_cgi;
+        size_t                              _i;
+        bool                                _isChunked;
+        unsigned long long                  _maxBodySize;
+        unsigned long long                  _contentLength;
+        std::time_t                         _timeOut;
+        bool                                _isCgi;
+        std::string                         _queryString;
+        int                                 _port;
+        CgiRequest                          *_cgi;
         
         // Method
         void parseRequest(std::string request);
@@ -92,7 +93,9 @@ class Request{
         void checkCgi();
         void validateContentLengthAndEncoding();
         void skipHeaderEndSequence();
-        void checkAllowedMethods();    
+        void checkAllowedMethods();
+        
+        void handleFileTransfer();
         
         // utils
         bool isTimeoutExceeded() const;
