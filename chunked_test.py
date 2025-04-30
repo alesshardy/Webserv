@@ -7,16 +7,9 @@ port = 4343
 request = (
     "POST / HTTP/1.1\r\n"
     "Host: localhost:4343\r\n"
-    "Transfer-Encoding: chunked\r\n"
+    "Content-Length: 20\r\n"
     "\r\n"
-    "4\r\n"
-    "Wiki\r\n"
-    "5\r\n"
-    "pedia\r\n"
-    "C\r\n"
-    " in\r\nchunks.\r\n"
-    "0\r\n"
-    "\r\n"
+    "Wikipedia in chunks."
 )
 
 # Envoyer la requête
