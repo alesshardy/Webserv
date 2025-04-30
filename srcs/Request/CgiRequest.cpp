@@ -54,6 +54,7 @@ void CgiRequest::_initEnv()
     _env["PATH_INFO"] = _request->getUri();
     _env["PATH_TRANSLATED"] = _request->getMatchingLocation()->getRoot() + _request->getUri();
     _env["REDIRECT_STATUS"] = "200";
+    //SIUU AJOUT COOKIE ICI
 }
 
 void    CgiRequest::_CgiConvertEnvToChar()
