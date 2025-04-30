@@ -20,10 +20,17 @@ void signalHandler(int signum)
 
 int main(int ac, char **av)
 {
+    LogManager::log(LogManager::DEBUG, "Starting main");
     signal(SIGPIPE, SIG_IGN); // Ignorer SIGPIPE
+    // Capturer les signaux pour arrêter proprement le serveur
+    signal(SIGINT, signalHandler);
+    signal(SIGTERM, signalHandler);
+
+    LogManager::log(LogManager::DEBUG, "SIGPIPE signal ignored");
 
     //Initialisation du gestionnaire d'arguments de la ligne de commande
     CommandLineParser cmdParser(ac, av);
+    LogManager::log(LogManager::DEBUG, "CommandLineParser initialized");
 
     if (cmdParser.hasOption("help"))
     {
@@ -49,9 +56,6 @@ int main(int ac, char **av)
 
         LogManager::log(LogManager::INFO, "Server initialized successfully %d", server.get_socket());
 
-        // Capturer les signaux pour arrêter proprement le serveur
-        signal(SIGINT, signalHandler);
-        signal(SIGTERM, signalHandler);
         // Lancer le serveur
         server.run();
 
