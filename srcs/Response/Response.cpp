@@ -751,8 +751,18 @@ void Response::_handleCgi()
 {
     try
     {
+
+        if (!_request->getCgi())
+        {
+            LogManager::log(LogManager::ERROR, "No CGI request associated with this response");
+            _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
+            setRState(R_END);
+            return;
+        }
+
+        std::string tmpFilePath = _request->getCgi()->getTmpFilePath();
         // Open the temporary file containing the CGI output
-        std::ifstream cgiOutputFile(_request->getCgi()->getTmpFilePath().c_str(), std::ios::binary);
+        std::ifstream cgiOutputFile(tmpFilePath.c_str(), std::ios::binary);
         if (!cgiOutputFile.is_open())
         {
             LogManager::log(LogManager::ERROR, "Failed to open CGI output file: %s", _request->getCgi()->getTmpFilePath().c_str());
@@ -764,9 +774,21 @@ void Response::_handleCgi()
         // Read the content of the CGI file
         std::string cgiOutput((std::istreambuf_iterator<char>(cgiOutputFile)), std::istreambuf_iterator<char>());
         cgiOutputFile.close();
+        
+        LogManager::log(LogManager::DEBUG, "CGI Output:\n%s", cgiOutput.c_str());
+        // Separate headers and body of the CGI response
+        // Normalize line endings to \r\n
+        std::string normalizedCgiOutput;
+        for (size_t i = 0; i < cgiOutput.size(); ++i)
+        {
+            if (cgiOutput[i] == '\n' && (i == 0 || cgiOutput[i - 1] != '\r'))
+                normalizedCgiOutput += "\r\n";
+            else
+                normalizedCgiOutput += cgiOutput[i];
+        }
 
         // Separate headers and body of the CGI response
-        size_t headerEnd = cgiOutput.find("\r\n\r\n");
+        size_t headerEnd = normalizedCgiOutput.find("\r\n\r\n");
         if (headerEnd == std::string::npos)
         {
             LogManager::log(LogManager::ERROR, "Invalid CGI response format");
@@ -879,6 +901,18 @@ void Response::_sendFullResponse(const std::string& filePath, const std::string&
 void Response::_handlePost()
 {
     LogManager::log(LogManager::DEBUG, "Handling POST request");
+
+    if (isFileTransfer(_request->getMethod(), _request->getHeaders()))
+    {
+        LogManager::log(LogManager::DEBUG, "File transfer detected in POST request");
+        _response = "HTTP/1.1 200 OK\r\n";
+        _response += "Content-Type: text/plain\r\n";
+        _response += "Content-Length: 20\r\n";
+        _response += "\r\n";
+        _response += "File transfer done";
+        setRState(R_END);
+        return;
+    }
 
     // Vérifier si le corps de la requête est complet
     RequestBody* body = _request->getBody();

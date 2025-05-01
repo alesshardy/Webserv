@@ -16,8 +16,8 @@ class RequestBody
         bool                    _isComplete;
     
     public:
-        // RequestBody(size_t maxBodySize, bool isChunked);
-        RequestBody(size_t maxBodySize, bool isChunked, const std::string& uploadPath, const std::string& requestedFileName, bool isCgi);
+        RequestBody(size_t maxBodySize, bool isChunked);
+        // RequestBody(size_t maxBodySize, bool isChunked, const std::string& uploadPath, const std::string& requestedFileName, bool isCgi);
         ~RequestBody();
 
         void parseChunked(const std::string &rawData, size_t  &index);

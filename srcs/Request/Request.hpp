@@ -10,6 +10,7 @@
 #include <string>
 #include <ctime>
 #include <sstream>
+#include <filesystem>
 
 # define URI_MAX_SIZE 2048
 # define REQUETE_LINE_MAX_SIZE 8192
@@ -92,7 +93,9 @@ class Request{
         void checkCgi();
         void validateContentLengthAndEncoding();
         void skipHeaderEndSequence();
-        void checkAllowedMethods();    
+        void checkAllowedMethods();
+        
+        void handleFileTransfer();
         
         // utils
         bool isTimeoutExceeded() const;
