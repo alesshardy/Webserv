@@ -285,6 +285,7 @@ void Server::handleClientData(int client_fd)
         return;
     }
     std::string str(buffer, bytes);
+    std::cout << str << std::endl;
     _clients_map[client_fd]->handleRequest(str);
     // LogManager::log(LogManager::INFO, "Received %d bytes from client %d: %s", bytes, client_fd, buffer);
 }

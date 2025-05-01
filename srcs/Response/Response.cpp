@@ -44,6 +44,7 @@ int Response::buildResponse(int epoll_fd)
         return 0;
     }
 
+
     // Build the response based on the request method
     if (_request->getMethod() == "GET")
         _handleGet();
@@ -240,6 +241,12 @@ std::string Response::resolveFilePath()
     struct stat fileStat;
     if (stat(filePath.c_str(), &fileStat) == 0 && S_ISDIR(fileStat.st_mode))
     {
+        // Vérifier si la requête est une demande de listing
+        if (_request->getHeader("list").first == "list" && _request->getHeader("list").second == "true")
+        {
+            LogManager::log(LogManager::DEBUG, "Skipping autoindex logic for directory listing request: %s", filePath.c_str());
+            return filePath; // Retourner directement le chemin du répertoire
+        }
         if (!filePath.empty() && filePath[filePath.size() - 1] != '/')
             filePath += "/";
 
@@ -262,6 +269,7 @@ std::string Response::resolveFilePath()
         }
         else
         {
+            
             LogManager::log(LogManager::ERROR, "No index file found and autoindex is disabled for directory: %s", filePath.c_str());
             BlocServer* matchingServer = _server->getMatchingServer(_request);
             _response = ErrorPage::getErrorPage(403, matchingServer->getErrorPage());
@@ -273,17 +281,66 @@ std::string Response::resolveFilePath()
     return filePath;
 }
 
-std::string Response::generateDirectoryListing(const std::string& directoryPath, const std::string& uri)
+// std::string Response::generateDirectoryListing(const std::string& directoryPath, const std::string& uri)
+// {
+//     DIR* dir = opendir(directoryPath.c_str());
+//     if (!dir)
+//         throw std::runtime_error("ERROR: Failed to open directory");
+
+//     std::ostringstream html;
+//     html << "<!DOCTYPE html>\n<html>\n<head>\n<title>Index of " << uri << "</title>\n</head>\n<body>\n";
+//     html << "<h1>Index of " << uri << "</h1>\n<ul>\n";
+
+//     struct dirent* entry;
+//     while ((entry = readdir(dir)) != NULL)
+//     {
+//         std::string name = entry->d_name;
+//         if (name == "." || name == "..")
+//             continue;
+
+//         std::string fullPath = directoryPath + "/" + name;
+//         struct stat fileStat;
+//         if (stat(fullPath.c_str(), &fileStat) == 0)
+//         {
+//             if (S_ISDIR(fileStat.st_mode))
+//                 name += "/"; // Ajouter un slash pour les répertoires
+//         }
+
+//         html << "<li><a href=\"" << uri << "/" << name << "\">" << name << "</a></li>\n";
+//     }
+
+//     closedir(dir);
+
+//     html << "</ul>\n</body>\n</html>";
+//     return html.str();
+// }
+
+std::string Response::generateDirectoryListing(const std::string& directoryPath, const std::string& uri, const std::string& format)
 {
     DIR* dir = opendir(directoryPath.c_str());
     if (!dir)
         throw std::runtime_error("ERROR: Failed to open directory");
 
-    std::ostringstream html;
-    html << "<!DOCTYPE html>\n<html>\n<head>\n<title>Index of " << uri << "</title>\n</head>\n<body>\n";
-    html << "<h1>Index of " << uri << "</h1>\n<ul>\n";
+    std::ostringstream output;
+
+    if (format == "html")
+    {
+        // Générer une réponse HTML
+        output << "<!DOCTYPE html>\n<html>\n<head>\n<title>Index of " << uri << "</title>\n</head>\n<body>\n";
+        output << "<h1>Index of " << uri << "</h1>\n<ul>\n";
+    }
+    else if (format == "json")
+    {
+        // Générer une réponse JSON
+        output << "[";
+    }
+    else
+    {
+        throw std::invalid_argument("Unsupported format: " + format);
+    }
 
     struct dirent* entry;
+    bool first = true;
     while ((entry = readdir(dir)) != NULL)
     {
         std::string name = entry->d_name;
@@ -298,15 +355,242 @@ std::string Response::generateDirectoryListing(const std::string& directoryPath,
                 name += "/"; // Ajouter un slash pour les répertoires
         }
 
-        html << "<li><a href=\"" << uri << "/" << name << "\">" << name << "</a></li>\n";
+        if (format == "html")
+        {
+            output << "<li><a href=\"" << uri << "/" << name << "\">" << name << "</a></li>\n";
+        }
+        else if (format == "json")
+        {
+            if (!first)
+                output << ",";
+            first = false;
+            output << "\"" << name << "\"";
+        }
     }
 
     closedir(dir);
 
-    html << "</ul>\n</body>\n</html>";
-    return html.str();
+    if (format == "html")
+    {
+        output << "</ul>\n</body>\n</html>";
+    }
+    else if (format == "json")
+    {
+        output << "]";
+    }
+
+    return output.str();
 }
 
+// void Response::_handleUploads()
+// {
+//     try
+//     {
+//         std::string uploadDir = "www/main/uploads"; // Chemin du répertoire d'uploads
+//         std::string fileList = listUploadsDirectory(uploadDir);
+
+//         // Construire la réponse HTTP
+//         _response = "HTTP/1.1 200 OK\r\n";
+//         _response += "Content-Type: application/json\r\n";
+//         _response += "Content-Length: " + toString(fileList.size()) + "\r\n";
+//         _response += "\r\n";
+//         _response += fileList;
+
+//         LogManager::log(LogManager::DEBUG, "Uploads directory listed successfully");
+//     }
+//     catch (const std::exception& e)
+//     {
+//         LogManager::log(LogManager::ERROR, "Failed to list uploads directory: %s", e.what());
+//         _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
+//     }
+
+//     setRState(R_END);
+// }
+
+// void Response::_handleGet()
+// {
+//     try
+//     {
+//         // Récupérer dynamiquement le chemin du fichier
+//         std::string filePath = resolveFilePath();
+//         LogManager::log(LogManager::DEBUG, "Resolved file path: %s", filePath.c_str());
+
+//         // Vérifier si le chemin correspond à un répertoire
+//         struct stat fileStat;
+//         if (stat(filePath.c_str(), &fileStat) == 0 && S_ISDIR(fileStat.st_mode))
+//         {
+//             const BlocLocation* location = _request->getMatchingLocation();
+//             if (location && location->getAutoIndex())
+//             {
+//                 LogManager::log(LogManager::DEBUG, "Autoindex is enabled, generating directory listing for: %s", filePath.c_str());
+//                 std::string directoryListing = generateDirectoryListing(filePath, _request->getUri());
+//                 _response = "HTTP/1.1 200 OK\r\n";
+//                 _response += "Content-Type: text/html\r\n";
+//                 _response += "Content-Length: " + toString(directoryListing.size()) + "\r\n";
+//                 _response += "\r\n";
+//                 _response += directoryListing;
+//                 setRState(R_END);
+//                 return;
+//             }
+//             else
+//             {
+//                 LogManager::log(LogManager::ERROR, "Access denied: Autoindex is disabled for directory: %s", filePath.c_str());
+//                 BlocServer* matchingServer = _server->getMatchingServer(_request);
+//                 _response = ErrorPage::getErrorPage(403, matchingServer->getErrorPage());
+//                 setRState(R_END);
+//                 return;
+//             }
+//         }
+
+//         // Vérifier si le fichier existe et est accessible
+//         if (stat(filePath.c_str(), &fileStat) != 0)
+//         {
+//             LogManager::log(LogManager::ERROR, "File not found: %s", filePath.c_str());
+//             BlocServer* matchingServer = _server->getMatchingServer(_request);
+//             _response = ErrorPage::getErrorPage(404, matchingServer->getErrorPage());
+//             setRState(R_END);
+//             return;
+//         }
+
+//         if (access(filePath.c_str(), R_OK) != 0)
+//         {
+//             LogManager::log(LogManager::ERROR, "Access denied: %s", filePath.c_str());
+//             BlocServer* matchingServer = _server->getMatchingServer(_request);
+//             _response = ErrorPage::getErrorPage(403, matchingServer->getErrorPage());
+//             setRState(R_END);
+//             return;
+//         }
+
+//         // Déterminer le type de contenu
+//         std::string contentType = getContentType(filePath);
+
+//         // Choisir entre réponse complète ou chunked
+//         if (fileStat.st_size <= CHUNKED_THRESHOLD)
+//         {
+//             LogManager::log(LogManager::DEBUG, "File size is small enough for full response: %s", filePath.c_str());
+//             _sendFullResponse(filePath, contentType);
+//             setRState(R_END);
+//         }
+//         else
+//         {
+//             LogManager::log(LogManager::DEBUG, "File size is too large for full response, using chunked response: %s", filePath.c_str());
+//             _sendChunkedResponse(filePath, contentType);
+//             setRState(R_CHUNK); // Passer à l'état CHUNK
+//         }
+//     }
+//     catch (const std::exception& e)
+//     {
+//         LogManager::log(LogManager::ERROR, "Error in _handleGet: %s", e.what());
+//         _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
+//         setRState(R_END);
+//     }
+// }
+
+// void Response::_handleGet()
+// {
+//     try
+//     {
+//         // Récupérer dynamiquement le chemin du fichier
+//         std::string filePath = resolveFilePath();
+//         LogManager::log(LogManager::DEBUG, "Resolved file path: %s", filePath.c_str());
+
+//         // Vérifier si la requête demande un Directory Listing
+//         if (_request->getQueryString().find("list=true") != std::string::npos)
+//         {
+//             LogManager::log(LogManager::DEBUG, "Directory listing requested for: %s", filePath.c_str());
+
+//             // Vérifier si le chemin correspond à un répertoire
+//             struct stat fileStat;
+//             if (stat(filePath.c_str(), &fileStat) == 0 && S_ISDIR(fileStat.st_mode))
+//             {
+//                 std::string directoryListing = generateDirectoryListing(filePath, _request->getUri());
+//                 _response = "HTTP/1.1 200 OK\r\n";
+//                 _response += "Content-Type: text/html\r\n";
+//                 _response += "Content-Length: " + toString(directoryListing.size()) + "\r\n";
+//                 _response += "\r\n";
+//                 _response += directoryListing;
+//                 setRState(R_END);
+//                 return;
+//             }
+//             else
+//             {
+//                 LogManager::log(LogManager::ERROR, "Requested path is not a directory: %s", filePath.c_str());
+//                 _response = "HTTP/1.1 400 Bad Request\r\n\r\n";
+//                 setRState(R_END);
+//                 return;
+//             }
+//         }
+
+//         // Vérifier si le chemin correspond à un répertoire
+//         struct stat fileStat;
+//         if (stat(filePath.c_str(), &fileStat) == 0 && S_ISDIR(fileStat.st_mode))
+//         {
+//             const BlocLocation* location = _request->getMatchingLocation();
+//             if (location && location->getAutoIndex())
+//             {
+//                 LogManager::log(LogManager::DEBUG, "Autoindex is enabled, generating directory listing for: %s", filePath.c_str());
+//                 std::string directoryListing = generateDirectoryListing(filePath, _request->getUri());
+//                 _response = "HTTP/1.1 200 OK\r\n";
+//                 _response += "Content-Type: text/html\r\n";
+//                 _response += "Content-Length: " + toString(directoryListing.size()) + "\r\n";
+//                 _response += "\r\n";
+//                 _response += directoryListing;
+//                 setRState(R_END);
+//                 return;
+//             }
+//             else
+//             {
+//                 LogManager::log(LogManager::ERROR, "Access denied: Autoindex is disabled for directory: %s", filePath.c_str());
+//                 BlocServer* matchingServer = _server->getMatchingServer(_request);
+//                 _response = ErrorPage::getErrorPage(403, matchingServer->getErrorPage());
+//                 setRState(R_END);
+//                 return;
+//             }
+//         }
+
+//         // Vérifier si le fichier existe et est accessible
+//         if (stat(filePath.c_str(), &fileStat) != 0)
+//         {
+//             LogManager::log(LogManager::ERROR, "File not found: %s", filePath.c_str());
+//             BlocServer* matchingServer = _server->getMatchingServer(_request);
+//             _response = ErrorPage::getErrorPage(404, matchingServer->getErrorPage());
+//             setRState(R_END);
+//             return;
+//         }
+
+//         if (access(filePath.c_str(), R_OK) != 0)
+//         {
+//             LogManager::log(LogManager::ERROR, "Access denied: %s", filePath.c_str());
+//             BlocServer* matchingServer = _server->getMatchingServer(_request);
+//             _response = ErrorPage::getErrorPage(403, matchingServer->getErrorPage());
+//             setRState(R_END);
+//             return;
+//         }
+
+//         // Déterminer le type de contenu
+//         std::string contentType = getContentType(filePath);
+
+//         // Choisir entre réponse complète ou chunked
+//         if (fileStat.st_size <= CHUNKED_THRESHOLD)
+//         {
+//             LogManager::log(LogManager::DEBUG, "File size is small enough for full response: %s", filePath.c_str());
+//             _sendFullResponse(filePath, contentType);
+//             setRState(R_END);
+//         }
+//         else
+//         {
+//             LogManager::log(LogManager::DEBUG, "File size is too large for full response, using chunked response: %s", filePath.c_str());
+//             _sendChunkedResponse(filePath, contentType);
+//             setRState(R_CHUNK); // Passer à l'état CHUNK
+//         }
+//     }
+//     catch (const std::exception& e)
+//     {
+//         LogManager::log(LogManager::ERROR, "Error in _handleGet: %s", e.what());
+//         _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
+//         setRState(R_END);
+//     }
+// }
 void Response::_handleGet()
 {
     try
@@ -314,6 +598,38 @@ void Response::_handleGet()
         // Récupérer dynamiquement le chemin du fichier
         std::string filePath = resolveFilePath();
         LogManager::log(LogManager::DEBUG, "Resolved file path: %s", filePath.c_str());
+
+        // Vérifier si l'en-tête "list" est présent et a la valeur "true"
+        std::pair<std::string, std::string> listHeader = _request->getHeader("list");
+        if (listHeader.first == "list" && listHeader.second == "true")
+        {
+            LogManager::log(LogManager::DEBUG, "Directory listing requested via header for: %s", filePath.c_str());
+
+            // Vérifier si le chemin correspond à un répertoire
+            struct stat fileStat;
+            if (stat(filePath.c_str(), &fileStat) == 0 && S_ISDIR(fileStat.st_mode))
+            {
+                // Générer un Directory Listing au format JSON
+                std::string directoryListing = generateDirectoryListing(filePath, _request->getUri(), "json");
+
+                // Construire la réponse HTTP
+                _response = "HTTP/1.1 200 OK\r\n";
+                _response += "Content-Type: application/json\r\n";
+                _response += "Content-Length: " + toString(directoryListing.size()) + "\r\n";
+                _response += "\r\n";
+                _response += directoryListing;
+
+                setRState(R_END);
+                return;
+            }
+            else
+            {
+                LogManager::log(LogManager::ERROR, "Requested path is not a directory: %s", filePath.c_str());
+                _response = "HTTP/1.1 400 Bad Request\r\n\r\n";
+                setRState(R_END);
+                return;
+            }
+        }
 
         // Vérifier si le chemin correspond à un répertoire
         struct stat fileStat;
@@ -323,7 +639,7 @@ void Response::_handleGet()
             if (location && location->getAutoIndex())
             {
                 LogManager::log(LogManager::DEBUG, "Autoindex is enabled, generating directory listing for: %s", filePath.c_str());
-                std::string directoryListing = generateDirectoryListing(filePath, _request->getUri());
+                std::string directoryListing = generateDirectoryListing(filePath, _request->getUri(), "html");
                 _response = "HTTP/1.1 200 OK\r\n";
                 _response += "Content-Type: text/html\r\n";
                 _response += "Content-Length: " + toString(directoryListing.size()) + "\r\n";
@@ -385,7 +701,6 @@ void Response::_handleGet()
         setRState(R_END);
     }
 }
-
 bool Response::_isRedirect()
 {
     // Vérifier si l'URI correspond à une redirection dans un bloc location
@@ -505,136 +820,6 @@ void Response::_handleCgi()
     }
 }
 
-
-/**************************************Ancienne version handle get************* */
-// void Response::_handleGet()
-// {
-//     try
-//     {
-//         // Récupérer dynamiquement le chemin du fichier
-//         std::string filePath = resolveFilePath();
-//         LogManager::log(LogManager::DEBUG, "Resolved file path: %s", filePath.c_str());
-
-//         // Vérifier si le chemin correspond à un répertoire
-//         struct stat fileStat;
-//         if (stat(filePath.c_str(), &fileStat) == 0)
-//         {
-//             if (S_ISDIR(fileStat.st_mode))
-//             {
-//                 // Si c'est un répertoire, ajouter index.html
-//                 if (!filePath.empty() && filePath[filePath.size() - 1] != '/')
-//                     filePath += "/";
-//                 filePath += "index.html";
-//                 LogManager::log(LogManager::DEBUG, "Path is a directory, appending index.html: %s", filePath.c_str());
-//             }
-
-//             // Vérifier les permissions d'accès
-//             if (access(filePath.c_str(), R_OK) != 0)
-//             {
-//                 // Si l'accès est refusé, retourner une réponse 403
-//                 LogManager::log(LogManager::ERROR, "Access denied: %s", filePath.c_str());
-//                 BlocServer* matchingServer = _server->getMatchingServer(_request);
-//                 _response = ErrorPage::getErrorPage(403, matchingServer->getErrorPage());
-//                 setRState(R_END);
-//                 return;
-//             }
-//         }
-//         else
-//         {
-//             // Si le fichier ou le répertoire n'existe pas, retourner une réponse 404
-//             LogManager::log(LogManager::ERROR, "File not found: %s", filePath.c_str());
-//             BlocServer* matchingServer = _server->getMatchingServer(_request);
-//             _response = ErrorPage::getErrorPage(404, matchingServer->getErrorPage());
-//             setRState(R_END);
-//             return;
-//         }
-
-//         // Déterminer le type de contenu
-//         std::string contentType = getContentType(filePath);
-
-//         // Choisir entre réponse complète ou chunked
-//         if (fileStat.st_size <= CHUNKED_THRESHOLD)
-//         {
-//             LogManager::log(LogManager::DEBUG, "File size is small enough for full response: %s", filePath.c_str());
-//             _sendFullResponse(filePath, contentType);
-//             setRState(R_END);
-//         }
-//         else
-//         {
-//             LogManager::log(LogManager::DEBUG, "File size is too large for full response, using chunked response: %s", filePath.c_str());
-//             _sendChunkedResponse(filePath, contentType);
-//             setRState(R_CHUNK); // Passer à l'état CHUNK
-//         }
-//     }
-//     catch (const std::exception& e)
-//     {
-//         LogManager::log(LogManager::ERROR, "Error in _handleGet: %s", e.what());
-//         _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
-//         setRState(R_END);
-//     }
-// }
-// void Response::_handleGet()
-// {
-//     // Récupérer le chemin du fichier demandé
-//     std::string filePath = _request->getUri();
-//     if (filePath == "/")
-//         filePath = "/index.html"; // Par défaut, servir index.html
-    
-//     filePath = "www/main" + filePath; // Préfixer avec le répertoire racine
-//     LogManager::log(LogManager::DEBUG, "File path: %s", filePath.c_str());
-
-//     // Vérifier si le chemin correspond à un répertoire
-//     struct stat fileStat;
-//     if (stat(filePath.c_str(), &fileStat) == 0)
-//     {
-//         if (S_ISDIR(fileStat.st_mode))
-//         {
-//             // Si c'est un répertoire, ajouter index.html
-//             if (!filePath.empty() && filePath[filePath.size() - 1] != '/')
-//                 filePath += "/";
-//             filePath += "index.html";
-//             LogManager::log(LogManager::DEBUG, "Path is a directory, appending index.html: %s", filePath.c_str());
-//         }
-
-//         // Vérifier les permissions d'accès
-//         if (access(filePath.c_str(), R_OK) != 0)
-//         {
-//             // Si l'accès est refusé, retourner une réponse 403
-//             LogManager::log(LogManager::ERROR, "Access denied: %s", filePath.c_str());
-//             // BlocServer* matchingServer = _server->getMatchingServer(_request);
-//             _response = ErrorPage::getErrorPage(403, _request->getMatchingServer()->getErrorPage());
-//             setRState(R_END);
-//             return;
-//         }
-//     }
-//     else
-//     {
-//         // Si le fichier ou le répertoire n'existe pas, retourner une réponse 404
-//         LogManager::log(LogManager::ERROR, "File not found: %s", filePath.c_str());
-//         // BlocServer* matchingServer = _server->getMatchingServer(_request);
-//         _response = ErrorPage::getErrorPage(404, _request->getMatchingServer()->getErrorPage());
-//         setRState(R_END);
-//         return;
-//     }
-
-//     // Déterminer le type de contenu
-//     std::string contentType = getContentType(filePath);
-
-//     // Choisir entre réponse complète ou chunked
-//     if (fileStat.st_size <= CHUNKED_THRESHOLD)
-//     {
-//         LogManager::log(LogManager::DEBUG, "File size is small enough for full response: %s", filePath.c_str());
-//         _sendFullResponse(filePath, contentType);
-//         setRState(R_END);
-//     }
-//     else
-//     {
-//         LogManager::log(LogManager::DEBUG, "File size is too large for full response, using chunked response: %s", filePath.c_str());
-//         _sendChunkedResponse(filePath, contentType);
-//         setRState(R_CHUNK); // Passer à l'état CHUNK
-//     }
-// }
-
 void Response::_sendChunkedResponse(const std::string& filePath, const std::string& contentType)
 {
     std::ifstream file(filePath.c_str(), std::ios::binary);
@@ -734,7 +919,76 @@ void Response::_handleDelete()
 {
     // Handle DELETE request
     LogManager::log(LogManager::DEBUG, "Handling DELETE request");
-    // Implement DELETE logic here
+    
+    std::string filePath = _request->getUri();
+    if (filePath == "/")
+        filePath = ""; // Laisser vide pour ajouter l'index automatiquement
+    // Récupérer le bloc serveur correspondant
+    BlocServer* matchingServer = _request->getMatchingServer();
+    if (!matchingServer)
+        throw std::runtime_error("ERROR: No matching server found");
+    // Vérifier si une location correspond à l'URI
+    const BlocLocation* location = _request->getMatchingLocation();
+    std::string rootOrAlias;
+    std::vector<std::string> indexFiles;
+    if (location)
+    {
+        LogManager::log(LogManager::DEBUG, "Matching location found: %s", location->getRoot().c_str());
+        rootOrAlias = location->getAlias().empty() ? location->getRoot() : location->getAlias();
+        indexFiles = location->getIndex();
+    }
+    else
+    {
+        LogManager::log(LogManager::DEBUG, "No matching location found, using server root: %s", matchingServer->getRoot().c_str());
+        rootOrAlias = matchingServer->getRoot();
+        indexFiles = matchingServer->getIndex();
+    }
+    // Construire le chemin complet
+    std::string filePathToDelete = rootOrAlias + filePath;
+    // Vérifier si le fichier existe
+    if (directoryExists(filePathToDelete))
+    {
+        // Supprimer le répertoire
+        if (rmdir(filePathToDelete.c_str()) == 0)
+        {
+            LogManager::log(LogManager::DEBUG, "Directory deleted successfully: %s", filePathToDelete.c_str());
+            _response = "HTTP/1.1 200 OK\r\n";
+            _response += "Content-Type: text/plain\r\n";
+            _response += "Content-Length: 17\r\n";
+            _response += "\r\n";
+            _response += "Directory deleted";
+        }
+        else
+        {
+            LogManager::log(LogManager::ERROR, "Failed to delete directory: %s", filePathToDelete.c_str());
+            _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
+        }
+    }
+    else if (fileExists(filePathToDelete))
+    {
+        // Supprimer le fichier
+        if (remove(filePathToDelete.c_str()) == 0)
+        {
+            LogManager::log(LogManager::DEBUG, "File deleted successfully: %s", filePathToDelete.c_str());
+            _response = "HTTP/1.1 200 OK\r\n";
+            _response += "Content-Type: text/plain\r\n";
+            _response += "Content-Length: 12\r\n";
+            _response += "\r\n";
+            _response += "File deleted";
+        }
+        else
+        {
+            LogManager::log(LogManager::ERROR, "Failed to delete file: %s", filePathToDelete.c_str());
+            _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
+        }
+    }
+    else
+    {
+        LogManager::log(LogManager::ERROR, "File or directory not found: %s", filePathToDelete.c_str());
+        _response = "HTTP/1.1 404 Not Found\r\n\r\n";
+    }
+    setRState(R_END);
+    LogManager::log(LogManager::DEBUG, "DELETE response prepared for client %d", _client_fd);
 }
 void Response::_handlePut()
 {
