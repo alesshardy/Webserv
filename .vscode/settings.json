@@ -119,6 +119,7 @@
     "semaphore": "cpp",
     "*.tcc": "cpp",
     "codecvt": "cpp",
-    "iomanip": "cpp"
+    "iomanip": "cpp",
+    "cerrno": "cpp"
   }
 }

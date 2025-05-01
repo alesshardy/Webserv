@@ -26,6 +26,13 @@ Response::~Response()
 int Response::buildResponse(int epoll_fd)
 {
     (void)epoll_fd; // Suppress unused parameter warning SIUU
+    
+    if (_request->getState() == ERROR)
+    {
+        LogManager::log(LogManager::ERROR, "Request in ERROR state, cannot build response");
+        handleError(_request->getStatusCode());
+        return 0;
+    }
 
     if (_r_state != R_CHUNK)
         setRState(R_PROCESSING);
@@ -52,8 +59,6 @@ int Response::buildResponse(int epoll_fd)
         _handlePost();
     else if (_request->getMethod() == "DELETE")
         _handleDelete();
-    else if (_request->getMethod() == "PUT")
-        _handlePut();
     else
     {
         // SIUUU gerer plus tard le code 500
@@ -93,116 +98,7 @@ void Response::setClientSocket(Socket* client_socket)
 {
     _client_socket = client_socket;
 }
-// Handle different HTTP methods
-// void Response::_handleGet()
-// {
-//     // Récupérer le chemin du fichier demandé
-//     std::string filePath = _request->getUri();
-//     if (filePath == "/")
-//         filePath = "/index.html"; // Par défaut, servir index.html
-    
-//     filePath = "www/main" + filePath; // Préfixer avec le répertoire racine
-//     LogManager::log(LogManager::DEBUG, "File path: %s", filePath.c_str());
 
-//     // Vérifier si le chemin correspond à un répertoire
-//     struct stat fileStat;
-//     if (stat(filePath.c_str(), &fileStat) == 0)
-//     {
-//         if (S_ISDIR(fileStat.st_mode))
-//         {
-//             // Si c'est un répertoire, ajouter index.html
-//             if (!filePath.empty() && filePath[filePath.size() - 1] != '/')
-//                 filePath += "/";
-//             filePath += "index.html";
-//             LogManager::log(LogManager::DEBUG, "Path is a directory, appending index.html: %s", filePath.c_str());
-//         }
-
-//         // Vérifier les permissions d'accès
-//         if (access(filePath.c_str(), R_OK) != 0)
-//         {
-//             // Si l'accès est refusé, retourner une réponse 403
-//             LogManager::log(LogManager::ERROR, "Access denied: %s", filePath.c_str());
-//             BlocServer* matchingServer = _server->getMatchingServer(_request);
-//             _response = ErrorPage::getErrorPage(403, matchingServer->getErrorPage());
-//             setRState(R_END);
-//             return;
-//         }
-//     }
-//     else
-//     {
-//         // Si le fichier ou le répertoire n'existe pas, retourner une réponse 404
-//         LogManager::log(LogManager::ERROR, "File not found: %s", filePath.c_str());
-//         BlocServer* matchingServer = _server->getMatchingServer(_request);
-//         _response = ErrorPage::getErrorPage(404, matchingServer->getErrorPage());
-//         setRState(R_END);
-//         return;
-//     }
-
-//     // Ouvrir le fichier demandé
-//     std::ifstream file(filePath.c_str(), std::ios::binary);
-//     if (file.is_open())
-//     {
-//         LogManager::log(LogManager::DEBUG, "File opened successfully: %s", filePath.c_str());
-
-//         // Lire le contenu du fichier
-//         std::string content((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-//         file.close();
-
-//         // Déterminer le type de contenu
-//         std::string contentType = getContentType(filePath);
-
-//         // Construire les en-têtes de la réponse
-//         std::ostringstream oss;
-//         oss << content.size();
-//         _response_header = "HTTP/1.1 200 OK\r\n";
-//         _response_header += "Content-Type: " + contentType + "\r\n";
-//         _response_header += "Content-Length: " + oss.str() + "\r\n";
-//         _response_header += "\r\n";
-
-//         // Stocker le corps de la réponse
-//         _response_body = content;
-//         _response += _response_header + _response_body;
-
-//         LogManager::log(LogManager::INFO, "Response prepared for client %d: %s", _client_fd, filePath.c_str());
-//     }
-//     else
-//     {
-//         // Si le fichier n'est pas trouvé, retourner une réponse 404
-//         LogManager::log(LogManager::ERROR, "File not found: %s", filePath.c_str());
-//         BlocServer* matchingServer = _server->getMatchingServer(_request);
-//         _response = ErrorPage::getErrorPage(404, matchingServer->getErrorPage());
-//     }
-//     setRState(R_END);
-// }
-
-// std::string Response::resolveFilePath()
-// {
-//     // Récupérer le chemin URI demandé
-//     std::string uri = _request->getUri();
-//     if (uri == "/")
-//         uri = "/index.html"; // Par défaut, servir index.html
-
-//     // Récupérer le bloc serveur correspondant
-    
-//     if (!_request->getMatchingServer())
-//         throw std::runtime_error("ERROR: No matching server found");
-
-//     // Vérifier si une location correspond à l'URI
-    
-//     if (_request->getMatchingLocation())
-//     {
-//         LogManager::log(LogManager::DEBUG, "Matching location found: %s", _request->getMatchingLocation()->getRoot().c_str());
-//         // Si une location est trouvée, utiliser son root ou alias
-//         std::string rootOrAlias = _request->getMatchingLocation()->getAlias().empty() ? _request->getMatchingLocation()->getRoot() : _request->getMatchingLocation()->getAlias();
-//         LogManager::log(LogManager::DEBUG, "Using root or alias: %s", rootOrAlias.c_str());
-//         LogManager::log(LogManager::DEBUG, "Resolved file path: %s", (rootOrAlias + uri).c_str());
-//         return rootOrAlias + uri;
-//     }
-
-//     LogManager::log(LogManager::DEBUG, "No matching location found, using server root: %s", _request->getMatchingServer()->getRoot().c_str());
-//     // Si aucune location ne correspond, utiliser le root du serveur
-//     return _request->getMatchingServer()->getRoot() + uri;
-// }
 
 std::string Response::resolveFilePath()
 {
@@ -281,40 +177,6 @@ std::string Response::resolveFilePath()
     return filePath;
 }
 
-// std::string Response::generateDirectoryListing(const std::string& directoryPath, const std::string& uri)
-// {
-//     DIR* dir = opendir(directoryPath.c_str());
-//     if (!dir)
-//         throw std::runtime_error("ERROR: Failed to open directory");
-
-//     std::ostringstream html;
-//     html << "<!DOCTYPE html>\n<html>\n<head>\n<title>Index of " << uri << "</title>\n</head>\n<body>\n";
-//     html << "<h1>Index of " << uri << "</h1>\n<ul>\n";
-
-//     struct dirent* entry;
-//     while ((entry = readdir(dir)) != NULL)
-//     {
-//         std::string name = entry->d_name;
-//         if (name == "." || name == "..")
-//             continue;
-
-//         std::string fullPath = directoryPath + "/" + name;
-//         struct stat fileStat;
-//         if (stat(fullPath.c_str(), &fileStat) == 0)
-//         {
-//             if (S_ISDIR(fileStat.st_mode))
-//                 name += "/"; // Ajouter un slash pour les répertoires
-//         }
-
-//         html << "<li><a href=\"" << uri << "/" << name << "\">" << name << "</a></li>\n";
-//     }
-
-//     closedir(dir);
-
-//     html << "</ul>\n</body>\n</html>";
-//     return html.str();
-// }
-
 std::string Response::generateDirectoryListing(const std::string& directoryPath, const std::string& uri, const std::string& format)
 {
     DIR* dir = opendir(directoryPath.c_str());
@@ -382,30 +244,6 @@ std::string Response::generateDirectoryListing(const std::string& directoryPath,
     return output.str();
 }
 
-// void Response::_handleUploads()
-// {
-//     try
-//     {
-//         std::string uploadDir = "www/main/uploads"; // Chemin du répertoire d'uploads
-//         std::string fileList = listUploadsDirectory(uploadDir);
-
-//         // Construire la réponse HTTP
-//         _response = "HTTP/1.1 200 OK\r\n";
-//         _response += "Content-Type: application/json\r\n";
-//         _response += "Content-Length: " + toString(fileList.size()) + "\r\n";
-//         _response += "\r\n";
-//         _response += fileList;
-
-//         LogManager::log(LogManager::DEBUG, "Uploads directory listed successfully");
-//     }
-//     catch (const std::exception& e)
-//     {
-//         LogManager::log(LogManager::ERROR, "Failed to list uploads directory: %s", e.what());
-//         _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
-//     }
-
-//     setRState(R_END);
-// }
 
 // void Response::_handleGet()
 // {
@@ -415,100 +253,26 @@ std::string Response::generateDirectoryListing(const std::string& directoryPath,
 //         std::string filePath = resolveFilePath();
 //         LogManager::log(LogManager::DEBUG, "Resolved file path: %s", filePath.c_str());
 
-//         // Vérifier si le chemin correspond à un répertoire
-//         struct stat fileStat;
-//         if (stat(filePath.c_str(), &fileStat) == 0 && S_ISDIR(fileStat.st_mode))
+//         // Vérifier si l'en-tête "list" est présent et a la valeur "true"
+//         std::pair<std::string, std::string> listHeader = _request->getHeader("list");
+//         if (listHeader.first == "list" && listHeader.second == "true")
 //         {
-//             const BlocLocation* location = _request->getMatchingLocation();
-//             if (location && location->getAutoIndex())
-//             {
-//                 LogManager::log(LogManager::DEBUG, "Autoindex is enabled, generating directory listing for: %s", filePath.c_str());
-//                 std::string directoryListing = generateDirectoryListing(filePath, _request->getUri());
-//                 _response = "HTTP/1.1 200 OK\r\n";
-//                 _response += "Content-Type: text/html\r\n";
-//                 _response += "Content-Length: " + toString(directoryListing.size()) + "\r\n";
-//                 _response += "\r\n";
-//                 _response += directoryListing;
-//                 setRState(R_END);
-//                 return;
-//             }
-//             else
-//             {
-//                 LogManager::log(LogManager::ERROR, "Access denied: Autoindex is disabled for directory: %s", filePath.c_str());
-//                 BlocServer* matchingServer = _server->getMatchingServer(_request);
-//                 _response = ErrorPage::getErrorPage(403, matchingServer->getErrorPage());
-//                 setRState(R_END);
-//                 return;
-//             }
-//         }
-
-//         // Vérifier si le fichier existe et est accessible
-//         if (stat(filePath.c_str(), &fileStat) != 0)
-//         {
-//             LogManager::log(LogManager::ERROR, "File not found: %s", filePath.c_str());
-//             BlocServer* matchingServer = _server->getMatchingServer(_request);
-//             _response = ErrorPage::getErrorPage(404, matchingServer->getErrorPage());
-//             setRState(R_END);
-//             return;
-//         }
-
-//         if (access(filePath.c_str(), R_OK) != 0)
-//         {
-//             LogManager::log(LogManager::ERROR, "Access denied: %s", filePath.c_str());
-//             BlocServer* matchingServer = _server->getMatchingServer(_request);
-//             _response = ErrorPage::getErrorPage(403, matchingServer->getErrorPage());
-//             setRState(R_END);
-//             return;
-//         }
-
-//         // Déterminer le type de contenu
-//         std::string contentType = getContentType(filePath);
-
-//         // Choisir entre réponse complète ou chunked
-//         if (fileStat.st_size <= CHUNKED_THRESHOLD)
-//         {
-//             LogManager::log(LogManager::DEBUG, "File size is small enough for full response: %s", filePath.c_str());
-//             _sendFullResponse(filePath, contentType);
-//             setRState(R_END);
-//         }
-//         else
-//         {
-//             LogManager::log(LogManager::DEBUG, "File size is too large for full response, using chunked response: %s", filePath.c_str());
-//             _sendChunkedResponse(filePath, contentType);
-//             setRState(R_CHUNK); // Passer à l'état CHUNK
-//         }
-//     }
-//     catch (const std::exception& e)
-//     {
-//         LogManager::log(LogManager::ERROR, "Error in _handleGet: %s", e.what());
-//         _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
-//         setRState(R_END);
-//     }
-// }
-
-// void Response::_handleGet()
-// {
-//     try
-//     {
-//         // Récupérer dynamiquement le chemin du fichier
-//         std::string filePath = resolveFilePath();
-//         LogManager::log(LogManager::DEBUG, "Resolved file path: %s", filePath.c_str());
-
-//         // Vérifier si la requête demande un Directory Listing
-//         if (_request->getQueryString().find("list=true") != std::string::npos)
-//         {
-//             LogManager::log(LogManager::DEBUG, "Directory listing requested for: %s", filePath.c_str());
+//             LogManager::log(LogManager::DEBUG, "Directory listing requested via header for: %s", filePath.c_str());
 
 //             // Vérifier si le chemin correspond à un répertoire
 //             struct stat fileStat;
 //             if (stat(filePath.c_str(), &fileStat) == 0 && S_ISDIR(fileStat.st_mode))
 //             {
-//                 std::string directoryListing = generateDirectoryListing(filePath, _request->getUri());
+//                 // Générer un Directory Listing au format JSON
+//                 std::string directoryListing = generateDirectoryListing(filePath, _request->getUri(), "json");
+
+//                 // Construire la réponse HTTP
 //                 _response = "HTTP/1.1 200 OK\r\n";
-//                 _response += "Content-Type: text/html\r\n";
+//                 _response += "Content-Type: application/json\r\n";
 //                 _response += "Content-Length: " + toString(directoryListing.size()) + "\r\n";
 //                 _response += "\r\n";
 //                 _response += directoryListing;
+
 //                 setRState(R_END);
 //                 return;
 //             }
@@ -529,7 +293,7 @@ std::string Response::generateDirectoryListing(const std::string& directoryPath,
 //             if (location && location->getAutoIndex())
 //             {
 //                 LogManager::log(LogManager::DEBUG, "Autoindex is enabled, generating directory listing for: %s", filePath.c_str());
-//                 std::string directoryListing = generateDirectoryListing(filePath, _request->getUri());
+//                 std::string directoryListing = generateDirectoryListing(filePath, _request->getUri(), "html");
 //                 _response = "HTTP/1.1 200 OK\r\n";
 //                 _response += "Content-Type: text/html\r\n";
 //                 _response += "Content-Length: " + toString(directoryListing.size()) + "\r\n";
@@ -591,6 +355,7 @@ std::string Response::generateDirectoryListing(const std::string& directoryPath,
 //         setRState(R_END);
 //     }
 // }
+
 void Response::_handleGet()
 {
     try
@@ -625,8 +390,7 @@ void Response::_handleGet()
             else
             {
                 LogManager::log(LogManager::ERROR, "Requested path is not a directory: %s", filePath.c_str());
-                _response = "HTTP/1.1 400 Bad Request\r\n\r\n";
-                setRState(R_END);
+                handleError(400, false); // Utiliser handleError pour une erreur 400
                 return;
             }
         }
@@ -651,9 +415,7 @@ void Response::_handleGet()
             else
             {
                 LogManager::log(LogManager::ERROR, "Access denied: Autoindex is disabled for directory: %s", filePath.c_str());
-                BlocServer* matchingServer = _server->getMatchingServer(_request);
-                _response = ErrorPage::getErrorPage(403, matchingServer->getErrorPage());
-                setRState(R_END);
+                handleError(403, true); // Utiliser handleError pour une erreur 403 avec une page personnalisée
                 return;
             }
         }
@@ -662,18 +424,14 @@ void Response::_handleGet()
         if (stat(filePath.c_str(), &fileStat) != 0)
         {
             LogManager::log(LogManager::ERROR, "File not found: %s", filePath.c_str());
-            BlocServer* matchingServer = _server->getMatchingServer(_request);
-            _response = ErrorPage::getErrorPage(404, matchingServer->getErrorPage());
-            setRState(R_END);
+            handleError(404, true); // Utiliser handleError pour une erreur 404 avec une page personnalisée
             return;
         }
 
         if (access(filePath.c_str(), R_OK) != 0)
         {
             LogManager::log(LogManager::ERROR, "Access denied: %s", filePath.c_str());
-            BlocServer* matchingServer = _server->getMatchingServer(_request);
-            _response = ErrorPage::getErrorPage(403, matchingServer->getErrorPage());
-            setRState(R_END);
+            handleError(403, true); // Utiliser handleError pour une erreur 403 avec une page personnalisée
             return;
         }
 
@@ -697,10 +455,10 @@ void Response::_handleGet()
     catch (const std::exception& e)
     {
         LogManager::log(LogManager::ERROR, "Error in _handleGet: %s", e.what());
-        _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
-        setRState(R_END);
+        handleError(500, false); // Utiliser handleError pour une erreur 500
     }
 }
+
 bool Response::_isRedirect()
 {
     // Vérifier si l'URI correspond à une redirection dans un bloc location
@@ -747,37 +505,130 @@ bool Response::_isRedirect()
     return false;
 }
 
+// void Response::_handleCgi()
+// {
+//     try
+//     {
+
+//         if (!_request->getCgi())
+//         {
+//             LogManager::log(LogManager::ERROR, "No CGI request associated with this response");
+//             _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
+//             setRState(R_END);
+//             return;
+//         }
+
+//         std::string tmpFilePath = _request->getCgi()->getTmpFilePath();
+//         // Open the temporary file containing the CGI output
+//         std::ifstream cgiOutputFile(tmpFilePath.c_str(), std::ios::binary);
+//         if (!cgiOutputFile.is_open())
+//         {
+//             LogManager::log(LogManager::ERROR, "Failed to open CGI output file: %s", _request->getCgi()->getTmpFilePath().c_str());
+//             _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
+//             setRState(R_END);
+//             return;
+//         }
+
+//         // Read the content of the CGI file
+//         std::string cgiOutput((std::istreambuf_iterator<char>(cgiOutputFile)), std::istreambuf_iterator<char>());
+//         cgiOutputFile.close();
+        
+//         LogManager::log(LogManager::DEBUG, "CGI Output:\n%s", cgiOutput.c_str());
+//         // Separate headers and body of the CGI response
+//         // Normalize line endings to \r\n
+//         std::string normalizedCgiOutput;
+//         for (size_t i = 0; i < cgiOutput.size(); ++i)
+//         {
+//             if (cgiOutput[i] == '\n' && (i == 0 || cgiOutput[i - 1] != '\r'))
+//                 normalizedCgiOutput += "\r\n";
+//             else
+//                 normalizedCgiOutput += cgiOutput[i];
+//         }
+
+//         // Separate headers and body of the CGI response
+//         size_t headerEnd = normalizedCgiOutput.find("\r\n\r\n");
+//         if (headerEnd == std::string::npos)
+//         {
+//             LogManager::log(LogManager::ERROR, "Invalid CGI response format");
+//             _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
+//             setRState(R_END);
+//             return;
+//         }
+
+//         std::string cgiHeaders = cgiOutput.substr(0, headerEnd + 4);
+//         std::string cgiBody = cgiOutput.substr(headerEnd + 4);
+
+//         // Validate and fix CGI headers
+//         std::istringstream headerStream(cgiHeaders);
+//         std::ostringstream fixedHeaders;
+//         std::string line;
+//         bool hasContentType = false;
+
+//         while (std::getline(headerStream, line))
+//         {
+//             if (!line.empty() && line[line.size() - 1] == '\r') // Check the last character
+//                 line.erase(line.size() - 1); // Remove the last character
+
+//             if (line.empty())
+//                 continue;
+
+//             if (line.find("Content-type:") == 0 || line.find("Content-Type:") == 0)
+//                 hasContentType = true;
+
+//             fixedHeaders << line << "\r\n";
+//         }
+
+//         if (!hasContentType)
+//         {
+//             LogManager::log(LogManager::WARNING, "CGI response missing Content-Type header, adding default");
+//             fixedHeaders << "Content-Type: text/html\r\n";
+//         }
+
+//         fixedHeaders << "\r\n"; // Ensure headers end with a blank line
+
+//         // Build the HTTP response
+//         _response = "HTTP/1.1 200 OK\r\n" + fixedHeaders.str() + cgiBody;
+
+//         LogManager::log(LogManager::DEBUG, "CGI response prepared for client %d", _client_fd);
+//         setRState(R_END);
+//     }
+//     catch (const std::exception& e)
+//     {
+//         LogManager::log(LogManager::ERROR, "Error in _handleCgi: %s", e.what());
+//         _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
+//         setRState(R_END);
+//     }
+// }
+
 void Response::_handleCgi()
 {
     try
     {
-
+        // Vérifier si la requête est associée à un CGI
         if (!_request->getCgi())
         {
             LogManager::log(LogManager::ERROR, "No CGI request associated with this response");
-            _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
-            setRState(R_END);
+            handleError(500, false); // Utiliser handleError pour une erreur 500
             return;
         }
 
+        // Récupérer le chemin du fichier temporaire contenant la sortie CGI
         std::string tmpFilePath = _request->getCgi()->getTmpFilePath();
-        // Open the temporary file containing the CGI output
         std::ifstream cgiOutputFile(tmpFilePath.c_str(), std::ios::binary);
         if (!cgiOutputFile.is_open())
         {
-            LogManager::log(LogManager::ERROR, "Failed to open CGI output file: %s", _request->getCgi()->getTmpFilePath().c_str());
-            _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
-            setRState(R_END);
+            LogManager::log(LogManager::ERROR, "Failed to open CGI output file: %s", tmpFilePath.c_str());
+            handleError(500, false); // Utiliser handleError pour une erreur 500
             return;
         }
 
-        // Read the content of the CGI file
+        // Lire le contenu du fichier CGI
         std::string cgiOutput((std::istreambuf_iterator<char>(cgiOutputFile)), std::istreambuf_iterator<char>());
         cgiOutputFile.close();
-        
+
         LogManager::log(LogManager::DEBUG, "CGI Output:\n%s", cgiOutput.c_str());
-        // Separate headers and body of the CGI response
-        // Normalize line endings to \r\n
+
+        // Normaliser les fins de ligne à "\r\n"
         std::string normalizedCgiOutput;
         for (size_t i = 0; i < cgiOutput.size(); ++i)
         {
@@ -787,20 +638,19 @@ void Response::_handleCgi()
                 normalizedCgiOutput += cgiOutput[i];
         }
 
-        // Separate headers and body of the CGI response
+        // Séparer les en-têtes et le corps de la réponse CGI
         size_t headerEnd = normalizedCgiOutput.find("\r\n\r\n");
         if (headerEnd == std::string::npos)
         {
             LogManager::log(LogManager::ERROR, "Invalid CGI response format");
-            _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
-            setRState(R_END);
+            handleError(500, false); // Utiliser handleError pour une erreur 500
             return;
         }
 
-        std::string cgiHeaders = cgiOutput.substr(0, headerEnd + 4);
-        std::string cgiBody = cgiOutput.substr(headerEnd + 4);
+        std::string cgiHeaders = normalizedCgiOutput.substr(0, headerEnd + 4);
+        std::string cgiBody = normalizedCgiOutput.substr(headerEnd + 4);
 
-        // Validate and fix CGI headers
+        // Valider et corriger les en-têtes CGI
         std::istringstream headerStream(cgiHeaders);
         std::ostringstream fixedHeaders;
         std::string line;
@@ -808,8 +658,8 @@ void Response::_handleCgi()
 
         while (std::getline(headerStream, line))
         {
-            if (!line.empty() && line[line.size() - 1] == '\r') // Check the last character
-                line.erase(line.size() - 1); // Remove the last character
+            if (!line.empty() && line[line.size() - 1] == '\r') // Vérifier le dernier caractère
+                line.erase(line.size() - 1); // Supprimer le dernier caractère
 
             if (line.empty())
                 continue;
@@ -826,9 +676,9 @@ void Response::_handleCgi()
             fixedHeaders << "Content-Type: text/html\r\n";
         }
 
-        fixedHeaders << "\r\n"; // Ensure headers end with a blank line
+        fixedHeaders << "\r\n"; // S'assurer que les en-têtes se terminent par une ligne vide
 
-        // Build the HTTP response
+        // Construire la réponse HTTP
         _response = "HTTP/1.1 200 OK\r\n" + fixedHeaders.str() + cgiBody;
 
         LogManager::log(LogManager::DEBUG, "CGI response prepared for client %d", _client_fd);
@@ -837,8 +687,7 @@ void Response::_handleCgi()
     catch (const std::exception& e)
     {
         LogManager::log(LogManager::ERROR, "Error in _handleCgi: %s", e.what());
-        _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
-        setRState(R_END);
+        handleError(500, false); // Utiliser handleError pour une erreur 500
     }
 }
 
@@ -898,18 +747,127 @@ void Response::_sendFullResponse(const std::string& filePath, const std::string&
 }
 
 
+// void Response::_handlePost()
+// {
+//     LogManager::log(LogManager::DEBUG, "Handling POST request");
+
+//     if (isFileTransfer(_request->getMethod(), _request->getHeaders()))
+//     {
+//         LogManager::log(LogManager::DEBUG, "File transfer detected in POST request");
+
+//         // Récupérer le nom du fichier téléversé
+//         std::string fileName = extractFileNameFromMultipart(_request->_raw);
+//         if (fileName.empty())
+//         {
+//             LogManager::log(LogManager::ERROR, "Filename header is missing");
+//             _response = "HTTP/1.1 400 Bad Request\r\n\r\n";
+//             setRState(R_END);
+//             return;
+//         }
+
+//         // Construire une réponse HTML avec les détails du fichier
+//         std::ostringstream responseBody;
+//         responseBody << "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n";
+//         responseBody << "<meta charset=\"UTF-8\">\n<title>Fichier Téléversé</title>\n</head>\n<body>\n";
+//         responseBody << "<h1>✅ Téléversement Réussi !</h1>\n";
+//         responseBody << "<p>Votre fichier <strong>" << fileName << "</strong> a été téléversé avec succès.</p>\n";
+//         responseBody << "<p><a href=\"/uploads/" << fileName << "\" target=\"_blank\">Télécharger ou visualiser le fichier</a></p>\n";
+//         responseBody << "<p><a href=\"/filetransfert.html\">Téléverser un autre fichier</a></p>\n";
+//         responseBody << "</body>\n</html>";
+
+//         std::string body = responseBody.str();
+
+//         // Construire les en-têtes de la réponse
+//         std::ostringstream responseHeader;
+//         responseHeader << "HTTP/1.1 200 OK\r\n";
+//         responseHeader << "Content-Type: text/html\r\n";
+//         responseHeader << "Content-Length: " << body.size() << "\r\n";
+//         responseHeader << "\r\n";
+
+//         // Combiner les en-têtes et le corps
+//         _response = responseHeader.str() + body;
+
+//         setRState(R_END);
+//         return;
+//     }
+
+//     // Vérifier si le corps de la requête est complet
+//     RequestBody* body = _request->getBody();
+//     if (!body || !body->isComplete())
+//     {
+//         LogManager::log(LogManager::ERROR, "POST request body is incomplete or missing");
+//         _response = "HTTP/1.1 400 Bad Request\r\n\r\n";
+//         setRState(R_END);
+//         return;
+//     }
+
+//     // Lire le corps de la requête (si nécessaire pour traitement)
+//     try
+//     {
+//         std::string requestBody = body->readBody();
+//         LogManager::log(LogManager::DEBUG, ("POST request body: " + requestBody).c_str());
+//         // Traitez les données ici si nécessaire
+//     }
+//     catch (const std::exception& e)
+//     {
+//         LogManager::log(LogManager::ERROR, ("Failed to read POST request body: " + std::string(e.what())).c_str());
+//         _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
+//         setRState(R_END);
+//         return;
+//     }
+
+//     // Construire une réponse simple
+//     _response = "HTTP/1.1 200 OK\r\n";
+//     _response += "Content-Type: text/plain\r\n";
+//     _response += "Content-Length: 19\r\n";
+//     _response += "\r\n";
+//     _response += "POST request received";
+
+//     setRState(R_END);
+//     LogManager::log(LogManager::DEBUG, "POST response prepared for client %d", _client_fd);
+// }
+
+
 void Response::_handlePost()
 {
     LogManager::log(LogManager::DEBUG, "Handling POST request");
 
+    // Vérifier si la requête est un transfert de fichier
     if (isFileTransfer(_request->getMethod(), _request->getHeaders()))
     {
         LogManager::log(LogManager::DEBUG, "File transfer detected in POST request");
-        _response = "HTTP/1.1 200 OK\r\n";
-        _response += "Content-Type: text/plain\r\n";
-        _response += "Content-Length: 20\r\n";
-        _response += "\r\n";
-        _response += "File transfer done";
+
+        // Récupérer le nom du fichier téléversé
+        std::string fileName = extractFileNameFromMultipart(_request->_raw);
+        if (fileName.empty())
+        {
+            LogManager::log(LogManager::ERROR, "Filename header is missing");
+            handleError(400, false); // Utiliser handleError pour une erreur 400
+            return;
+        }
+
+        // Construire une réponse HTML avec les détails du fichier
+        std::ostringstream responseBody;
+        responseBody << "<!DOCTYPE html>\n<html lang=\"fr\">\n<head>\n";
+        responseBody << "<meta charset=\"UTF-8\">\n<title>Fichier Téléversé</title>\n</head>\n<body>\n";
+        responseBody << "<h1>✅ Téléversement Réussi !</h1>\n";
+        responseBody << "<p>Votre fichier <strong>" << fileName << "</strong> a été téléversé avec succès.</p>\n";
+        responseBody << "<p><a href=\"/uploads/" << fileName << "\" target=\"_blank\">Télécharger ou visualiser le fichier</a></p>\n";
+        responseBody << "<p><a href=\"/filetransfert.html\">Téléverser un autre fichier</a></p>\n";
+        responseBody << "</body>\n</html>";
+
+        std::string body = responseBody.str();
+
+        // Construire les en-têtes de la réponse
+        std::ostringstream responseHeader;
+        responseHeader << "HTTP/1.1 200 OK\r\n";
+        responseHeader << "Content-Type: text/html\r\n";
+        responseHeader << "Content-Length: " << body.size() << "\r\n";
+        responseHeader << "\r\n";
+
+        // Combiner les en-têtes et le corps
+        _response = responseHeader.str() + body;
+
         setRState(R_END);
         return;
     }
@@ -919,8 +877,7 @@ void Response::_handlePost()
     if (!body || !body->isComplete())
     {
         LogManager::log(LogManager::ERROR, "POST request body is incomplete or missing");
-        _response = "HTTP/1.1 400 Bad Request\r\n\r\n";
-        setRState(R_END);
+        handleError(400, false); // Utiliser handleError pour une erreur 400
         return;
     }
 
@@ -934,8 +891,7 @@ void Response::_handlePost()
     catch (const std::exception& e)
     {
         LogManager::log(LogManager::ERROR, ("Failed to read POST request body: " + std::string(e.what())).c_str());
-        _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
-        setRState(R_END);
+        handleError(500, false); // Utiliser handleError pour une erreur 500
         return;
     }
 
@@ -949,37 +905,117 @@ void Response::_handlePost()
     setRState(R_END);
     LogManager::log(LogManager::DEBUG, "POST response prepared for client %d", _client_fd);
 }
+// void Response::_handleDelete()
+// {
+//     // Handle DELETE request
+//     LogManager::log(LogManager::DEBUG, "Handling DELETE request");
+    
+//     std::string filePath = _request->getUri();
+//     if (filePath == "/")
+//         filePath = ""; // Laisser vide pour ajouter l'index automatiquement
+//     // Récupérer le bloc serveur correspondant
+//     BlocServer* matchingServer = _request->getMatchingServer();
+//     if (!matchingServer)
+//         throw std::runtime_error("ERROR: No matching server found");
+//     // Vérifier si une location correspond à l'URI
+//     const BlocLocation* location = _request->getMatchingLocation();
+//     std::string rootOrAlias;
+//     std::vector<std::string> indexFiles;
+//     if (location)
+//     {
+//         LogManager::log(LogManager::DEBUG, "Matching location found: %s", location->getRoot().c_str());
+//         rootOrAlias = location->getAlias().empty() ? location->getRoot() : location->getAlias();
+//         indexFiles = location->getIndex();
+//     }
+//     else
+//     {
+//         LogManager::log(LogManager::DEBUG, "No matching location found, using server root: %s", matchingServer->getRoot().c_str());
+//         rootOrAlias = matchingServer->getRoot();
+//         indexFiles = matchingServer->getIndex();
+//     }
+//     // Construire le chemin complet
+//     std::string filePathToDelete = rootOrAlias + filePath;
+//     // Vérifier si le fichier existe
+//     if (directoryExists(filePathToDelete))
+//     {
+//         // Supprimer le répertoire
+//         if (rmdir(filePathToDelete.c_str()) == 0)
+//         {
+//             LogManager::log(LogManager::DEBUG, "Directory deleted successfully: %s", filePathToDelete.c_str());
+//             _response = "HTTP/1.1 200 OK\r\n";
+//             _response += "Content-Type: text/plain\r\n";
+//             _response += "Content-Length: 17\r\n";
+//             _response += "\r\n";
+//             _response += "Directory deleted";
+//         }
+//         else
+//         {
+//             LogManager::log(LogManager::ERROR, "Failed to delete directory: %s", filePathToDelete.c_str());
+//             _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
+//         }
+//     }
+//     else if (fileExists(filePathToDelete))
+//     {
+//         // Supprimer le fichier
+//         if (remove(filePathToDelete.c_str()) == 0)
+//         {
+//             LogManager::log(LogManager::DEBUG, "File deleted successfully: %s", filePathToDelete.c_str());
+//             _response = "HTTP/1.1 200 OK\r\n";
+//             _response += "Content-Type: text/plain\r\n";
+//             _response += "Content-Length: 12\r\n";
+//             _response += "\r\n";
+//             _response += "File deleted";
+//         }
+//         else
+//         {
+//             LogManager::log(LogManager::ERROR, "Failed to delete file: %s", filePathToDelete.c_str());
+//             _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
+//         }
+//     }
+//     else
+//     {
+//         LogManager::log(LogManager::ERROR, "File or directory not found: %s", filePathToDelete.c_str());
+//         _response = "HTTP/1.1 404 Not Found\r\n\r\n";
+//     }
+//     setRState(R_END);
+//     LogManager::log(LogManager::DEBUG, "DELETE response prepared for client %d", _client_fd);
+// }
+
 void Response::_handleDelete()
 {
-    // Handle DELETE request
     LogManager::log(LogManager::DEBUG, "Handling DELETE request");
-    
+
     std::string filePath = _request->getUri();
     if (filePath == "/")
         filePath = ""; // Laisser vide pour ajouter l'index automatiquement
+
     // Récupérer le bloc serveur correspondant
     BlocServer* matchingServer = _request->getMatchingServer();
     if (!matchingServer)
-        throw std::runtime_error("ERROR: No matching server found");
+    {
+        LogManager::log(LogManager::ERROR, "No matching server found");
+        handleError(500, false); // Utiliser handleError pour une erreur 500
+        return;
+    }
+
     // Vérifier si une location correspond à l'URI
     const BlocLocation* location = _request->getMatchingLocation();
     std::string rootOrAlias;
-    std::vector<std::string> indexFiles;
     if (location)
     {
         LogManager::log(LogManager::DEBUG, "Matching location found: %s", location->getRoot().c_str());
         rootOrAlias = location->getAlias().empty() ? location->getRoot() : location->getAlias();
-        indexFiles = location->getIndex();
     }
     else
     {
         LogManager::log(LogManager::DEBUG, "No matching location found, using server root: %s", matchingServer->getRoot().c_str());
         rootOrAlias = matchingServer->getRoot();
-        indexFiles = matchingServer->getIndex();
     }
+
     // Construire le chemin complet
     std::string filePathToDelete = rootOrAlias + filePath;
-    // Vérifier si le fichier existe
+
+    // Vérifier si le fichier ou le répertoire existe
     if (directoryExists(filePathToDelete))
     {
         // Supprimer le répertoire
@@ -995,7 +1031,7 @@ void Response::_handleDelete()
         else
         {
             LogManager::log(LogManager::ERROR, "Failed to delete directory: %s", filePathToDelete.c_str());
-            _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
+            handleError(500, false); // Utiliser handleError pour une erreur 500
         }
     }
     else if (fileExists(filePathToDelete))
@@ -1013,32 +1049,34 @@ void Response::_handleDelete()
         else
         {
             LogManager::log(LogManager::ERROR, "Failed to delete file: %s", filePathToDelete.c_str());
-            _response = "HTTP/1.1 500 Internal Server Error\r\n\r\n";
+            handleError(500, false); // Utiliser handleError pour une erreur 500
         }
     }
     else
     {
         LogManager::log(LogManager::ERROR, "File or directory not found: %s", filePathToDelete.c_str());
-        _response = "HTTP/1.1 404 Not Found\r\n\r\n";
+        handleError(404, true); // Utiliser handleError pour une erreur 404 avec une page personnalisée
     }
+
     setRState(R_END);
     LogManager::log(LogManager::DEBUG, "DELETE response prepared for client %d", _client_fd);
 }
-void Response::_handlePut()
+
+void            Response::handleError(int error_code, bool errorPage)
 {
-    // Handle PUT request
-    LogManager::log(LogManager::DEBUG, "Handling PUT request");
-    // Implement PUT logic here
-}
-
-// void            Response::handleError(int error_code, bool errorPage)
-// {
-//     _request->setCode(error_code);
-
-//     if (errorPage)
-//         _response = ErrorPage::getErrorPage(error_code, _server->getErrorPage());
+    BlocServer* matchingServer = _request->getMatchingServer();
+    if (errorPage)
+    {
+        _response = ErrorPage::getErrorPage(error_code, matchingServer->getErrorPage());
+        setRState(R_END);
+    }
+    else
+    {
+        _response = "HTTP/1.1 " + toString(error_code) + " Error\r\n\r\n";
+        setRState(R_END);
+    }
     
-// }
+}
 
 
 
