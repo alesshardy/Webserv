@@ -45,3 +45,16 @@ std::string toString(int value)
 	oss << value;
 	return oss.str();
 }
+
+bool    directoryExists(const std::string &path)
+{
+    struct stat buffer;
+    return (stat(path.c_str(), &buffer) == 0 && S_ISDIR(buffer.st_mode));
+}
+bool    fileExists(const std::string &path)
+{
+    struct stat buffer;
+    return (stat(path.c_str(), &buffer) == 0 && S_ISREG(buffer.st_mode));
+}
+
+

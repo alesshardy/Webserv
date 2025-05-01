@@ -176,7 +176,7 @@ void    CgiRequest::checkEnd()
     else
     {
         LogManager::log(LogManager::DEBUG, ("cgi script crash"));
-        _request->handleError(502, ERROR, "cgi script crash");
+        // _request->handleError(502, ERROR, "cgi script crash");
     }
 }
 
