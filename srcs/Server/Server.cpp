@@ -578,16 +578,16 @@ BlocServer* Server::getMatchingServer(const Request* request) const
     // Utiliser le port stocké dans la requête
     int requestPort = request->getPort();
 
-    // Si un port est spécifié dans l'en-tête Host, vérifier qu'il correspond au port stocké
-    if (colonPos != std::string::npos)
-    {
-        int hostPort = ft_stoi(hostValue.substr(colonPos + 1));
-        if (hostPort != requestPort)
-        {
-            LogManager::log(LogManager::ERROR, "Port mismatch: Host header port (%d) does not match request port (%d)", hostPort, requestPort);
-            throw std::runtime_error("ERROR: Port in Host header does not match request port");
-        }
-    }
+    // // Si un port est spécifié dans l'en-tête Host, vérifier qu'il correspond au port stocké
+    // if (colonPos != std::string::npos)
+    // {
+    //     int hostPort = ft_stoi(hostValue.substr(colonPos + 1));
+    //     if (hostPort != requestPort)
+    //     {
+    //         LogManager::log(LogManager::ERROR, "Port mismatch: Host header port (%d) does not match request port (%d)", hostPort, requestPort);
+    //         throw std::runtime_error("ERROR: Port in Host header does not match request port");
+    //     }
+    // }
 
     // Trouver le bloc serveur correspondant
     const std::vector<BlocServer>& servers = _config.getServers();
