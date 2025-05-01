@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformation d'Image</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+        }
+        h1 {
+            font-size: 2rem;
+            color: #4a90e2;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        form {
+            margin-top: 20px;
+        }
+        input[type="file"], select, button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #4a90e2;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #357ABD;
+        }
+        .gif-container {
+            margin-top: 20px;
+        }
+        .gif-container img {
+            width: 80px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Transformez votre Image</h1>
+        <p>Choisissez une photo et appliquez un effet unique.</p>
+        <form method="post" action="./cgi-bin/cartoonize_face.py" enctype="multipart/form-data">
+            <label for="face">Sélectionnez une photo :</label>
+            <input type="file" id="face" name="face" accept="image/*" required>
+            
+            <label for="filter">Choisissez une catégorie de filtre :</label>
+            <select id="filter" name="filter" required>
+                <optgroup label="Effets Cartoon">
+                    <option value="cartoon">Cartoon</option>
+                    <option value="cartoon_glow">Cartoon Glow</option>
+                </optgroup>
+                <optgroup label="Effets Artistiques">
+                    <option value="pencil_sketch">Pencil Sketch</option>
+                    <option value="oil_painting">Oil Painting</option>
+                    <option value="halftone">Halftone</option>
+                </optgroup>
+                <optgroup label="Effets de Couleur">
+                    <option value="grayscale">Grayscale</option>
+                    <option value="invert">Invert Colors</option>
+                    <option value="sepia">Sepia</option>
+                    <option value="thermal">Thermal Vision</option>
+                </optgroup>
+                <optgroup label="Effets Stylisés">
+                    <option value="edges">Edge Detection</option>
+                    <option value="emboss">Emboss</option>
+                    <option value="glitch">Glitch</option>
+                    <option value="pixel_art">Pixel Art</option>
+                </optgroup>
+            </select>
+            
+            <button type="submit">Appliquer le Filtre</button>
+        </form>
+        <div class="gif-container">
+            <img src="https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif" alt="GIF amusant">
+        </div>
+    </div>
+</body>
+</html>
