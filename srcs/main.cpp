@@ -26,8 +26,6 @@ int main(int ac, char **av)
     signal(SIGINT, signalHandler);
     signal(SIGTERM, signalHandler);
 
-    LogManager::log(LogManager::DEBUG, "SIGPIPE signal ignored");
-
     //Initialisation du gestionnaire d'arguments de la ligne de commande
     CommandLineParser cmdParser(ac, av);
     LogManager::log(LogManager::DEBUG, "CommandLineParser initialized");

@@ -56,19 +56,19 @@ void CgiRequest::_initEnv()
     // Construire le chemin réel du fichier CGI
     std::string rootOrAlias = location->getAlias().empty() ? location->getRoot() : location->getAlias();
 
-    // Ajouter un '/' à rootOrAlias si nécessaire
-    if (!rootOrAlias.empty() && rootOrAlias[rootOrAlias.size() - 1] != '/')
-    {
-        rootOrAlias += '/';
-    }
+    // // Ajouter un '/' à rootOrAlias si nécessaire
+    // if (!rootOrAlias.empty() && rootOrAlias[rootOrAlias.size() - 1] != '/')
+    // {
+    //     rootOrAlias += '/';
+    // }
 
     std::string locationPath = location->getPath();
 
-    // Vérifier si le chemin de location se termine par un '/'
-    if (!locationPath.empty() && locationPath[locationPath.size() - 1] != '/')
-    {
-        locationPath += '/'; // Ajouter '/' si nécessaire
-    }
+    // // Vérifier si le chemin de location se termine par un '/'
+    // if (!locationPath.empty() && locationPath[locationPath.size() - 1] != '/')
+    // {
+    //     locationPath += '/'; // Ajouter '/' si nécessaire
+    // }
 
     _realPath = rootOrAlias + _request->getUri().substr(locationPath.size());
 
@@ -175,8 +175,8 @@ void    CgiRequest::checkEnd()
     }
     else
     {
-        LogManager::log(LogManager::DEBUG, ("cgi script crash"));
-        // _request->handleError(502, ERROR, "cgi script crash");
+        // LogManager::log(LogManager::ERROR, ("cgi script crash"));
+        _request->handleError(502, ERROR, "cgi script crash");
     }
 }
 

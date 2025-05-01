@@ -655,21 +655,17 @@ void Request::parseBody()
             _state = END;
         return;
     }
-
+    
     if (_headers.find("Content-Length") == _headers.end() && _headers.find("Transfer-Encoding") == _headers.end())
         return (handleError(400, ERROR, "ERROR: Bad Request, missing Content-Length or Transfer-Encoding"));
-
+        
     if (_contentLength > _maxBodySize)
         return (handleError(413, ERROR, "ERROR: Request body exceeds the maximum allowed size"));
 
     if (!_body)
-    {
-        std::string uploadPath = _matchingLocation ? _matchingLocation->getUploadPath() : "";
-        std::string requestedFileName = "uploaded_file.txt"; // Vous pouvez extraire un nom de fichier depuis l'URI si nécessaire
-        _body = new RequestBody(_maxBodySize, _isChunked, uploadPath, requestedFileName, isCgi());
-    }
-
-    try {
+        _body = new RequestBody(_maxBodySize, _isChunked);
+        
+    try{
         size_t startIndex = _i;
 
         if (_isChunked)
@@ -684,6 +680,19 @@ void Request::parseBody()
         }
 
         clearProcessedData(_i - startIndex);
+        if (isFileTransfer(_method, _headers) &&!isCgi())
+        {
+            std::string fileName = extractFileNameFromMultipart(_raw);
+            if (!fileName.empty())
+            {
+                LogManager::log(LogManager::DEBUG, "File transfer detected with filename: %s", fileName.c_str());
+                handleFileTransfer();
+                // _state = END;
+                return;
+            }
+        }
+    
+        // Gestion normale du corps
 
         if (_body->isComplete())
         {
@@ -728,6 +737,36 @@ void    Request::parseCgi()
     _cgi->executeCgi();
 }
 
+
+/********************************file Transfert ****************************************** */
+
+void Request::handleFileTransfer()
+{
+    std::string uploadDir = "./www/uploads/";
+    if (!directoryExists(uploadDir))
+    {
+        if (!createDirectory(uploadDir))
+            throw std::runtime_error("ERROR: Unable to create upload directory");
+        LogManager::log(LogManager::DEBUG, "Upload directory created: %s", uploadDir.c_str());
+    }
+
+    std::string fileName = extractFileNameFromMultipart(_raw);
+    if (fileName.empty())
+        throw std::runtime_error("ERROR: Missing or invalid filename in multipart data");
+
+    std::string filePath = uploadDir + sanitizeFileName(fileName);
+    LogManager::log(LogManager::DEBUG, "Attempting to open file for writing: %s", filePath.c_str());
+
+    std::ofstream outFile(filePath.c_str(), std::ios::binary);
+    if (!outFile.is_open())
+        throw std::runtime_error("ERROR: Unable to open file for writing");
+
+    outFile.write(_raw.c_str(), _raw.size());
+    outFile.close();
+
+    LogManager::log(LogManager::DEBUG, "File uploaded successfully: %s", filePath.c_str());
+    _state = END;
+}
 /******************************************* TIMER *******************************************/
 
 /**

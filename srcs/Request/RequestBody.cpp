@@ -2,58 +2,58 @@
 
 
 // Constructeur Et destructeur
-// RequestBody::RequestBody(size_t maxBodySize, bool isChunked)
-// {   
-//     _currentSize = 0;
-//     _maxBodySize = maxBodySize;
-//     _isChunked = isChunked;
-//     _isComplete = false;
-
-//     char tmpFileName[] = "/tmp/request_body_XXXXXX";
-//     _fd = mkstemp(tmpFileName); // fonction pour creer un fichier temporaire
-//     if (_fd == -1)
-//     {
-//         perror("mkstemp failed");
-//         throw std::runtime_error("ERROR: failed to create tmp file");
-//     }
-    
-//     _tmpFilePath = tmpFileName;
-// }
-
-RequestBody::RequestBody(size_t maxBodySize, bool isChunked, const std::string& uploadPath, const std::string& requestedFileName, bool isCgi)
-{
+RequestBody::RequestBody(size_t maxBodySize, bool isChunked)
+{   
     _currentSize = 0;
     _maxBodySize = maxBodySize;
     _isChunked = isChunked;
     _isComplete = false;
 
-    if (!isCgi && !uploadPath.empty())
+    char tmpFileName[] = "/tmp/request_body_XXXXXX";
+    _fd = mkstemp(tmpFileName); // fonction pour creer un fichier temporaire
+    if (_fd == -1)
     {
-        // Construire le chemin complet pour le fichier d'upload
-        _tmpFilePath = uploadPath + "/" + requestedFileName;
-        std::cout << "Fichier : " << _tmpFilePath << std::endl;
-
-        // Créer et ouvrir le fichier pour écriture
-        _fd = open(_tmpFilePath.c_str(), O_CREAT | O_WRONLY | O_TRUNC, 0644);
-        if (_fd == -1)
-        {
-            perror("open failed");
-            throw std::runtime_error("ERROR: failed to create upload file: " + _tmpFilePath);
-        }
+        perror("mkstemp failed");
+        throw std::runtime_error("ERROR: failed to create tmp file");
     }
-    else
-    {
-        // Créer un fichier temporaire pour les autres cas (par exemple, CGI)
-        char tmpFileName[] = "/tmp/request_body_XXXXXX";
-        _fd = mkstemp(tmpFileName);
-        if (_fd == -1)
-        {
-            perror("mkstemp failed");
-            throw std::runtime_error("ERROR: failed to create tmp file");
-        }
-        _tmpFilePath = tmpFileName;
-    }
+    
+    _tmpFilePath = tmpFileName;
 }
+
+// RequestBody::RequestBody(size_t maxBodySize, bool isChunked, const std::string& uploadPath, const std::string& requestedFileName, bool isCgi)
+// {
+//     _currentSize = 0;
+//     _maxBodySize = maxBodySize;
+//     _isChunked = isChunked;
+//     _isComplete = false;
+
+//     if (!isCgi && !uploadPath.empty())
+//     {
+//         // Construire le chemin complet pour le fichier d'upload
+//         _tmpFilePath = uploadPath + "/" + requestedFileName;
+//         std::cout << "Fichier : " << _tmpFilePath << std::endl;
+
+//         // Créer et ouvrir le fichier pour écriture
+//         _fd = open(_tmpFilePath.c_str(), O_CREAT | O_WRONLY | O_TRUNC, 0644);
+//         if (_fd == -1)
+//         {
+//             perror("open failed");
+//             throw std::runtime_error("ERROR: failed to create upload file: " + _tmpFilePath);
+//         }
+//     }
+//     else
+//     {
+//         // Créer un fichier temporaire pour les autres cas (par exemple, CGI)
+//         char tmpFileName[] = "/tmp/request_body_XXXXXX";
+//         _fd = mkstemp(tmpFileName);
+//         if (_fd == -1)
+//         {
+//             perror("mkstemp failed");
+//             throw std::runtime_error("ERROR: failed to create tmp file");
+//         }
+//         _tmpFilePath = tmpFileName;
+//     }
+// }
 
 RequestBody::~RequestBody()
 {

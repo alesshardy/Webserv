@@ -182,8 +182,8 @@ void Server::handleEpollEvents()
                 Client *client = _clients_map[fd];
                 if (client->getRequest() && client->getRequest()->getState() == CGI)
                 {
-                    // Vérifier si le CGI est terminé
-                    client->getRequest()->getCgi()->checkEnd();
+
+                        client->getRequest()->getCgi()->checkEnd();
                     if (client->getRequest()->getState() == END)
                     {
                         LogManager::log(LogManager::DEBUG, "CGI finished, ready to send response for FD %d", fd);
@@ -199,7 +199,7 @@ void Server::handleEpollEvents()
                         }
                     }
                 }
-                else if (client->getRequest() && client->getRequest()->getState() == END)
+                else if (client->getRequest() && (client->getRequest()->getState() == END || client->getRequest()->getState() == ERROR))
                 {
                     LogManager::log(LogManager::DEBUG, "Request is complete, sending response for FD %d", fd);
                     client->getResponse()->setTimeStartResponse();
