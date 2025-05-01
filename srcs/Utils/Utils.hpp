@@ -27,5 +27,7 @@ std::string extractFileNameFromMultipart(const std::string& rawData);
 
 bool isFileTransfer(const std::string& method, const std::map<std::string, std::string>& headers);
 
+std::string getStatusCodeMessage(int statusCode);
+
 
 #endif

@@ -112,3 +112,40 @@ bool isFileTransfer(const std::string& method, const std::map<std::string, std::
 
     return false;
 }
+
+
+std::string getStatusCodeMessage(int statusCode)
+{
+    switch (statusCode)
+    {
+        //succes
+        case 200: return "OK";
+        case 201: return "Created";
+        case 204: return "No Content";
+
+        //redirection
+        case 301: return "Moved Permanently";
+        case 302: return "Found";
+        case 303: return "See Other";
+        case 304: return "Not Modified";
+        case 307: return "Temporary Redirect";
+        case 308: return "Permanent Redirect";
+
+        //erreur client
+        case 400: return "Bad Request";
+        case 401: return "Unauthorized";
+        case 403: return "Forbidden";
+        case 404: return "Not Found";
+        case 405: return "Method Not Allowed";
+        case 408: return "Request Timeout";
+        case 409: return "Conflict";
+        case 413: return "Payload Too Large";
+        case 414: return "URI Too Long";
+        case 415: return "Unsupported Media Type";
+        case 429: return "Too Many Requests";
+
+        //erreur serveur
+        case 500: return "Internal Server Error";
+        default: return "Unknown Status Code";
+    }
+}

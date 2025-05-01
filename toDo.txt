@@ -7,3 +7,6 @@ test cgi avec bodychunked
 si lancer avec dossier au lieu de fichier conf cela prend chemin par default  ?
 
 code ERREUR dans request avec handke error au lieu de juste throw
+
+
+si on essaye d'executer un cgi qui n'existe pas, le gci crash et ca quitte le serveur
