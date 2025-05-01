@@ -46,7 +46,7 @@ void Client::handleRequest(std::string const & str)
         _request->parseRequest(str);
 
         // Vérifier si la requête est complète
-        if (_request->getState() == END)
+        if (_request->getState() == END || _request->getState() == ERROR)
         {
             _server->change_epoll_event(_client_fd, RESPONSE_EVENTS);
             LogManager::log(LogManager::DEBUG, "Request complete for client %d", _client_fd);
