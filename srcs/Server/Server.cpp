@@ -199,7 +199,7 @@ void Server::handleEpollEvents()
                         }
                     }
                 }
-                else if (client->getRequest() && client->getRequest()->getState() == END)
+                else if (client->getRequest() && (client->getRequest()->getState() == END || client->getRequest()->getState() == ERROR))
                 {
                     LogManager::log(LogManager::DEBUG, "Request is complete, sending response for FD %d", fd);
                     client->getResponse()->setTimeStartResponse();
@@ -652,7 +652,7 @@ void Server::checkRequestTimeouts()
         if (request)
         {
             // Vérifier si la requête a dépassé le timeout
-            if (request->isTimeoutExceeded() && request->getState() != END)
+            if (request->isTimeoutExceeded() && request->getState() != END && request->getState() != ERROR)
             {
                 if (request->getState() == CGI)
                 {
@@ -680,13 +680,15 @@ void Server::checkRequestTimeouts()
             }
 
             // Vérifier si la requête est dans un état d'erreur
-            if (request->getState() == ERROR)
+            if (request->getState() == ERROR && request->_sentToResponse == false) 
             {
                 LogManager::log(LogManager::ERROR, "Request in ERROR state for client FD %d", it->first);
-                int client_fd = it->first;
-                ++it;
-                close_client(client_fd); // Fermez la connexion pour ce client
-                continue;
+                change_epoll_event(it->first, EPOLLOUT);
+                request->_sentToResponse = true;
+                // int client_fd = it->first;
+                // ++it;
+                // close_client(client_fd); // Fermez la connexion pour ce client
+                // continue;
             }
         }
         //ajouter check de temps

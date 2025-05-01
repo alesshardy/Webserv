@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -92,5 +92,208 @@
         <p>&copy; 2025 42 Webserv. Tous droits réservés.</p>
     </footer>
     <script src="script.js"></script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="42logo.png">
+    <title>Webserv - Serveur Web Professionnel</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin: 0;
+            color: #f5f5f5;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            margin: 10px 0 0;
+            color: #dcdcdc;
+        }
+
+        main {
+            padding: 40px 20px;
+        }
+
+        section {
+            margin-bottom: 50px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #f5f5f5;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        .feature-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .feature {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            width: 200px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+
+        .feature p {
+            font-size: 0.9rem;
+            color: #dcdcdc;
+        }
+
+        .feature-button a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #4caf50;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .feature-button a:hover {
+            background: #388e3c;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #dcdcdc;
+            font-size: 0.9rem;
+        }
+
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Webserv - Serveur Web Professionnel</h1>
+        <p>Un serveur web moderne, performant et conçu pour répondre à vos besoins.</p>
+    </header>
+    <main>
+        <section class="intro">
+            <h2>À propos de Webserv</h2>
+            <p>Webserv est un serveur web robuste, capable de gérer plusieurs connexions simultanément. Il prend en charge les méthodes HTTP essentielles et offre des fonctionnalités avancées pour les développeurs et les entreprises.</p>
+        </section>
+        <section class="features">
+            <h2>Fonctionnalités</h2>
+            <div class="feature-box">
+                <div class="feature">
+                    <h3>GET</h3>
+                    <p>Récupérez des ressources facilement.</p>
+                    <button class="feature-button"><a href="GET.html">Explorer</a></button>
+                </div>
+                <div class="feature">
+                    <h3>POST</h3>
+                    <p>Envoyez des données au serveur.</p>
+                    <button class="feature-button"><a href="POST.html">Tester</a></button>
+                </div>
+                <div class="feature">
+                    <h3>DELETE</h3>
+                    <p>Supprimez des ressources sur le serveur.</p>
+                    <button class="feature-button"><a href="DELETE.html">Supprimer</a></button>
+                </div>
+                <div class="feature">
+                    <h3>UPLOAD</h3>
+                    <p>Téléversez des fichiers vers le serveur.</p>
+                    <button class="feature-button"><a href="filetransfert.html">Téléverser</a></button>
+                </div>
+                <div class="feature">
+                    <h3>Python CGI</h3>
+                    <p>Exécutez des scripts Python CGI dynamiques.</p>
+                    <button class="feature-button"><a href="python_cgi.html">Découvrir</a></button>
+                </div>
+                <div class="feature">
+                    <h3>PHP CGI</h3>
+                    <p>Exécutez des scripts PHP CGI dynamiques.</p>
+                    <button class="feature-button"><a href="php-cgi.html">Tester</a></button>
+                </div>
+            </div>
+        </section>
+        <section class="usage">
+            <h2>Comment démarrer ?</h2>
+            <p>Lancez le serveur avec la commande suivante :</p>
+            <pre>./webserv [fichier_de_configuration]</pre>
+            <p>Ensuite, accédez au serveur via votre navigateur à l'adresse <a href="http://localhost:8080">http://localhost:8080</a>.</p>
+        </section>
+        <section class="authors">
+            <h2>Équipe de Développement</h2>
+            <div class="author-box">
+                <div class="author">
+                    <img src="apintus.jpg" alt="Apintus">
+                    <p>Apintus</p>
+                </div>
+                <div class="author">
+                    <img src="kammi.jpg" alt="Kammi">
+                    <p>Kammi</p>
+                </div>
+                <div class="author">
+                    <img src="tpassin.jpg" alt="Tpassin">
+                    <p>Tpassin</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 Webserv. Tous droits réservés.</p>
+    </footer>
 </body>
 </html>

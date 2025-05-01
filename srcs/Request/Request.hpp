@@ -69,6 +69,7 @@ class Request{
         std::string                         _queryString;
         int                                 _port;
         CgiRequest                          *_cgi;
+        bool                                _sentToResponse;
         
         // Method
         void parseRequest(std::string request);
