@@ -34,8 +34,8 @@ port = 4343
 
 # Requête HTTP avec body en mode Content-Length
 request = (
-    "POST / HTTP/1.1\r\n"
-    "Host: localhost:3434\r\n"
+    "POOST / HTTP/1.1\r\n"
+    "Host: localhost:4343\r\n"
     "Content-Length: 21\r\n"
     "\r\n"
     "Wikipedia in\r\nchunks."
