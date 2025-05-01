@@ -43,10 +43,54 @@ std::string ErrorPage::generateStandardErrorPage(int error_code)
     // Obtenir le message correspondant au code d'erreur
     std::string errorMessage = getStatusCodeMessage(error_code);
 
-    // Générer une page d'erreur standard
-    std::string page = "<html><head><title>Error " + toString(error_code) + " - " + errorMessage + "</title></head>";
-    page += "<body><h1>Error " + toString(error_code) + " - " + errorMessage + "</h1>";
-    page += "<p>Something went wrong. Please try again later.</p></body></html>";
+    // Générer une page d'erreur standard avec un style minimaliste
+    std::string page = "<!DOCTYPE html>";
+    page += "<html lang=\"en\">";
+    page += "<head>";
+    page += "<meta charset=\"UTF-8\">";
+    page += "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">";
+    page += "<title>Error " + toString(error_code) + " - " + errorMessage + "</title>";
+    page += "<style>";
+    page += "body {";
+    page += "  font-family: Arial, sans-serif;";
+    page += "  background-color: #f8f9fa;";
+    page += "  color: #333;";
+    page += "  display: flex;";
+    page += "  justify-content: center;";
+    page += "  align-items: center;";
+    page += "  height: 100vh;";
+    page += "  margin: 0;";
+    page += "}";
+    page += ".error-container {";
+    page += "  text-align: center;";
+    page += "  background: #fff;";
+    page += "  padding: 20px;";
+    page += "  border-radius: 10px;";
+    page += "  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);";
+    page += "}";
+    page += ".error-logo {";
+    page += "  font-size: 50px;";
+    page += "  color: #e74c3c;";
+    page += "  margin-bottom: 20px;";
+    page += "}";
+    page += ".error-title {";
+    page += "  font-size: 24px;";
+    page += "  margin-bottom: 10px;";
+    page += "}";
+    page += ".error-message {";
+    page += "  font-size: 16px;";
+    page += "  color: #666;";
+    page += "}";
+    page += "</style>";
+    page += "</head>";
+    page += "<body>";
+    page += "<div class=\"error-container\">";
+    page += "  <div class=\"error-logo\">⚠️</div>";
+    page += "  <div class=\"error-title\">Error " + toString(error_code) + " - " + errorMessage + "</div>";
+    page += "  <div class=\"error-message\">Something went wrong. Please try again later.</div>";
+    page += "</div>";
+    page += "</body>";
+    page += "</html>";
 
     // Construire les en-têtes HTTP
     std::ostringstream oss;
