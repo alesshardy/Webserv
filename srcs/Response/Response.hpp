@@ -58,9 +58,8 @@ class   Response
         void                _handlePost();
         void                _handleDelete();
         void                _handleCgi();
-        void                _handlePut();
         bool                _isRedirect();
-       // void                _handleUploads();
+     
 
     public:
         Response(Client* client);
@@ -96,7 +95,7 @@ class   Response
 
         bool                isTimeoutExceeded() const;
 
-        // void                handleError(int error_code, bool errorPage = true);
+        void                handleError(int error_code, bool errorPage = true);
 };
 
 #endif

@@ -1,6 +1,6 @@
 
-#!/usr/bin/env php
 <?php
+#!/usr/bin/env php
 
 // Récupérer l'humeur envoyée via POST
 $mood = isset($_POST['mood']) ? $_POST['mood'] : 'unknown';
@@ -42,7 +42,7 @@ $messages = [
 $response = $messages[$mood] ?? $messages['unknown'];
 
 // Générer la réponse HTML
-echo "Content-Type: text/html; charset=UTF-8\r\n\r\n";
+//echo "Content-Type: text/html; charset=UTF-8\r\n\r\n";
 echo <<<HTML
 <!DOCTYPE html>
 <html lang="en">
