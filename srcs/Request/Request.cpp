@@ -100,7 +100,7 @@ void Request::parseRequest(std::string str)
             parseBody();
         if (_state == CGI)
             parseCgi();
-        if  (_state == END)
+        if  (_state == END || _state == ERROR)
                 return ;
     }
     catch (const std::runtime_error &e)
