@@ -1,6 +1,6 @@
 #include "Request.hpp"
 
-Request::Request(Client *client, Server *server): _client(client), _server(server), _body(NULL),_raw(""), _method(""), _uri(""), _version(""), _currentHeaderKey(""), _statusCode(200), _state(0), _inHeader(false), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0), _timeOut(std::time(NULL)), _isCgi(false), _queryString(""), _port(0), _cgi(NULL)
+Request::Request(Client *client, Server *server): _client(client), _server(server), _body(NULL),_raw(""), _method(""), _uri(""), _version(""), _currentHeaderKey(""), _statusCode(200), _state(0), _inHeader(false), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0), _timeOut(std::time(NULL)), _isCgi(false), _queryString(""), _port(0), _cgi(NULL), _sentToResponse(false)
 {
     setPort(_client->getClientSocket()->get_port());
 }
@@ -34,6 +34,7 @@ Request &Request::operator=(Request const & rhs)
         this->_isCgi = rhs._isCgi;
         this->_queryString = rhs._queryString;
         this->_port = rhs._port;
+        this->_sentToResponse = rhs._sentToResponse;
 
         if (this->_body)
         {
@@ -385,6 +386,7 @@ void Request::checkHeader()
 
     checkHostHeader();
     findMatchingServerAndLocation();
+    validateHostPort();
     checkCgi();
     getMaxBodySize();
     validateContentLengthAndEncoding();
@@ -585,6 +587,28 @@ void Request::getMaxBodySize()
     LogManager::log(LogManager::DEBUG, ("Max body size set to: " + maxBodySizeStr).c_str());
 }
 
+
+void Request::validateHostPort() const
+{
+    std::map<std::string, std::string> headers = getHeaders();
+    if (headers.find("Host") == headers.end())
+        throw std::runtime_error("ERROR: Missing Host Header");
+
+    std::string hostValue = headers.at("Host");
+    size_t colonPos = hostValue.find(':');
+    int requestPort = getPort();
+
+    if (colonPos != std::string::npos)
+    {
+        int hostPort = ft_stoi(hostValue.substr(colonPos + 1));
+        if (hostPort != requestPort)
+        {
+            LogManager::log(LogManager::ERROR, "Port mismatch: Host header port (%d) does not match request port (%d)", hostPort, requestPort);
+            throw std::runtime_error("ERROR: Port in Host header does not match request port");
+        }
+    }
+}
+
 /******************************* PARSING DU BODY *****************************/
 
 /**
@@ -663,7 +687,7 @@ void Request::parseBody()
         return (handleError(413, ERROR, "ERROR: Request body exceeds the maximum allowed size"));
 
     if (!_body)
-        _body = new RequestBody(_maxBodySize, _isChunked);
+        _body = new RequestBody(_maxBodySize, _isChunked, this);
         
     try{
         size_t startIndex = _i;

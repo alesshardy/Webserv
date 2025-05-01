@@ -29,7 +29,7 @@ int Response::buildResponse(int epoll_fd)
     
     if (_request->getState() == ERROR)
     {
-        LogManager::log(LogManager::ERROR, "Request in ERROR state, cannot build response");
+        LogManager::log(LogManager::DEBUG, "Request in ERROR stat,  building response");
         handleError(_request->getStatusCode());
         return 0;
     }

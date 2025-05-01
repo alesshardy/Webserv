@@ -84,7 +84,6 @@ class Request{
         void parseQuery();
         void parseBody();
         void clearProcessedData(size_t processedBytes);
-        void handleError(int code, int state, const std::string& errorMessage);
         void parseCgi();
         void getMaxBodySize();
         
@@ -95,6 +94,7 @@ class Request{
         void validateContentLengthAndEncoding();
         void skipHeaderEndSequence();
         void checkAllowedMethods();
+        void validateHostPort() const;
         
         void handleFileTransfer();
         
@@ -131,7 +131,7 @@ class Request{
         const std::string &getQueryString() const {return _queryString;}
         CgiRequest *getCgi() const {return _cgi;}
 
-
+        void handleError(int code, int state, const std::string& errorMessage);
     
         // Setters
         void setCode(int const &code) {_statusCode = code;}

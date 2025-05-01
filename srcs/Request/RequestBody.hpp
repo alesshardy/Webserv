@@ -4,10 +4,13 @@
 #include <iostream>
 #include "Request.hpp"
 
+class Request;
+
 class RequestBody
 {
     friend class CgiRequest;
     private:
+        Request                 *_request;
         std::string             _tmpFilePath;
         int                     _fd;
         size_t                  _currentSize;
@@ -16,7 +19,7 @@ class RequestBody
         bool                    _isComplete;
     
     public:
-        RequestBody(size_t maxBodySize, bool isChunked);
+        RequestBody(size_t maxBodySize, bool isChunked, Request *request);
         // RequestBody(size_t maxBodySize, bool isChunked, const std::string& uploadPath, const std::string& requestedFileName, bool isCgi);
         ~RequestBody();
 
