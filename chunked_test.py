@@ -30,7 +30,7 @@
 import socket
 
 host = "localhost"
-port = 3434
+port = 4343
 
 # Requête HTTP avec body en mode Content-Length
 request = (
@@ -74,23 +74,23 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 #     response = s.recv(4096)
 #     print(response.decode())
 
-import socket
+# import socket
 
-host = "localhost"
-port = 4343
+# host = "localhost"
+# port = 4343
 
-# Requête HTTP avec body en mode Content-Length
-request = (
-    "POST / HTTP/1.1\r\n"
-    "Host: localhost:4343\r\n"
-    "Content-Length: 20\r\n"
-    "\r\n"
-    "Wikipedia in\r\nchunks."
-)
+# # Requête HTTP avec body en mode Content-Length
+# request = (
+#     "POST / HTTP/1.1\r\n"
+#     "Host: localhost:4343\r\n"
+#     "Content-Length: 20\r\n"
+#     "\r\n"
+#     "Wikipedia in\r\nchunks."
+# )
 
-# Envoyer la requête
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.connect((host, port))
-    s.sendall(request.encode())
-    response = s.recv(4096)
-    print(response.decode())
+# # Envoyer la requête
+# with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+#     s.connect((host, port))
+#     s.sendall(request.encode())
+#     response = s.recv(4096)
+#     print(response.decode())

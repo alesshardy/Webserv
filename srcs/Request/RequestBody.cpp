@@ -2,11 +2,12 @@
 
 
 // Constructeur Et destructeur
-RequestBody::RequestBody(size_t maxBodySize, bool isChunked)
+RequestBody::RequestBody(size_t maxBodySize, bool isChunked, Request *request)
 {   
     _currentSize = 0;
     _maxBodySize = maxBodySize;
     _isChunked = isChunked;
+    _request = request;
     _isComplete = false;
 
     char tmpFileName[] = "/tmp/request_body_XXXXXX";
@@ -94,7 +95,9 @@ void RequestBody::parseContentLength(const std::string &rawData, size_t  &index,
     if (_currentSize == contentLength)
         _isComplete = true;
     else if (_currentSize > contentLength)
-        throw std::runtime_error("ERROR: Body size exceeds Content-Length");
+        _request->handleError(400, ERROR, "ERROR : empty request");
+        // throw std::runtime_error("ERROR: Body size exceeds Content-Length");
+
     
 }
 
