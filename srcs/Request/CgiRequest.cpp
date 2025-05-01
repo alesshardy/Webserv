@@ -4,8 +4,9 @@ CgiRequest::CgiRequest(Request *request, std::string cgiPath, std::string script
 {
     _initEnv();
 
-    char tmpFileName[] = "/tmp/cgi_tmpfile_XXXXXX";
-    _fd = mkstemp(tmpFileName); // fonction pour creer un fichier temporaire
+    char tmpFileName[] = "/tmp/cgi_tmpfile_XXXXXX"; //SIUUU
+    // _fd = mkstemp(tmpFileName); // fonction pour creer un fichier temporaire
+    _fd = open(tmpFileName, O_CREAT | O_RDWR | O_TRUNC, 0644); 
     if (_fd == -1)
     {
         perror("mkstemp failed");
@@ -56,19 +57,19 @@ void CgiRequest::_initEnv()
     // Construire le chemin réel du fichier CGI
     std::string rootOrAlias = location->getAlias().empty() ? location->getRoot() : location->getAlias();
 
-    // // Ajouter un '/' à rootOrAlias si nécessaire
-    // if (!rootOrAlias.empty() && rootOrAlias[rootOrAlias.size() - 1] != '/')
-    // {
-    //     rootOrAlias += '/';
-    // }
+    // Ajouter un '/' à rootOrAlias si nécessaire
+    if (!rootOrAlias.empty() && rootOrAlias[rootOrAlias.size() - 1] != '/')
+    {
+        rootOrAlias += '/';
+    }
 
     std::string locationPath = location->getPath();
 
-    // // Vérifier si le chemin de location se termine par un '/'
-    // if (!locationPath.empty() && locationPath[locationPath.size() - 1] != '/')
-    // {
-    //     locationPath += '/'; // Ajouter '/' si nécessaire
-    // }
+    // Vérifier si le chemin de location se termine par un '/'
+    if (!locationPath.empty() && locationPath[locationPath.size() - 1] != '/')
+    {
+        locationPath += '/'; // Ajouter '/' si nécessaire
+    }
 
     _realPath = rootOrAlias + _request->getUri().substr(locationPath.size());
 
@@ -125,7 +126,7 @@ void CgiRequest::executeCgi()
         if (_request->_body->_fd != -1)
         {
             if (lseek(_request->_body->_fd, 0, SEEK_SET) == -1) // remet a 0 lecture
-               throw std::runtime_error("reset lecture body failed");
+                throw std::runtime_error("reset lecture body failed");
         }
     
     LogManager::log(LogManager::DEBUG, ("Execution du cgi"));
@@ -142,7 +143,7 @@ void CgiRequest::executeCgi()
         if (dup2(_fd, STDOUT_FILENO) == -1)
             throw (std::runtime_error("fail dans l'enfant sortie"));
         execve(_argv[0], _argv, _envp);
-        throw (std::runtime_error("fail childdd execve"));
+            throw (std::runtime_error("fail childdd execve"));
     }
     else
     {
@@ -151,6 +152,7 @@ void CgiRequest::executeCgi()
         // Vérifier si la requête est complète
         if (_request->getState() == CGI)
         {
+            _request->_sentToResponse = true;
             _request->_server->change_epoll_event(_request->_client->getClientFd(), RESPONSE_EVENTS);
             LogManager::log(LogManager::DEBUG, "Request complete for client %d", _request->_client->getClientFd());
             // Passer à la gestion de la réponse
@@ -175,8 +177,10 @@ void    CgiRequest::checkEnd()
     }
     else
     {
-        // LogManager::log(LogManager::ERROR, ("cgi script crash"));
-        _request->handleError(502, ERROR, "cgi script crash");
+        LogManager::log(LogManager::ERROR, ("cgi script crash"));
+        _request->setState(ERROR);
+        _request->setCode(502);
+        // _request->handleError(502, ERROR, "cgi script crash");
     }
 }
 
