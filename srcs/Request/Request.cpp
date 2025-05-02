@@ -1,33 +1,8 @@
 #include "Request.hpp"
 
-Request::Request(Client *client, Server *server): _client(client), _server(server), _body(NULL),_raw(""), _method(""), _uri(""), _version(""), _currentHeaderKey(""), _statusCode(200), _state(0), _inHeader(false), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0), _timeOut(std::time(NULL)), _isCgi(false), _queryString(""), _port(0), _cgi(NULL), _sentToResponse(false)
+Request::Request(Client *client, Server *server): _client(client), _server(server), _body(NULL), _matchingServer(NULL), _matchingLocation(NULL), _raw(""), _method(""), _uri(""), _version(""), _currentHeaderKey(""), _statusCode(200), _state(0), _inHeader(false), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0), _timeOut(std::time(NULL)), _isCgi(false), _queryString(""), _port(0), _cgi(NULL), _sentToResponse(false)
 {
     setPort(_client->getClientSocket()->get_port());
-    setDefaultServer(_port); // Appeler la fonction pour définir le serveur par défaut
-}
-
-
-void Request::setDefaultServer(int port)
-{
-    const std::vector<BlocServer>& servers = _server->get_config().getServers();
-
-    for (size_t i = 0; i < servers.size(); ++i)
-    {
-        const BlocServer& server = servers[i];
-        const std::vector<Listen>& listens = server.getListen();
-
-        for (size_t j = 0; j < listens.size(); ++j)
-        {
-            if (listens[j].getPort() == port)
-            {
-                _matchingServer = const_cast<BlocServer*>(&server); // Définir le premier serveur correspondant
-                LogManager::log(LogManager::DEBUG, "Default server set for port %d", port);
-                return;
-            }
-        }
-    }
-
-    throw std::runtime_error("ERROR: No matching server found for port " + toString(port));
 }
 
 Request::Request(Request const & copy)
@@ -720,7 +695,17 @@ void Request::parseBody()
         return (handleError(413, ERROR, "ERROR: Request body exceeds the maximum allowed size"));
 
     if (!_body)
+    {
         _body = new RequestBody(_maxBodySize, _isChunked, this);
+        try
+        {
+            _body->defineBodyDestination();
+        }
+        catch (const std::exception& e)
+        {
+            handleError(500, ERROR, e.what());
+        }
+    }
         
     try{
         size_t startIndex = _i;

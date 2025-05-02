@@ -9,59 +9,95 @@ RequestBody::RequestBody(size_t maxBodySize, bool isChunked, Request *request)
     _isChunked = isChunked;
     _request = request;
     _isComplete = false;
-
-    char tmpFileName[] = "/tmp/request_body_XXXXXX";
-    _fd = mkstemp(tmpFileName); // fonction pour creer un fichier temporaire
-    if (_fd == -1)
-    {
-        perror("mkstemp failed");
-        throw std::runtime_error("ERROR: failed to create tmp file");
-    }
-    
-    _tmpFilePath = tmpFileName;
+    _isTmp = false;
+    _tmpFilePath = "";
+    _fd = -1;
+    _isNew = false;
 }
 
-// RequestBody::RequestBody(size_t maxBodySize, bool isChunked, const std::string& uploadPath, const std::string& requestedFileName, bool isCgi)
-// {
-//     _currentSize = 0;
-//     _maxBodySize = maxBodySize;
-//     _isChunked = isChunked;
-//     _isComplete = false;
+// SIUU gerere lesERREUR
+void RequestBody::defineBodyDestination()
+{
+    const std::string& method = _request->getMethod();
+    const std::map<std::string, std::string>& headers = _request->getHeaders();
+    const BlocLocation* matchingLocation = _request->getMatchingLocation();
+    const BlocServer* matchingServer = _request->getMatchingServer();
+    bool isCgi = _request->isCgi();
 
-//     if (!isCgi && !uploadPath.empty())
-//     {
-//         // Construire le chemin complet pour le fichier d'upload
-//         _tmpFilePath = uploadPath + "/" + requestedFileName;
-//         std::cout << "Fichier : " << _tmpFilePath << std::endl;
+    if (method == "POST" && !isCgi)
+    {
+        // Étape 1 : Déterminer le chemin de base
+        std::string basePath;
+        if (matchingLocation && !matchingLocation->getUploadPath().empty())
+        {
+            basePath = matchingLocation->getUploadPath();
+        }
+        else if (matchingLocation && !matchingLocation->getRoot().empty())
+        {
+            basePath = matchingLocation->getRoot();
+        }
+        else if (matchingServer)
+        {
+            basePath = matchingServer->getRoot();
+        }
+        else
+        {
+            throw std::runtime_error("ERROR: No valid path found for upload");
+        }
 
-//         // Créer et ouvrir le fichier pour écriture
-//         _fd = open(_tmpFilePath.c_str(), O_CREAT | O_WRONLY | O_TRUNC, 0644);
-//         if (_fd == -1)
-//         {
-//             perror("open failed");
-//             throw std::runtime_error("ERROR: failed to create upload file: " + _tmpFilePath);
-//         }
-//     }
-//     else
-//     {
-//         // Créer un fichier temporaire pour les autres cas (par exemple, CGI)
-//         char tmpFileName[] = "/tmp/request_body_XXXXXX";
-//         _fd = mkstemp(tmpFileName);
-//         if (_fd == -1)
-//         {
-//             perror("mkstemp failed");
-//             throw std::runtime_error("ERROR: failed to create tmp file");
-//         }
-//         _tmpFilePath = tmpFileName;
-//     }
-// }
+        // Ajouter un '/' à la fin du chemin si nécessaire
+        if (!basePath.empty() && basePath[basePath.size() - 1] != '/')
+        {
+            basePath += '/';
+        }
 
+        // Étape 2 : Déterminer le nom du fichier
+        std::string fileName = "upload"; // Nom par défaut
+        if (headers.find("Filename") != headers.end())
+        {
+            fileName = headers.at("Filename");
+        }
+
+        // Construire le chemin complet
+        _tmpFilePath = basePath + fileName;
+
+        // Étape 3 : Vérifier si le fichier existe déjà
+        if (fileExists(_tmpFilePath))
+        {
+            throw std::runtime_error("ERROR: File already exists, cannot overwrite");
+        }
+
+        // Étape 4 : Créer et ouvrir le fichier
+        _fd = open(_tmpFilePath.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
+        if (_fd == -1)
+        {
+            perror("open failed");
+            throw std::runtime_error("ERROR: Failed to create upload file: " + _tmpFilePath);
+        }
+        _isNew = true;
+        _isTmp = false; // Ce n'est pas un fichier temporaire
+    }
+    else
+    {
+        // Cas CGI ou autre : créer un fichier temporaire
+        char tmpFileName[] = "/tmp/request_body_XXXXXX";
+        _fd = mkstemp(tmpFileName);
+        if (_fd == -1)
+        {
+            perror("mkstemp failed");
+            throw std::runtime_error("ERROR: Failed to create temporary file");
+        }
+
+        _tmpFilePath = tmpFileName;
+        _isTmp = true; // C'est un fichier temporaire
+    }
+}
 RequestBody::~RequestBody()
 {
     if (_fd != -1)
         close (_fd);
         
-    if (!_tmpFilePath.empty())
+    if (!_tmpFilePath.empty() && _isTmp)
     std::remove(_tmpFilePath.c_str());
 }
 /************************** VERSION AVEC FICHIER TEMP & FD *****************************/
@@ -95,7 +131,7 @@ void RequestBody::parseContentLength(const std::string &rawData, size_t  &index,
     if (_currentSize == contentLength)
         _isComplete = true;
     else if (_currentSize > contentLength)
-        _request->handleError(400, ERROR, "ERROR : empty request");
+        _request->handleError(400, ERROR, "ERROR : Body size exceeds Content-Length");
         // throw std::runtime_error("ERROR: Body size exceeds Content-Length");
 
     
