@@ -48,8 +48,8 @@ class Request{
         Client                              *_client;
         Server                              *_server;
         RequestBody                         *_body;
-        BlocServer                          *_matchingServer;// siuuu inint
-        BlocLocation                        *_matchingLocation;// siuuu inint
+        BlocServer                          *_matchingServer;
+        BlocLocation                        *_matchingLocation;
         std::string                         _raw;
         std::string                         _method;
         std::string                         _uri;
@@ -100,9 +100,8 @@ class Request{
         
         // utils
         bool isTimeoutExceeded() const;
-        bool isCgi() {return _isCgi;}
         std::string getUriExtension() const;
-
+        
     public:                     
         Request(Client *client, Server *server);                      
         Request(Request const & copy);
@@ -130,7 +129,7 @@ class Request{
         const int &getPort() const {return _port;}
         const std::string &getQueryString() const {return _queryString;}
         CgiRequest *getCgi() const {return _cgi;}
-
+        
         void handleError(int code, int state, const std::string& errorMessage);
     
         // Setters
@@ -138,9 +137,8 @@ class Request{
         void setState(int const &state) {_state = state;}
         void setPort(int const &port) {_port = port;}
         void setError(int code, int state);
-
-        void setDefaultServer(int port);
-
+        
+        bool isCgi() {return _isCgi;}
     };
 
 #endif
