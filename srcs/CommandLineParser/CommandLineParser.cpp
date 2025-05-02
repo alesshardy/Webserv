@@ -15,8 +15,7 @@ CommandLineParser::CommandLineParser(int argc, char **argv)
     if (hasOption("logfile"))
     {
         LogManager::setLogFileStatus(true);
-        std::string logFile = getOption("logfile");
-        LogManager::log(LogManager::INFO, "Logging to file: %s", logFile.c_str());
+        LogManager::log(LogManager::INFO, "Logging to file enabled.");
     }
 }
 
@@ -55,16 +54,16 @@ void    CommandLineParser::_parseCommandLine(int argc, char **argv)
         // Vérifie si l'argument est une option (commence par '--')
         if (arg.rfind("--", 0) == 0)
         {
-            size_t equalPos = arg.find('=');
-            if (equalPos != std::string::npos)
+            // Vérifie si l'option est valide
+            if (isValidOption(arg))
             {
-                std::string key = arg.substr(2, equalPos - 2);
-                std::string value = arg.substr(equalPos + 1);
-                _options[key] = value;
+                // Si c'est une option, ajoutez-la à la liste des options
+                _options.push_back(arg);
             }
             else
             {
-                _options[arg.substr(2)] = ""; // Option sans valeur
+                LogManager::log(LogManager::ERROR, "Invalid option: %s", arg.c_str());
+                throw std::invalid_argument("Invalid option: " + arg);
             }
         }
         else
@@ -122,21 +121,18 @@ std::string CommandLineParser::getConfigFilePath() const
  */
 bool CommandLineParser::hasOption(const std::string &option) const
 {
-    return _options.find(option) != _options.end();
+    for (std::vector<std::string>::const_iterator it = _options.begin(); it != _options.end(); ++it)
+    {
+        if (*it == option)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
-/**
- * @brief  Récupère la valeur d'une option.
- * 
- * @param option 
- * @return std::string 
- */
-std::string CommandLineParser::getOption(const std::string &option) const
+
+bool     CommandLineParser::isValidOption(const std::string& option)
 {
-    std::map<std::string, std::string>::const_iterator it = _options.find(option);
-    if (it == _options.end())
-    {
-        throw std::runtime_error("Option '" + option + "' not found.");
-    }
-    return it->second;
+    return (option == "--debug" || option == "--logfile" || option == "--help");
 }
