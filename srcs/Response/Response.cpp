@@ -30,6 +30,7 @@ int Response::buildResponse(int epoll_fd)
     if (_request->getState() == ERROR)
     {
         LogManager::log(LogManager::DEBUG, "Request in ERROR stat,  building response");
+        std::cout << _request->getStatusCode() << std::endl;
         handleError(_request->getStatusCode());
         return 0;
     }
@@ -59,11 +60,7 @@ int Response::buildResponse(int epoll_fd)
         _handlePost();
     else if (_request->getMethod() == "DELETE")
         _handleDelete();
-    else
-    {
-        // SIUUU gerer plus tard le code 500
-        LogManager::log(LogManager::ERROR, "Unsupported HTTP method: %s", _request->getMethod().c_str());
-    }
+    
     return 0;
 }
 void Response::setResponseHeader(const std::string& header)
@@ -1065,7 +1062,7 @@ void Response::_handleDelete()
 void            Response::handleError(int error_code, bool errorPage)
 {
     BlocServer* matchingServer = _request->getMatchingServer();
-    if (errorPage)
+    if (matchingServer && errorPage)
     {
         _response = ErrorPage::getErrorPage(error_code, matchingServer->getErrorPage());
         setRState(R_END);

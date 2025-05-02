@@ -146,6 +146,8 @@ std::string getStatusCodeMessage(int statusCode)
 
         //erreur serveur
         case 500: return "Internal Server Error";
+        case 501: return "Not Implemented";
+        case 502: return "Bad Gateway";
         default: return "Unknown Status Code";
     }
 }

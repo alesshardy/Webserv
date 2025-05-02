@@ -95,8 +95,7 @@ void RequestBody::parseContentLength(const std::string &rawData, size_t  &index,
     if (_currentSize == contentLength)
         _isComplete = true;
     else if (_currentSize > contentLength)
-        _request->handleError(400, ERROR, "ERROR : empty request");
-        // throw std::runtime_error("ERROR: Body size exceeds Content-Length");
+        _request->handleError(400, ERROR, "ERROR: Body size exceeds Content-Length");
 
     
 }
