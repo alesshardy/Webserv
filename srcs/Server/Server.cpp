@@ -685,11 +685,9 @@ void Server::checkRequestTimeouts()
             {
                 LogManager::log(LogManager::ERROR, "Request in ERROR state for client FD %d", it->first);
                 request->_sentToResponse = true;
+                if (!request->_body->getTmpFilePath().empty() && request->_body->getIsNew())
+                    std::remove(request->_body->getTmpFilePath().c_str());
                 change_epoll_event(it->first, EPOLLOUT);
-                // int client_fd = it->first;
-                // ++it;
-                // close_client(client_fd); // Fermez la connexion pour ce client
-                // continue;
             }
         }
         //ajouter check de temps

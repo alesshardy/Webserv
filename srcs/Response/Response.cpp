@@ -1065,7 +1065,7 @@ void Response::_handleDelete()
 void            Response::handleError(int error_code, bool errorPage)
 {
     BlocServer* matchingServer = _request->getMatchingServer();
-    if (errorPage)
+    if (matchingServer && errorPage)
     {
         _response = ErrorPage::getErrorPage(error_code, matchingServer->getErrorPage());
         setRState(R_END);
