@@ -17,10 +17,11 @@ class RequestBody
         size_t                  _maxBodySize;
         bool                    _isChunked;
         bool                    _isComplete;
+        bool                    _isTmp;
+        bool                    _isNew;
     
     public:
         RequestBody(size_t maxBodySize, bool isChunked, Request *request);
-        // RequestBody(size_t maxBodySize, bool isChunked, const std::string& uploadPath, const std::string& requestedFileName, bool isCgi);
         ~RequestBody();
 
         void parseChunked(const std::string &rawData, size_t  &index);
@@ -29,10 +30,15 @@ class RequestBody
         //getters
         bool isComplete() const {return _isComplete;};
         size_t getCurrentSize() const {return _currentSize;};
-        int getFd () const{return _fd;};
+        int getFd () const {return _fd;};
+        std::string getTmpFilePath() const{return _tmpFilePath;};
+        bool getIsNew() const {return _isNew;};
         
         //print
         std::string readBody() const;
+
+        void defineBodyDestination();
+
 };
 
 #endif

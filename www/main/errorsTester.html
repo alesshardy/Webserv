@@ -51,8 +51,6 @@
 
     <button onclick="testError(404)">Tester 404 Not Found</button>
     <button onclick="testError(403)">Tester 403 Forbidden</button>
-    <button onclick="testError(500)">Tester 500 Internal Server Error</button>
-    <button onclick="testError(400)">Tester 400 Bad Request</button>
     <button onclick="testError(405)">Tester 405 Method Not Allowed</button>
     <button onclick="testError(501)">Tester 501 Not Implemented</button>
     <button onclick="testError(502)">Tester 502 Bad Gateway</button>
@@ -78,9 +76,6 @@
                     break;
                 case 502:
                     url = '/cgi-bin/fail.py'; // Une URL qui provoque une erreur serveur
-                case 500:
-                    url = '/cgi-bin/error.py'; // Une URL qui provoque une erreur serveur
-            
                     break;
                 case 405:
                     url = '/method-not-allowed'; // Une URL qui n'autorise pas la méthode utilisée

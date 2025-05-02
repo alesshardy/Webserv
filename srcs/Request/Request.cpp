@@ -1,33 +1,8 @@
 #include "Request.hpp"
 
-Request::Request(Client *client, Server *server): _client(client), _server(server), _body(NULL),_raw(""), _method(""), _uri(""), _version(""), _currentHeaderKey(""), _statusCode(200), _state(0), _inHeader(false), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0), _timeOut(std::time(NULL)), _isCgi(false), _queryString(""), _port(0), _cgi(NULL), _sentToResponse(false)
+Request::Request(Client *client, Server *server): _client(client), _server(server), _body(NULL), _matchingServer(NULL), _matchingLocation(NULL), _raw(""), _method(""), _uri(""), _version(""), _currentHeaderKey(""), _statusCode(200), _state(0), _inHeader(false), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0), _timeOut(std::time(NULL)), _isCgi(false), _queryString(""), _port(0), _cgi(NULL), _sentToResponse(false)
 {
     setPort(_client->getClientSocket()->get_port());
-    // setDefaultServer(_port); // Appeler la fonction pour définir le serveur par défaut
-}
-
-
-void Request::setDefaultServer(int port)
-{
-    const std::vector<BlocServer>& servers = _server->get_config().getServers();
-
-    for (size_t i = 0; i < servers.size(); ++i)
-    {
-        const BlocServer& server = servers[i];
-        const std::vector<Listen>& listens = server.getListen();
-
-        for (size_t j = 0; j < listens.size(); ++j)
-        {
-            if (listens[j].getPort() == port)
-            {
-                _matchingServer = const_cast<BlocServer*>(&server); // Définir le premier serveur correspondant
-                LogManager::log(LogManager::DEBUG, "Default server set for port %d", port);
-                return;
-            }
-        }
-    }
-
-    throw std::runtime_error("ERROR: No matching server found for port " + toString(port));
 }
 
 Request::Request(Request const & copy)
@@ -442,7 +417,8 @@ void Request::checkHeader()
 void Request::checkHostHeader()
 {
     if (_headers.find("Host") == _headers.end())
-        throw std::runtime_error("ERROR: Missing Host Header");
+        return (handleError(400, ERROR, "ERROR: Missing Host Header"));
+        // throw std::runtime_error("ERROR: Missing Host Header");
 }
 
 /**
@@ -453,8 +429,8 @@ void Request::findMatchingServerAndLocation()
 {
     _matchingServer = _server->getMatchingServer(this);
     if (!_matchingServer)
-        throw std::runtime_error("ERROR: No matching server block found for the request");
-
+        return (handleError(400, ERROR, "ERROR: No matching server found"));
+        // throw std::runtime_error("ERROR: No matching server block found for the request");
     _matchingLocation = _matchingServer->getMatchingLocation(_uri);
 }
 
@@ -476,46 +452,6 @@ void Request::checkCgi()
     }
 }
 
-/**
- * @brief Vérifie la validité de la longueur et de l'encodage du contenu.
- * 
- */
-// void Request::validateContentLengthAndEncoding()
-// {
-//     if (_headers.find("Content-Length") != _headers.end())
-//     {
-//         for (size_t i = 0; i < _headers["Content-Length"].length(); i++)
-//         {
-//             if (!isdigit(_headers["Content-Length"][i]))
-//                 handleError(400, ERROR, "ERROR: Bad request");
-//         }
-//         long long contentLength;
-//         try
-//         {
-//             contentLength = ft_stoll(_headers["Content-Length"]);
-//         }
-//         catch (const std::exception &e)
-//         {
-//             handleERROR()
-//             throw std::runtime_error("ERROR: Invalid Content-Length value");
-//         }
-//         if (contentLength < 0)
-//             throw std::runtime_error("ERROR: Invalid Content-Length value");
-//         _contentLength = contentLength; // Stocker la taille du content length
-//     }
-
-//     if (_headers.find("Transfer-Encoding") != _headers.end())
-//     {
-//         std::string transferEncoding = _headers["Transfer-Encoding"];
-//         if (transferEncoding.find("chunked") == std::string::npos)
-//             throw std::runtime_error("ERROR: Unsupported Transfer-Encoding (must include 'chunked')");
-//         _isChunked = true; // Mettre le flag chunked
-//     }
-
-//     if (_headers.find("Content-Length") != _headers.end() &&
-//         _headers.find("Transfer-Encoding") != _headers.end())
-//         throw std::runtime_error("ERROR: Both Content-Length and Transfer-Encoding are present");
-// }
 
 void Request::validateContentLengthAndEncoding()
 {
@@ -621,11 +557,12 @@ void Request::getMaxBodySize()
 }
 
 
-void Request::validateHostPort() const
+void Request::validateHostPort()
 {
     std::map<std::string, std::string> headers = getHeaders();
     if (headers.find("Host") == headers.end())
-        throw std::runtime_error("ERROR: Missing Host Header");
+        return (handleError(400, ERROR, "ERROR: Missing Host Header"));
+        // throw std::runtime_error("ERROR: Missing Host Header");
 
     std::string hostValue = headers.at("Host");
     size_t colonPos = hostValue.find(':');
@@ -637,69 +574,13 @@ void Request::validateHostPort() const
         if (hostPort != requestPort)
         {
             LogManager::log(LogManager::ERROR, "Port mismatch: Host header port (%d) does not match request port (%d)", hostPort, requestPort);
-            throw std::runtime_error("ERROR: Port in Host header does not match request port");
+            return (handleError(400, ERROR, "ERROR: Port in Host header does not match request port"));
+            // throw std::runtime_error("ERROR: Port in Host header does not match request port");
         }
     }
 }
 
 /******************************* PARSING DU BODY *****************************/
-
-/**
- * @brief Parse le corps de la requête HTTP.
- * 
- */
-// void Request::parseBody()
-// {   
-//     LogManager::log(LogManager::DEBUG, "Parse Body");
-//     if (_method == "GET")
-//     {
-//         if (isCgi())
-//             _state = CGI;
-//         else
-//             _state = END;
-//         return;
-//     }
-
-//     if (_headers.find("Content-Length") == _headers.end() && _headers.find("Transfer-Encoding") == _headers.end())
-//         return (handleError(400, ERROR, "ERROR: Bad Request, missing Content-Length or Transfer-Encoding"));
-    
-//     if (_contentLength > _maxBodySize)
-//         return (handleError(413, ERROR, "ERROR: Request body exceeds the maximum allowed size"));
-
-//     if (!_body)
-//         _body = new RequestBody(_maxBodySize, _isChunked);
-        
-//     try{
-//         size_t startIndex = _i;
-        
-//         if (_isChunked)
-//         {
-//             LogManager::log(LogManager::DEBUG, "Parse Body en mode CHUNKED");
-//             _body->parseChunked(_raw, _i);
-//         }
-//         else
-//         {
-//             LogManager::log(LogManager::DEBUG, "Parse Body en mode LENGTH");
-//             _body->parseContentLength(_raw, _i, _contentLength);
-//         }
-
-//         // Nettoyer les données traitées dans _raw
-//         clearProcessedData(_i - startIndex);
-        
-//         if (_body->isComplete())
-//         {
-//             if (isCgi())
-//                 _state = CGI;
-//             else
-//                 _state = END;
-//             LogManager::log(LogManager::DEBUG, "Parse body DONE!");
-//         }
-        
-//     } catch (const std::exception &e) {
-//         _state = ERROR;
-//         throw; // Relancer l'exception pour traitement en amont
-//     }
-// }
 
 void Request::parseBody()
 {
@@ -720,7 +601,17 @@ void Request::parseBody()
         return (handleError(413, ERROR, "ERROR: Request body exceeds the maximum allowed size"));
 
     if (!_body)
+    {
         _body = new RequestBody(_maxBodySize, _isChunked, this);
+        try
+        {
+            _body->defineBodyDestination();
+        }
+        catch (const std::exception& e)
+        {
+            handleError(500, ERROR, e.what());
+        }
+    }
         
     try{
         size_t startIndex = _i;
@@ -803,20 +694,23 @@ void Request::handleFileTransfer()
     if (!directoryExists(uploadDir))
     {
         if (!createDirectory(uploadDir))
-            throw std::runtime_error("ERROR: Unable to create upload directory");
+            return (handleError(500, ERROR, "ERROR: Unable to create upload directory"));
+            // throw std::runtime_error("ERROR: Unable to create upload directory");
         LogManager::log(LogManager::DEBUG, "Upload directory created: %s", uploadDir.c_str());
     }
 
     std::string fileName = extractFileNameFromMultipart(_raw);
     if (fileName.empty())
-        throw std::runtime_error("ERROR: Missing or invalid filename in multipart data");
+        return (handleError(400, ERROR, "ERROR: Missing or invalid filename in multipart data"));
+        // throw std::runtime_error("ERROR: Missing or invalid filename in multipart data");
 
     std::string filePath = uploadDir + sanitizeFileName(fileName);
     LogManager::log(LogManager::DEBUG, "Attempting to open file for writing: %s", filePath.c_str());
 
     std::ofstream outFile(filePath.c_str(), std::ios::binary);
     if (!outFile.is_open())
-        throw std::runtime_error("ERROR: Unable to open file for writing");
+        return (handleError(500, ERROR, "ERROR: Unable to open file for writing"));
+        // throw std::runtime_error("ERROR: Unable to open file for writing");
 
     outFile.write(_raw.c_str(), _raw.size());
     outFile.close();
@@ -835,5 +729,5 @@ void Request::handleFileTransfer()
 bool Request::isTimeoutExceeded() const
 {
     std::time_t now = std::time(NULL);
-    return (now - _timeOut > 10);
+    return (now - _timeOut > 60);
 }

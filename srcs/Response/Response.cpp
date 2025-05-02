@@ -30,7 +30,6 @@ int Response::buildResponse(int epoll_fd)
     if (_request->getState() == ERROR)
     {
         LogManager::log(LogManager::DEBUG, "Request in ERROR stat,  building response");
-        std::cout << _request->getStatusCode() << std::endl;
         handleError(_request->getStatusCode());
         return 0;
     }
@@ -1059,6 +1058,7 @@ void Response::_handleDelete()
     LogManager::log(LogManager::DEBUG, "DELETE response prepared for client %d", _client_fd);
 }
 
+
 void            Response::handleError(int error_code, bool errorPage)
 {
     BlocServer* matchingServer = _request->getMatchingServer();
@@ -1067,15 +1067,19 @@ void            Response::handleError(int error_code, bool errorPage)
         _response = ErrorPage::getErrorPage(error_code, matchingServer->getErrorPage());
         setRState(R_END);
     }
+    else if (!matchingServer && errorPage)
+    {
+        _response = ErrorPage::generateStandardErrorPage(error_code);
+    }
     else
     {
-        _response = "HTTP/1.1 " + toString(error_code) + " Error\r\n\r\n";
-        setRState(R_END);
+        _response = "HTTP/1.1 " + toString(error_code) + " Error\r\n";
+        _response += "Content-Type: text/plain\r\n";
+        _response += "Content-Length: 0\r\n";
+        _response += "\r\n";
     }
     
 }
-
-
 
 
 
@@ -1159,6 +1163,6 @@ std::string getContentType(const std::string &filePath)
 bool Response::isTimeoutExceeded() const
 {
     std::time_t now = std::time(NULL);
-    return (now - _timeOut > 10);
+    return (now - _timeOut > 60);
 }
 
