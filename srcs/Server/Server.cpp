@@ -183,7 +183,7 @@ void Server::handleEpollEvents()
                 if (client->getRequest() && client->getRequest()->getState() == CGI)
                 {
 
-                        client->getRequest()->getCgi()->checkEnd();
+                    client->getRequest()->getCgi()->checkEnd();
                     if (client->getRequest()->getState() == END)
                     {
                         LogManager::log(LogManager::DEBUG, "CGI finished, ready to send response for FD %d", fd);
@@ -684,8 +684,8 @@ void Server::checkRequestTimeouts()
             if (request->getState() == ERROR && request->_sentToResponse == false) 
             {
                 LogManager::log(LogManager::ERROR, "Request in ERROR state for client FD %d", it->first);
-                change_epoll_event(it->first, EPOLLOUT);
                 request->_sentToResponse = true;
+                change_epoll_event(it->first, EPOLLOUT);
                 // int client_fd = it->first;
                 // ++it;
                 // close_client(client_fd); // Fermez la connexion pour ce client
