@@ -10,7 +10,9 @@ CgiRequest::CgiRequest(Request *request, std::string cgiPath, std::string script
     if (_fd == -1)
     {
         perror("mkstemp failed");
-        throw std::runtime_error("ERROR: failed to create tmp file");
+        // throw std::runtime_error("ERROR: failed to create tmp file");
+        _request->handleError(500, ERROR, "ERROR: failed to create tmp file");
+
     }
     _tmpFilePath = tmpFileName;
 }
@@ -52,7 +54,9 @@ void CgiRequest::_initEnv()
     // Récupérer le bloc location correspondant
     BlocLocation* location = _request->getMatchingLocation();
     if (!location)
-        throw std::runtime_error("ERROR: No matching location block found for the request");
+        _request->handleError(500, ERROR, "ERROR: No matching location block found for the request");
+        // throw std::runtime_error("ERROR: No matching location block found for the request");
+
 
     // Construire le chemin réel du fichier CGI
     std::string rootOrAlias = location->getAlias().empty() ? location->getRoot() : location->getAlias();
@@ -126,24 +130,29 @@ void CgiRequest::executeCgi()
         if (_request->_body->_fd != -1)
         {
             if (lseek(_request->_body->_fd, 0, SEEK_SET) == -1) // remet a 0 lecture
-                throw std::runtime_error("reset lecture body failed");
+                _request->handleError(500, ERROR, "ERROR: failed to reset body");
+                // throw std::runtime_error("reset lecture body failed");
         }
     
     LogManager::log(LogManager::DEBUG, ("Execution du cgi"));
     _pid = fork();
     if (_pid == -1)
-        throw (std::runtime_error("Fork failed "));
+        _request->handleError(500, ERROR, "ERROR: failed to fork");
+        // throw (std::runtime_error("Fork failed "));
     if (_pid == 0)
     {
         // 1 lire le body
         if (_request->_body != NULL)
             if (_request->_body->_fd != -1)
                 if (dup2(_request->_body->_fd, STDIN_FILENO) == -1)
-                    throw (std::runtime_error("fail dans l'enfant lecture body"));
+                    _request->handleError(500, ERROR, "ERROR: failed to read body");
+                    // throw (std::runtime_error("fail dans l'enfant lecture body"));
         if (dup2(_fd, STDOUT_FILENO) == -1)
-            throw (std::runtime_error("fail dans l'enfant sortie"));
+            _request->handleError(500, ERROR, "ERROR: failed to write body");
+            // throw (std::runtime_error("fail dans l'enfant sortie"));
         execve(_argv[0], _argv, _envp);
-            throw (std::runtime_error("fail childdd execve"));
+        _request->handleError(500, ERROR, "ERROR: failed to execve");
+        // throw (std::runtime_error("fail childdd execve"));
     }
     else
     {
@@ -167,7 +176,12 @@ void    CgiRequest::checkEnd()
     int status;
     pid_t wpid = waitpid(_pid, &status, WNOHANG);
     if (wpid == -1)
-        throw (std::runtime_error("Error dans waitpid"));
+    {
+        LogManager::log(LogManager::ERROR, ("Error dans waitpid"));
+        _request->setState(ERROR);
+        _request->setCode(502);
+        // throw (std::runtime_error("Error dans waitpid"));
+    }
     if (wpid == 0)
         return ; // encore en cours
     if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
