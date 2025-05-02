@@ -48,6 +48,7 @@ void Client::handleRequest(std::string const & str)
         // Vérifier si la requête est complète
         if (_request->getState() == END || _request->getState() == ERROR)
         {
+            _request->_sentToResponse = true;
             _server->change_epoll_event(_client_fd, RESPONSE_EVENTS);
             LogManager::log(LogManager::DEBUG, "Request complete for client %d", _client_fd);
             // Passer à la gestion de la réponse
@@ -60,6 +61,7 @@ void Client::handleRequest(std::string const & str)
     {
         LogManager::log(LogManager::ERROR, "Error handling request for client %d: \n%s", _client_fd, e.what());
         //SIUUU Gérer l'erreur (fermer le client, envoyer une réponse d'erreur, etc.)
+        _request->setState(ERROR);
         _request->setCode(400);     
     }
 }

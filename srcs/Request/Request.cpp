@@ -3,6 +3,31 @@
 Request::Request(Client *client, Server *server): _client(client), _server(server), _body(NULL),_raw(""), _method(""), _uri(""), _version(""), _currentHeaderKey(""), _statusCode(200), _state(0), _inHeader(false), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0), _timeOut(std::time(NULL)), _isCgi(false), _queryString(""), _port(0), _cgi(NULL), _sentToResponse(false)
 {
     setPort(_client->getClientSocket()->get_port());
+    setDefaultServer(_port); // Appeler la fonction pour définir le serveur par défaut
+}
+
+
+void Request::setDefaultServer(int port)
+{
+    const std::vector<BlocServer>& servers = _server->get_config().getServers();
+
+    for (size_t i = 0; i < servers.size(); ++i)
+    {
+        const BlocServer& server = servers[i];
+        const std::vector<Listen>& listens = server.getListen();
+
+        for (size_t j = 0; j < listens.size(); ++j)
+        {
+            if (listens[j].getPort() == port)
+            {
+                _matchingServer = const_cast<BlocServer*>(&server); // Définir le premier serveur correspondant
+                LogManager::log(LogManager::DEBUG, "Default server set for port %d", port);
+                return;
+            }
+        }
+    }
+
+    throw std::runtime_error("ERROR: No matching server found for port " + toString(port));
 }
 
 Request::Request(Request const & copy)
@@ -16,6 +41,8 @@ Request &Request::operator=(Request const & rhs)
     {
         this->_client = rhs._client;
         this->_server = rhs._server;
+        this->_matchingServer = rhs._matchingServer;
+        this->_matchingLocation = rhs._matchingLocation;
         this->_raw = rhs._raw;
         this->_method = rhs._method;
         this->_uri = rhs._uri;
@@ -75,6 +102,12 @@ void Request::handleError(int code, int state, const std::string& errorMessage)
     setState(state);     
     // LogManager::log(LogManager::ERROR, errorMessage.c_str()); 
     throw std::runtime_error(errorMessage);
+}
+
+void Request::setError(int code, int state)
+{
+    setCode(code);      
+    setState(state);     
 }
 
 
@@ -756,11 +789,11 @@ void    Request::parseCgi()
     std::string cgiPath = _matchingLocation->getCgiPath(getUriExtension());
     std::string scriptCgi = getUri();
 
+
     _cgi = new CgiRequest(this, cgiPath, scriptCgi);
     _timeOut = std::time(NULL); // Reset timer pour le Cgi
     _cgi->executeCgi();
 }
-
 
 /********************************file Transfert ****************************************** */
 
@@ -802,5 +835,5 @@ void Request::handleFileTransfer()
 bool Request::isTimeoutExceeded() const
 {
     std::time_t now = std::time(NULL);
-    return (now - _timeOut > 60);
+    return (now - _timeOut > 10);
 }

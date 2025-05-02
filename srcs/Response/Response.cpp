@@ -1162,6 +1162,6 @@ std::string getContentType(const std::string &filePath)
 bool Response::isTimeoutExceeded() const
 {
     std::time_t now = std::time(NULL);
-    return (now - _timeOut > 60);
+    return (now - _timeOut > 10);
 }
 
