@@ -12,7 +12,7 @@
 class CommandLineParser
 {
     private:
-        std::map<std::string, std::string>  _options;
+        std::vector<std::string>            _options;
         std::string                         _configFilePath;
 
         void       _parseCommandLine(int argc, char **argv);
@@ -21,11 +21,11 @@ class CommandLineParser
         CommandLineParser(int argc, char **argv);
         ~CommandLineParser();
 
-        std::string getOption(const std::string &option) const;
         bool        hasOption(const std::string &option) const;
         bool        hasConfigFile() const;
         std::string getConfigFilePath() const;
         void        printHelp() const;
+        bool        isValidOption(const std::string &option);
 };
 
 #endif // COMMANDLINEPARSER_HPP
