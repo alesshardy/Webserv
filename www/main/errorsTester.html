@@ -54,6 +54,8 @@
     <button onclick="testError(500)">Tester 500 Internal Server Error</button>
     <button onclick="testError(400)">Tester 400 Bad Request</button>
     <button onclick="testError(405)">Tester 405 Method Not Allowed</button>
+    <button onclick="testError(501)">Tester 501 Not Implemented</button>
+    <button onclick="testError(502)">Tester 502 Bad Gateway</button>
 
     <div class="result" id="result">
         <p>Les résultats des tests apparaîtront ici.</p>
@@ -74,20 +76,19 @@
                 case 403:
                     url = '/cgi-bin/'; // Une URL qui devrait être interdite
                     break;
-                case 500:
+                case 502:
                     url = '/cgi-bin/fail.py'; // Une URL qui provoque une erreur serveur
-                    break;
-                case 400:
-                    url = '/bad-request'; // Une URL qui provoque une mauvaise requête
-                    options = {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Content-Length': '100' }, // Longueur incorrecte
-                        body: '', // Corps vide
-                    };
+                case 500:
+                    url = '/cgi-bin/error.py'; // Une URL qui provoque une erreur serveur
+            
                     break;
                 case 405:
                     url = '/method-not-allowed'; // Une URL qui n'autorise pas la méthode utilisée
-                    options.method = 'PUT'; // Utiliser une méthode non autorisée
+                    options.method = 'DELETE'; // Utiliser une méthode non autorisée
+                    break;
+                case 501:
+                    url = '/not-implemented'; // Une URL qui n'est pas implémentée
+                    options.method = 'PUT'; // Utiliser une méthode non prise en charge
                     break;
                 default:
                     resultDiv.innerHTML = `<p>Code d'erreur non pris en charge : ${statusCode}</p>`;

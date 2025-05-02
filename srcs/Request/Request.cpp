@@ -3,7 +3,7 @@
 Request::Request(Client *client, Server *server): _client(client), _server(server), _body(NULL),_raw(""), _method(""), _uri(""), _version(""), _currentHeaderKey(""), _statusCode(200), _state(0), _inHeader(false), _i(0), _isChunked(false), _maxBodySize(DEFAULT_CLIENT_MAX_BODY_SIZE), _contentLength(0), _timeOut(std::time(NULL)), _isCgi(false), _queryString(""), _port(0), _cgi(NULL), _sentToResponse(false)
 {
     setPort(_client->getClientSocket()->get_port());
-    setDefaultServer(_port); // Appeler la fonction pour définir le serveur par défaut
+    // setDefaultServer(_port); // Appeler la fonction pour définir le serveur par défaut
 }
 
 
@@ -166,7 +166,7 @@ void Request::parseMethod()
 
     LogManager::log(LogManager::DEBUG, ("Http method: " + _method).c_str());
 
-    if (_method != "GET" && _method != "POST" && _method != "DELETE" && _method != "PUT")
+    if (_method != "GET" && _method != "POST" && _method != "DELETE")
         return (handleError(501, ERROR, "ERROR : unsupported HTTP method"));
 
     while (_i < endLine && _raw[_i] == ' ')
