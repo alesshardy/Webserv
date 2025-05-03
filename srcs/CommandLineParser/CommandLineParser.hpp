@@ -6,6 +6,7 @@
 #include <vector>
 #include <map>
 #include "LogManager.hpp"
+#include "../includes/Webserv.hpp"
 
 #define DEFAULT_CONFIG_FILE "testConfig/default.conf"
 

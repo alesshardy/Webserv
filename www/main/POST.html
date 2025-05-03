@@ -5,6 +5,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>Test de la requête POST</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            color: #f5f5f5;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            margin: 10px 0 0;
+            color: #dcdcdc;
+        }
+
+        main {
+            flex: 1;
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #f5f5f5;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        button {
+            background-color: #4a90e2;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #357ABD;
+        }
+
+        .result-box {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            color: #fff;
+            overflow-x: auto;
+            max-height: 300px;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-size: 0.9rem;
+            color: #dcdcdc;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #dcdcdc;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+
+        .gif-container img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -19,7 +128,7 @@
         <section class="post-demo">
             <h2>Essayez une requête POST</h2>
             <p>Remplissez le formulaire ci-dessous et cliquez sur "Envoyer" pour tester une requête POST :</p>
-            <form id="postForm" action="http://localhost:2727/submit" method="POST">
+            <form id="postForm" action="/uploads/filepost.txt" method="POST">
                 <label for="name">Nom :</label>
                 <input type="text" id="name" name="name" placeholder="Entrez votre nom" required>
                 <label for="message">Message :</label>
@@ -27,20 +136,71 @@
                 <button type="submit">Envoyer</button>
             </form>
             <div id="postResult" class="result-box">
-                <p>Le résultat de la requête POST apparaîtra ici.</p>
+                <h3>Résultat de la requête :</h3>
+                <pre id="responseContent">Le résultat de la requête POST apparaîtra ici.</pre>
             </div>
         </section>
         <section class="fun-section">
             <h2>Un peu d'insolite</h2>
             <p>Voici un GIF aléatoire pour rendre cette page plus amusante :</p>
+            <button id="changeGifButton">Changer le GIF</button>
             <div class="gif-container">
                 <img id="randomGif" src="https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif" alt="GIF aléatoire">
             </div>
+        </section>
+        <section class="back-section">
+            <button id="backButton">Retour à la page d'accueil</button>
         </section>
     </main>
     <footer>
         <p>&copy; 2025 42 Webserv. Tous droits réservés.</p>
     </footer>
-    <!-- <script src="post.js"></script> -->
+    <script>
+        document.getElementById('postForm').addEventListener('submit', async (event) => {
+            event.preventDefault(); // Empêche le rechargement de la page
+
+            const form = event.target;
+            const formData = new FormData(form);
+            const responseContent = document.getElementById('responseContent');
+
+            try {
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erreur : ${response.status} ${response.statusText}`);
+                }
+
+                const result = await response.text();
+                responseContent.textContent = result;
+            } catch (error) {
+                responseContent.textContent = `Erreur : ${error.message}`;
+            }
+        });
+
+        document.getElementById('changeGifButton').addEventListener('click', async () => {
+            const gifContainer = document.getElementById('randomGif');
+            const apiKey = 'WIMOBoGW3RSiid5Xy1s96RL3CXyRqEjN'; // Remplacez par votre clé API Giphy
+            const apiUrl = `https://api.giphy.com/v1/gifs/random?api_key=${apiKey}&tag=&rating=g`;
+
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error(`Erreur lors de la récupération du GIF : ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                gifContainer.src = data.data.images.original.url;
+            } catch (error) {
+                gifContainer.alt = `Erreur : ${error.message}`;
+            }
+        });
+
+        document.getElementById('backButton').addEventListener('click', () => {
+            window.location.href = 'index.html'; // Redirige vers la page d'accueil
+        });
+    </script>
 </body>
 </html>
