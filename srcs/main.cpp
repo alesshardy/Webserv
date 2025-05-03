@@ -33,7 +33,7 @@ int main(int ac, char **av)
 
         LogManager::log(LogManager::DEBUG, "CommandLineParser initialized");
     
-        if (cmdParser.hasOption("help"))
+        if (cmdParser.hasOption("--help"))
         {
             cmdParser.printHelp();
             return (EXIT_SUCCESS);
