@@ -1,0 +1,111 @@
+[2025-05-03 14:39:49] [INFO] Logging to file enabled.
+[2025-05-03 14:39:49] [DEBUG] CommandLineParser initialized
+[2025-05-03 14:39:49] [INFO] Using configuration file: testConfig/default.conf
+[2025-05-03 14:39:49] [DEBUG] Clé trouvée3 : server
+[2025-05-03 14:39:49] [DEBUG] Début de bloc
+[2025-05-03 14:39:49] [DEBUG] Clé trouvée3 : listen
+[2025-05-03 14:39:50] [DEBUG] Argument trouvé2 : 3434
+[2025-05-03 14:39:50] [DEBUG] Clé trouvée3 : root
+[2025-05-03 14:39:50] [DEBUG] Argument trouvé2 : ./www/main
+[2025-05-03 14:39:50] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-05-03 14:39:50] [DEBUG] Argument trouvé2 : 100
+[2025-05-03 14:39:50] [DEBUG] Fin de bloc
+[2025-05-03 14:39:50] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-05-03 14:39:50] [DEBUG] Socket created for port 3434
+[2025-05-03 14:39:50] [DEBUG] Socket added to epoll for port 3434
+[2025-05-03 14:39:50] [INFO] Server initialization complete
+[2025-05-03 14:39:50] [INFO] Server initialized successfully 4
+[2025-05-03 14:39:50] [INFO] Server running
+[2025-05-03 14:39:50] [DEBUG] Socket: 4
+[2025-05-03 14:39:50] [DEBUG] Port: 3434
+[2025-05-03 14:40:03] [INFO] Interrupt signal received, shutting down...
+[2025-05-03 14:40:03] [INFO] Server stopping
+[2025-05-03 14:40:03] [DEBUG] Closing all sockets and clients started
+[2025-05-03 14:40:03] [DEBUG] No clients in _clients_map.
+[2025-05-03 14:40:03] [DEBUG] Clients closed
+[2025-05-03 14:40:03] [DEBUG] Closing socket 4
+[2025-05-03 14:40:03] [DEBUG] Closing socket 4
+[2025-05-03 14:40:03] [DEBUG] Failed to Close FD 4: Bad file descriptor
+[2025-05-03 14:40:03] [DEBUG] Sockets closed
+[2025-05-03 14:40:03] [DEBUG] Epoll instance closed
+[2025-05-03 14:40:03] [INFO] Server stopped
+[2025-05-03 14:40:03] [INFO] Exiting program...
+[2025-05-03 14:40:03] [DEBUG] Closing all sockets and clients started
+[2025-05-03 14:40:03] [DEBUG] No clients in _clients_map.
+[2025-05-03 14:40:03] [DEBUG] Clients closed
+[2025-05-03 14:40:03] [DEBUG] Sockets closed
+[2025-05-03 14:40:03] [DEBUG] Epoll instance closed
+[2025-05-03 14:40:30] [INFO] Logging to file enabled.
+[2025-05-03 14:40:30] [DEBUG] CommandLineParser initialized
+[2025-05-03 14:40:30] [INFO] Using configuration file: testConfig/default.conf
+[2025-05-03 14:40:30] [DEBUG] Clé trouvée3 : server
+[2025-05-03 14:40:30] [DEBUG] Début de bloc
+[2025-05-03 14:40:30] [DEBUG] Clé trouvée3 : listen
+[2025-05-03 14:40:30] [DEBUG] Argument trouvé2 : 3434
+[2025-05-03 14:40:30] [DEBUG] Clé trouvée3 : root
+[2025-05-03 14:40:30] [DEBUG] Argument trouvé2 : ./www/main
+[2025-05-03 14:40:30] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-05-03 14:40:30] [DEBUG] Argument trouvé2 : 100
+[2025-05-03 14:40:30] [DEBUG] Fin de bloc
+[2025-05-03 14:40:30] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-05-03 14:40:30] [DEBUG] Socket created for port 3434
+[2025-05-03 14:40:30] [DEBUG] Socket added to epoll for port 3434
+[2025-05-03 14:40:30] [INFO] Server initialization complete
+[2025-05-03 14:40:30] [INFO] Server initialized successfully 4
+[2025-05-03 14:40:30] [INFO] Server running
+[2025-05-03 14:40:30] [DEBUG] Socket: 4
+[2025-05-03 14:40:30] [DEBUG] Port: 3434
+[2025-05-03 14:40:42] [INFO] Interrupt signal received, shutting down...
+[2025-05-03 14:40:42] [INFO] Server stopping
+[2025-05-03 14:40:42] [DEBUG] Closing all sockets and clients started
+[2025-05-03 14:40:42] [DEBUG] No clients in _clients_map.
+[2025-05-03 14:40:42] [DEBUG] Clients closed
+[2025-05-03 14:40:42] [DEBUG] Closing socket 4
+[2025-05-03 14:40:42] [DEBUG] Closing socket 4
+[2025-05-03 14:40:42] [DEBUG] Failed to Close FD 4: Bad file descriptor
+[2025-05-03 14:40:42] [DEBUG] Sockets closed
+[2025-05-03 14:40:42] [DEBUG] Epoll instance closed
+[2025-05-03 14:40:42] [INFO] Server stopped
+[2025-05-03 14:40:42] [INFO] Exiting program...
+[2025-05-03 14:40:42] [DEBUG] Closing all sockets and clients started
+[2025-05-03 14:40:42] [DEBUG] No clients in _clients_map.
+[2025-05-03 14:40:42] [DEBUG] Clients closed
+[2025-05-03 14:40:42] [DEBUG] Sockets closed
+[2025-05-03 14:40:42] [DEBUG] Epoll instance closed
+[2025-05-03 14:54:08] [INFO] Logging to file enabled.
+[2025-05-03 14:54:08] [DEBUG] CommandLineParser initialized
+[2025-05-03 14:54:08] [INFO] Using configuration file: testConfig/default.conf
+[2025-05-03 14:54:08] [DEBUG] Clé trouvée3 : server
+[2025-05-03 14:54:08] [DEBUG] Début de bloc
+[2025-05-03 14:54:08] [DEBUG] Clé trouvée3 : listen
+[2025-05-03 14:54:08] [DEBUG] Argument trouvé2 : 3434
+[2025-05-03 14:54:08] [DEBUG] Clé trouvée3 : root
+[2025-05-03 14:54:08] [DEBUG] Argument trouvé2 : ./www/main
+[2025-05-03 14:54:08] [DEBUG] Clé trouvée3 : client_max_body_size
+[2025-05-03 14:54:08] [DEBUG] Argument trouvé2 : 100
+[2025-05-03 14:54:08] [DEBUG] Fin de bloc
+[2025-05-03 14:54:08] [DEBUG] PRINT PARSE CONFIGURATION :
+[2025-05-03 14:54:08] [DEBUG] Socket created for port 3434
+[2025-05-03 14:54:08] [DEBUG] Socket added to epoll for port 3434
+[2025-05-03 14:54:08] [INFO] Server initialization complete
+[2025-05-03 14:54:08] [INFO] Server initialized successfully 4
+[2025-05-03 14:54:08] [INFO] Server running
+[2025-05-03 14:54:08] [DEBUG] Socket: 4
+[2025-05-03 14:54:08] [DEBUG] Port: 3434
+[2025-05-03 14:54:33] [INFO] Interrupt signal received, shutting down...
+[2025-05-03 14:54:33] [INFO] Server stopping
+[2025-05-03 14:54:33] [DEBUG] Closing all sockets and clients started
+[2025-05-03 14:54:33] [DEBUG] No clients in _clients_map.
+[2025-05-03 14:54:33] [DEBUG] Clients closed
+[2025-05-03 14:54:33] [DEBUG] Closing socket 4
+[2025-05-03 14:54:33] [DEBUG] Closing socket 4
+[2025-05-03 14:54:33] [DEBUG] Failed to Close FD 4: Bad file descriptor
+[2025-05-03 14:54:33] [DEBUG] Sockets closed
+[2025-05-03 14:54:33] [DEBUG] Epoll instance closed
+[2025-05-03 14:54:33] [INFO] Server stopped
+[2025-05-03 14:54:33] [INFO] Exiting program...
+[2025-05-03 14:54:33] [DEBUG] Closing all sockets and clients started
+[2025-05-03 14:54:33] [DEBUG] No clients in _clients_map.
+[2025-05-03 14:54:33] [DEBUG] Clients closed
+[2025-05-03 14:54:33] [DEBUG] Sockets closed
+[2025-05-03 14:54:33] [DEBUG] Epoll instance closed

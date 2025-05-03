@@ -628,7 +628,7 @@ void Request::parseBody()
         }
 
         clearProcessedData(_i - startIndex);
-        if (isFileTransfer(_method, _headers) &&!isCgi())
+        if (isFileTransfer(_method, _headers) && !isCgi())
         {
             std::string fileName = extractFileNameFromMultipart(_raw);
             if (!fileName.empty())

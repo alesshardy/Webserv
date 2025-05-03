@@ -66,8 +66,9 @@ class   Response
         ~Response();
 
 
-        int                 buildResponse(int epoll_fd);
+        int                 buildResponse();
         
+        // Setters
         void                setResponseHeader(const std::string& header);
         void                setResponseBody(const std::string& body);
         void                setResponseStatus(const std::string& status);
@@ -77,9 +78,8 @@ class   Response
         void                setClientFd(int client_fd);
         void                setClientSocket(Socket* client_socket);
         void                setTimeStartResponse(){_timeOut = std::time(NULL);};
+        void                setRState(int state) { _r_state = state;}
 
-        std::string         resolveFilePath();
-        std::string         generateDirectoryListing(const std::string& directoryPath, const std::string& uri, const std::string& format);
         // Getters
         int                 getClientFd() const { return _client_fd; }
         Socket*             getClientSocket() const { return _client_socket; }
@@ -89,10 +89,11 @@ class   Response
         std::string         getResponseBody() const { return _response_body; }
         std::string         getResponseHeader() const { return _response_header;}
         const int           &getResponseState() const {return (this->_r_state);}
-
-        void                setRState(int state) { _r_state = state;}
         
-
+        
+        //utility methods
+        std::string         resolveFilePath();
+        std::string         generateDirectoryListing(const std::string& directoryPath, const std::string& uri, const std::string& format);
         bool                isTimeoutExceeded() const;
 
         void                handleError(int error_code, bool errorPage = true);

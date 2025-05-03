@@ -84,7 +84,7 @@ void    Client::handleResponse(int epoll_fd)
     LogManager::log(LogManager::DEBUG, "epoll_fd: %d", epoll_fd);
 
     // Send the response to the client
-    if (_response->buildResponse(epoll_fd) == -1)
+    if (_response->buildResponse() == -1)
     {
         LogManager::log(LogManager::ERROR, "Failed to build response for client %d", _client_fd);
         return;

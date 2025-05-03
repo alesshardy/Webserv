@@ -4,15 +4,15 @@
 
 CommandLineParser::CommandLineParser(int argc, char **argv)
 {
-    _parseCommandLine(argc, argv);
     LogManager::setLogStatus(true);
-    if (hasOption("debug"))
+    _parseCommandLine(argc, argv);
+    if (hasOption("--debug"))
     {
         LogManager::setDebugLogStatus(true);
         LogManager::log(LogManager::INFO, "Debug mode enabled.");
     }
 
-    if (hasOption("logfile"))
+    if (hasOption("--logfile"))
     {
         LogManager::setLogFileStatus(true);
         LogManager::log(LogManager::INFO, "Logging to file enabled.");
@@ -29,14 +29,19 @@ CommandLineParser::~CommandLineParser()
  * @brief Affiche l'aide pour la ligne de commande.
  * 
  */
-void    CommandLineParser::printHelp() const
+void CommandLineParser::printHelp() const
 {
-    std::cout << "Usage: ./webserv [configuration_file] [options]" << std::endl;
-    std::cout << "Configuration file: Path to the configuration file (default: " << DEFAULT_CONFIG_FILE << ")" << std::endl;
-    std::cout << "Options:" << std::endl;
-    std::cout << "  --debug            Enable debug mode" << std::endl;
-    std::cout << "  --logfile          Enable logging to file" << std::endl;   
-    std::cout << "  --help            Show this help message" << std::endl;
+    std::cout << BLUE << "=========================================" << RESET << std::endl;
+    std::cout << BOLD << CYAN << "           Webserv - Help Menu           " << RESET << std::endl;
+    std::cout << BLUE << "=========================================" << RESET << std::endl;
+    std::cout << BOLD << "Usage: " << RESET << GREEN << "./webserv [configuration_file] [options]" << RESET << std::endl;
+    std::cout << "\n" << BOLD << "Configuration file:" << RESET << std::endl;
+    std::cout << "  " << YELLOW << "Path to the configuration file (default: " << DEFAULT_CONFIG_FILE << ")" << RESET << std::endl;
+    std::cout << "\n" << BOLD << "Options:" << RESET << std::endl;
+    std::cout << "  " << GREEN << "--debug" << RESET << "      Enable debug mode" << std::endl;
+    std::cout << "  " << GREEN << "--logfile" << RESET << "    Enable logging to file" << std::endl;
+    std::cout << "  " << GREEN << "--help" << RESET << "       Show this help message" << std::endl;
+    std::cout << BLUE << "=========================================" << RESET << std::endl;
 }
 
 /**
@@ -62,7 +67,6 @@ void    CommandLineParser::_parseCommandLine(int argc, char **argv)
             }
             else
             {
-                LogManager::log(LogManager::ERROR, "Invalid option: %s", arg.c_str());
                 throw std::invalid_argument("Invalid option: " + arg);
             }
         }

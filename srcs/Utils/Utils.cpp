@@ -114,6 +114,37 @@ bool isFileTransfer(const std::string& method, const std::map<std::string, std::
 }
 
 
+// bool isFileTransfer(const std::string& method, const std::map<std::string, std::string>& headers, const std::string& body)
+// {
+//     // Vérifier si la méthode est POST
+//     if (method != "POST")
+//         return false;
+
+//     // Vérifier si l'en-tête Content-Type est présent
+//     std::map<std::string, std::string>::const_iterator it = headers.find("Content-Type");
+//     if (it == headers.end())
+//         return false;
+
+//     // Vérifier si le Content-Type correspond à un transfert de fichier
+//     const std::string& contentType = it->second;
+//     if (contentType.find("multipart/form-data") != std::string::npos)
+//     {
+//         // Vérifier si un fichier est inclus dans le body
+//         if (body.find("filename=") != std::string::npos)
+//             return true;
+//         else
+//             return false; // Pas de fichier détecté
+//     }
+
+//     if (contentType.find("application/octet-stream") != std::string::npos)
+//     {
+//         return true; // Les données binaires sont considérées comme un transfert de fichier
+//     }
+
+//     return false;
+// }
+
+
 std::string getStatusCodeMessage(int statusCode)
 {
     switch (statusCode)
