@@ -4,7 +4,7 @@ CgiRequest::CgiRequest(Request *request, std::string cgiPath, std::string script
 {
     _initEnv();
 
-    char tmpFileName[] = "/tmp/cgi_tmpfile_XXXXXX"; //SIUUU
+    char tmpFileName[] = "/tmp/cgi_tmpfile_XXXXXX";
     _fd = mkstemp(tmpFileName); // fonction pour creer un fichier temporaire
     _fd = open(tmpFileName, O_CREAT | O_RDWR | O_TRUNC, 0644); 
     if (_fd == -1)

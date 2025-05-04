@@ -39,8 +39,6 @@ class RequestBody
         std::string readBody() const;
 
         void defineBodyDestination();
-        // std::map<std::string, std::string>  parseFormData(const std::string& body) const;
-
 };
 
 #endif
