@@ -1,210 +1,130 @@
-=3049574== Invalid read of size 8
-==3049574==    at 0x4112FC: std::vector<Listen, std::allocator<Listen> >::size() const (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x429188: Request::setDefaultServer(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x428F26: Request::Request(Client*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4277DB: Client::Client(int, Socket*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4222D2: Server::handleNewConnection(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x42194C: Server::handleEpollEvents() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4213FD: Server::run() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x40650A: main (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==  Address 0x4df75f8 is 8 bytes inside a block of size 544 free'd
-==3049574==    at 0x484B8AF: operator delete(void*) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==3049574==    by 0x41633C: std::__new_allocator<BlocServer>::deallocate(BlocServer*, unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x416314: __gnu_cxx::__alloc_traits<std::allocator<BlocServer>, BlocServer>::deallocate(std::allocator<BlocServer>&, BlocServer*, unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4162C7: std::_Vector_base<BlocServer, std::allocator<BlocServer> >::_M_deallocate(BlocServer*, unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4161A4: std::_Vector_base<BlocServer, std::allocator<BlocServer> >::~_Vector_base() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x410622: std::vector<BlocServer, std::allocator<BlocServer> >::~vector() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4086E4: Config::~Config() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x429114: Request::setDefaultServer(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x428F26: Request::Request(Client*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4277DB: Client::Client(int, Socket*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4222D2: Server::handleNewConnection(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x42194C: Server::handleEpollEvents() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==  Block was alloc'd at
-==3049574==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==3049574==    by 0x41676F: std::__new_allocator<BlocServer>::allocate(unsigned long, void const*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x416700: __gnu_cxx::__alloc_traits<std::allocator<BlocServer>, BlocServer>::allocate(std::allocator<BlocServer>&, unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x41667F: std::_Vector_base<BlocServer, std::allocator<BlocServer> >::_M_allocate(unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4163B8: BlocServer* std::vector<BlocServer, std::allocator<BlocServer> >::_M_allocate_and_copy<__gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > > >(unsigned long, __gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > >, __gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > >) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4106F5: std::vector<BlocServer, std::allocator<BlocServer> >::operator=(std::vector<BlocServer, std::allocator<BlocServer> > const&) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4086BE: Config::operator=(Config const&) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x408649: Config::Config(Config const&) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x42F646: Server::get_config() const (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4290F0: Request::setDefaultServer(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x428F26: Request::Request(Client*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4277DB: Client::Client(int, Socket*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574== 
-==3049574== Invalid read of size 8
-==3049574==    at 0x411300: std::vector<Listen, std::allocator<Listen> >::size() const (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x429188: Request::setDefaultServer(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x428F26: Request::Request(Client*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4277DB: Client::Client(int, Socket*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4222D2: Server::handleNewConnection(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x42194C: Server::handleEpollEvents() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4213FD: Server::run() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x40650A: main (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==  Address 0x4df75f0 is 0 bytes inside a block of size 544 free'd
-==3049574==    at 0x484B8AF: operator delete(void*) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==3049574==    by 0x41633C: std::__new_allocator<BlocServer>::deallocate(BlocServer*, unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x416314: __gnu_cxx::__alloc_traits<std::allocator<BlocServer>, BlocServer>::deallocate(std::allocator<BlocServer>&, BlocServer*, unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4162C7: std::_Vector_base<BlocServer, std::allocator<BlocServer> >::_M_deallocate(BlocServer*, unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4161A4: std::_Vector_base<BlocServer, std::allocator<BlocServer> >::~_Vector_base() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x410622: std::vector<BlocServer, std::allocator<BlocServer> >::~vector() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4086E4: Config::~Config() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x429114: Request::setDefaultServer(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x428F26: Request::Request(Client*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4277DB: Client::Client(int, Socket*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4222D2: Server::handleNewConnection(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x42194C: Server::handleEpollEvents() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==  Block was alloc'd at
-==3049574==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==3049574==    by 0x41676F: std::__new_allocator<BlocServer>::allocate(unsigned long, void const*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x416700: __gnu_cxx::__alloc_traits<std::allocator<BlocServer>, BlocServer>::allocate(std::allocator<BlocServer>&, unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x41667F: std::_Vector_base<BlocServer, std::allocator<BlocServer> >::_M_allocate(unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4163B8: BlocServer* std::vector<BlocServer, std::allocator<BlocServer> >::_M_allocate_and_copy<__gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > > >(unsigned long, __gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > >, __gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > >) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4106F5: std::vector<BlocServer, std::allocator<BlocServer> >::operator=(std::vector<BlocServer, std::allocator<BlocServer> > const&) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4086BE: Config::operator=(Config const&) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x408649: Config::Config(Config const&) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x42F646: Server::get_config() const (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4290F0: Request::setDefaultServer(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x428F26: Request::Request(Client*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4277DB: Client::Client(int, Socket*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574== 
-==3049574== Invalid read of size 8
-==3049574==    at 0x411330: std::vector<Listen, std::allocator<Listen> >::operator[](unsigned long) const (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4291A8: Request::setDefaultServer(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x428F26: Request::Request(Client*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4277DB: Client::Client(int, Socket*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4222D2: Server::handleNewConnection(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x42194C: Server::handleEpollEvents() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4213FD: Server::run() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x40650A: main (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==  Address 0x4df75f0 is 0 bytes inside a block of size 544 free'd
-==3049574==    at 0x484B8AF: operator delete(void*) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==3049574==    by 0x41633C: std::__new_allocator<BlocServer>::deallocate(BlocServer*, unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x416314: __gnu_cxx::__alloc_traits<std::allocator<BlocServer>, BlocServer>::deallocate(std::allocator<BlocServer>&, BlocServer*, unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4162C7: std::_Vector_base<BlocServer, std::allocator<BlocServer> >::_M_deallocate(BlocServer*, unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4161A4: std::_Vector_base<BlocServer, std::allocator<BlocServer> >::~_Vector_base() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x410622: std::vector<BlocServer, std::allocator<BlocServer> >::~vector() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4086E4: Config::~Config() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x429114: Request::setDefaultServer(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x428F26: Request::Request(Client*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4277DB: Client::Client(int, Socket*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4222D2: Server::handleNewConnection(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x42194C: Server::handleEpollEvents() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==  Block was alloc'd at
-==3049574==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==3049574==    by 0x41676F: std::__new_allocator<BlocServer>::allocate(unsigned long, void const*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x416700: __gnu_cxx::__alloc_traits<std::allocator<BlocServer>, BlocServer>::allocate(std::allocator<BlocServer>&, unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x41667F: std::_Vector_base<BlocServer, std::allocator<BlocServer> >::_M_allocate(unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4163B8: BlocServer* std::vector<BlocServer, std::allocator<BlocServer> >::_M_allocate_and_copy<__gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > > >(unsigned long, __gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > >, __gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > >) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4106F5: std::vector<BlocServer, std::allocator<BlocServer> >::operator=(std::vector<BlocServer, std::allocator<BlocServer> > const&) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4086BE: Config::operator=(Config const&) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x408649: Config::Config(Config const&) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x42F646: Server::get_config() const (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4290F0: Request::setDefaultServer(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x428F26: Request::Request(Client*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4277DB: Client::Client(int, Socket*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574== 
-==3049574== Invalid read of size 4
-==3049574==    at 0x41135C: Listen::getPort() const (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4291B0: Request::setDefaultServer(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x428F26: Request::Request(Client*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4277DB: Client::Client(int, Socket*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4222D2: Server::handleNewConnection(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x42194C: Server::handleEpollEvents() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4213FD: Server::run() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x40650A: main (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==  Address 0x4df7870 is 32 bytes inside a block of size 80 free'd
-==3049574==    at 0x484B8AF: operator delete(void*) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==3049574==    by 0x412FDC: std::__new_allocator<Listen>::deallocate(Listen*, unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x412FB4: __gnu_cxx::__alloc_traits<std::allocator<Listen>, Listen>::deallocate(std::allocator<Listen>&, Listen*, unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x412B67: std::_Vector_base<Listen, std::allocator<Listen> >::_M_deallocate(Listen*, unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x419834: std::_Vector_base<Listen, std::allocator<Listen> >::~_Vector_base() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x418652: std::vector<Listen, std::allocator<Listen> >::~vector() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x417FFA: BlocServer::~BlocServer() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x416274: void std::_Destroy<BlocServer>(BlocServer*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x41623E: void std::_Destroy_aux<false>::__destroy<BlocServer*>(BlocServer*, BlocServer*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4161FC: void std::_Destroy<BlocServer*>(BlocServer*, BlocServer*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x416150: void std::_Destroy<BlocServer*, BlocServer>(BlocServer*, BlocServer*, std::allocator<BlocServer>&) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x410614: std::vector<BlocServer, std::allocator<BlocServer> >::~vector() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==  Block was alloc'd at
-==3049574==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==3049574==    by 0x412CFC: std::__new_allocator<Listen>::allocate(unsigned long, void const*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x412C90: __gnu_cxx::__alloc_traits<std::allocator<Listen>, Listen>::allocate(std::allocator<Listen>&, unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x412A4F: std::_Vector_base<Listen, std::allocator<Listen> >::_M_allocate(unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x419978: Listen* std::vector<Listen, std::allocator<Listen> >::_M_allocate_and_copy<__gnu_cxx::__normal_iterator<Listen const*, std::vector<Listen, std::allocator<Listen> > > >(unsigned long, __gnu_cxx::__normal_iterator<Listen const*, std::vector<Listen, std::allocator<Listen> > >, __gnu_cxx::__normal_iterator<Listen const*, std::vector<Listen, std::allocator<Listen> > >) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x418725: std::vector<Listen, std::allocator<Listen> >::operator=(std::vector<Listen, std::allocator<Listen> > const&) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x417EBE: BlocServer::operator=(BlocServer const&) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x417D7A: BlocServer::BlocServer(BlocServer const&) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4169AC: void std::_Construct<BlocServer, BlocServer>(BlocServer*, BlocServer const&) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4168A1: BlocServer* std::__do_uninit_copy<__gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > >, BlocServer*>(__gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > >, __gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > >, BlocServer*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x416824: BlocServer* std::__uninitialized_copy<false>::__uninit_copy<__gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > >, BlocServer*>(__gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > >, __gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > >, BlocServer*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4167DC: BlocServer* std::uninitialized_copy<__gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > >, BlocServer*>(__gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > >, __gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > >, BlocServer*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574== 
-[2025-05-01 18:46:43] [DEBUG] Default server set for port 4343
-[2025-05-01 18:46:43] [DEBUG] Create request
-[2025-05-01 18:46:43] [DEBUG] New client connected: 8
-[2025-05-01 18:46:43] [DEBUG] New connection on socket 4
-POOST / HTTP/1.1
-Host: localhost:4343
-Content-Length: 21
+[2025-05-04 12:33:34] [INFO] POST /upload HTTP/1.1
+[2025-05-04 12:33:34] [DEBUG] Http method: POST
+[2025-05-04 12:33:34] [DEBUG] Http uri: /upload
+[2025-05-04 12:33:34] [DEBUG] Http version: HTTP/1.1
+[2025-05-04 12:33:34] [DEBUG] HeaderKey Host
+[2025-05-04 12:33:34] [DEBUG] HeaderValue localhost:4343
+[2025-05-04 12:33:34] [DEBUG] HeaderKey Content-Length
+[2025-05-04 12:33:34] [DEBUG] HeaderValue 28
+[2025-05-04 12:33:34] [DEBUG] HeaderKey Content-Type
+[2025-05-04 12:33:34] [DEBUG] HeaderValue text/plain
+[2025-05-04 12:33:34] [DEBUG] HeaderKey Filename
+[2025-05-04 12:33:34] [DEBUG] HeaderValue fichier1
+[2025-05-04 12:33:34] [DEBUG] Checking headers ...
+[2025-05-04 12:33:34] [DEBUG] Matching location found: /
+[2025-05-04 12:33:34] [DEBUG] Request does not target a CGI script
+[2025-05-04 12:33:34] [DEBUG] Max body size set to: 10485760
+[2025-05-04 12:33:34] [DEBUG] Good AllowMethod: [POST] found in bloc location
+[2025-05-04 12:33:34] [DEBUG] Checking headers DONE
+[2025-05-04 12:33:34] [DEBUG] Parse Body
+FIchier cREER : ./www/main/fichier1
+[2025-05-04 12:33:34] [DEBUG] Parse Body en mode LENGTH
+[2025-05-04 12:33:34] [DEBUG] Clearing processed data: "This is the of POST request."
+[2025-05-04 12:33:34] [DEBUG] Parse body DONE!
+[2025-05-04 12:33:34] [DEBUG] Request complete for client 8
+[2025-05-04 12:33:34] [DEBUG] Request is complete, sending response for FD 8
+[2025-05-04 12:33:34] [DEBUG] Handling response for client 8
+[2025-05-04 12:33:34] [DEBUG] epoll_fd: 3
+[2025-05-04 12:33:34] [DEBUG] Handling POST request
+[2025-05-04 12:33:34] [DEBUG] POST request body: This is the of POST request.
+[2025-05-04 12:33:34] [DEBUG] POST response prepared for client 8
+[2025-05-04 12:33:34] [DEBUG] Response sent to client 8: HTTP/1.1 200 OK
+Content-Type: text/plain
+Content-Length: 19
 
-Wikipedia in
-chunks.
-[2025-05-01 18:46:43] [INFO] POOST / HTTP/1.1
-[2025-05-01 18:46:43] [DEBUG] Http method: POOST
-[2025-05-01 18:46:43] [ERROR] Error handling request for client 8: 
-ERROR : unsupported HTTP method
-[2025-05-01 18:46:44] [ERROR] Request in ERROR state for client FD 8
-[2025-05-01 18:46:44] [DEBUG] Request is complete, sending response for FD 8
-[2025-05-01 18:46:44] [DEBUG] Handling response for client 8
-[2025-05-01 18:46:44] [DEBUG] epoll_fd: 3
-[2025-05-01 18:46:44] [DEBUG] Request in ERROR stat,  building response
-[2025-05-01 18:46:44] [DEBUG] Generating error page for code: 400
-==3049574== Invalid read of size 8
-==3049574==    at 0x43D0CC: std::_Rb_tree<int, std::pair<int const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::_Select1st<std::pair<int const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >, std::less<int>, std::allocator<std::pair<int const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::_M_begin() const (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x43CF7C: std::_Rb_tree<int, std::pair<int const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::_Select1st<std::pair<int const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >, std::less<int>, std::allocator<std::pair<int const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::find(int const&) const (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x43CF4C: std::map<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<int>, std::allocator<std::pair<int const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::find(int const&) const (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x43C0D9: ErrorPage::getErrorPage(int, std::map<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<int>, std::allocator<std::pair<int const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > const&) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x434795: Response::handleError(int, bool) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x434588: Response::buildResponse(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x427C20: Client::handleResponse(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x421BC1: Server::handleEpollEvents() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4213FD: Server::run() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x40650A: main (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==  Address 0x4df7668 is 120 bytes inside a block of size 544 free'd
-==3049574==    at 0x484B8AF: operator delete(void*) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==3049574==    by 0x41633C: std::__new_allocator<BlocServer>::deallocate(BlocServer*, unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x416314: __gnu_cxx::__alloc_traits<std::allocator<BlocServer>, BlocServer>::deallocate(std::allocator<BlocServer>&, BlocServer*, unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4162C7: std::_Vector_base<BlocServer, std::allocator<BlocServer> >::_M_deallocate(BlocServer*, unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4161A4: std::_Vector_base<BlocServer, std::allocator<BlocServer> >::~_Vector_base() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x410622: std::vector<BlocServer, std::allocator<BlocServer> >::~vector() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4086E4: Config::~Config() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x429114: Request::setDefaultServer(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x428F26: Request::Request(Client*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4277DB: Client::Client(int, Socket*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4222D2: Server::handleNewConnection(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x42194C: Server::handleEpollEvents() (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==  Block was alloc'd at
-==3049574==    at 0x4849013: operator new(unsigned long) (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==3049574==    by 0x41676F: std::__new_allocator<BlocServer>::allocate(unsigned long, void const*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x416700: __gnu_cxx::__alloc_traits<std::allocator<BlocServer>, BlocServer>::allocate(std::allocator<BlocServer>&, unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x41667F: std::_Vector_base<BlocServer, std::allocator<BlocServer> >::_M_allocate(unsigned long) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4163B8: BlocServer* std::vector<BlocServer, std::allocator<BlocServer> >::_M_allocate_and_copy<__gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > > >(unsigned long, __gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > >, __gnu_cxx::__normal_iterator<BlocServer const*, std::vector<BlocServer, std::allocator<BlocServer> > >) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4106F5: std::vector<BlocServer, std::allocator<BlocServer> >::operator=(std::vector<BlocServer, std::allocator<BlocServer> > const&) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4086BE: Config::operator=(Config const&) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x408649: Config::Config(Config const&) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x42F646: Server::get_config() const (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4290F0: Request::setDefaultServer(int) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x428F26: Request::Request(Client*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574==    by 0x4277DB: Client::Client(int, Socket*, Server*) (in /home/apintus/Desktop/42cursus/git/Webserv/WebServ)
-==3049574== 
-[2025-05-01 18:46:44] [DEBUG] Using standard error page for code: 400
-[2025-05-01 18:46:44] [DEBUG] Response sent to client 8: HTTP/1.1 400 Bad Request
+POST request received
+[2025-05-04 12:33:34] [DEBUG] Response sent to client 8
+[2025-05-04 12:33:54] [DEBUG] Client 8 already exists, deleting old client
+[2025-05-04 12:33:54] [DEBUG] Destroying request
+[2025-05-04 12:33:54] [DEBUG] Destroying response
+[2025-05-04 12:33:54] [DEBUG] Destroying client 8
+[2025-05-04 12:33:54] [DEBUG] Create request
+[2025-05-04 12:33:54] [DEBUG] New client connected: 8
+[2025-05-04 12:33:54] [DEBUG] New connection on socket 4
+[2025-05-04 12:33:54] [INFO] DELETE /upload HTTP/1.1
+[2025-05-04 12:33:54] [DEBUG] Http method: DELETE
+[2025-05-04 12:33:54] [DEBUG] Http uri: /upload
+[2025-05-04 12:33:54] [DEBUG] Http version: HTTP/1.1
+[2025-05-04 12:33:54] [DEBUG] HeaderKey Host
+[2025-05-04 12:33:54] [DEBUG] HeaderValue localhost:4343
+[2025-05-04 12:33:54] [DEBUG] HeaderKey Content-Length
+[2025-05-04 12:33:54] [DEBUG] HeaderValue 28
+[2025-05-04 12:33:54] [DEBUG] HeaderKey Content-Type
+[2025-05-04 12:33:54] [DEBUG] HeaderValue text/plain
+[2025-05-04 12:33:54] [DEBUG] HeaderKey Filename
+[2025-05-04 12:33:54] [DEBUG] HeaderValue fichier1
+[2025-05-04 12:33:54] [DEBUG] Checking headers ...
+[2025-05-04 12:33:54] [DEBUG] Matching location found: /
+[2025-05-04 12:33:54] [DEBUG] Request does not target a CGI script
+[2025-05-04 12:33:54] [DEBUG] Max body size set to: 10485760
+[2025-05-04 12:33:54] [DEBUG] Good AllowMethod: [DELETE] found in bloc location
+[2025-05-04 12:33:54] [DEBUG] Checking headers DONE
+[2025-05-04 12:33:54] [DEBUG] Parse Body
+[2025-05-04 12:33:54] [DEBUG] Parse Body en mode LENGTH
+[2025-05-04 12:33:54] [DEBUG] Clearing processed data: "This is the of POST request."
+[2025-05-04 12:33:54] [DEBUG] Parse body DONE!
+[2025-05-04 12:33:54] [DEBUG] Request complete for client 8
+[2025-05-04 12:33:54] [DEBUG] Request is complete, sending response for FD 8
+[2025-05-04 12:33:54] [DEBUG] Handling response for client 8
+[2025-05-04 12:33:54] [DEBUG] epoll_fd: 3
+[2025-05-04 12:33:54] [DEBUG] Handling DELETE request
+[2025-05-04 12:33:54] [DEBUG] Matching location found: ./www/main
+[2025-05-04 12:33:54] [DEBUG] Filename header found: fichier1
+[2025-05-04 12:33:54] [DEBUG] Matching location found: ./www/main
+[2025-05-04 12:33:54] [DEBUG] Resolved file path to delete: ./www/main/upload/fichier1
+fichier a supp : ./www/main/upload/fichier1
+[2025-05-04 12:33:54] [ERROR] File or directory not found: ./www/main/upload/fichier1
+[2025-05-04 12:33:54] [DEBUG] Generating error page for code: 404
+[2025-05-04 12:33:54] [DEBUG] Using standard error page for code: 404
+[2025-05-04 12:33:54] [DEBUG] DELETE response prepared for client 8
+[2025-05-04 12:33:54] [DEBUG] Response sent to client 8: HTTP/1.1 404 Not Found
 Content-Type: text/html
-Content-Length: 161
+Content-Length: 904
 Connection: close
 
-<html><head><title>Error 400 - Bad Request</title></head><body><h1>Error 400 - Bad Request</h1><p>Something went wrong. Please try again later.</p></body></html>
-[2025-05-01 18:46:44] [DEBUG] Response sent to client 8
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Error 404 - Not Found</title><style>body {  font-family: Arial, sans-serif;  background-color: #f8f9fa;  color: #333;  display: flex;  justify-content: center;  align-items: center;  height: 100vh;  margin: 0;}.error-container {  text-align: center;  background: #fff;  padding: 20px;  border-radius: 10px;  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);}.error-logo {  font-size: 50px;  color: #e74c3c;  margin-bottom: 20px;}.error-title {  font-size: 24px;  margin-bottom: 10px;}.error-message {  font-size: 16px;  color: #666;}</style></head><body><div class="error-container">  <div class="error-logo">⚠️</div>  <div class="error-title">Error 404 - Not Found</div>  <div class="error-message">Something went wrong. Please try again later.</div></div></body></html>
+[2025-05-04 12:33:54] [DEBUG] Response sent to client 8
+^C[2025-05-04 12:33:58] [INFO] Interrupt signal received, shutting down...
+[2025-05-04 12:33:58] [INFO] Server stopping
+[2025-05-04 12:33:58] [DEBUG] Closing all sockets and clients started
+[2025-05-04 12:33:58] [DEBUG] Listing clients in _clients_map:
+[2025-05-04 12:33:58] [DEBUG] Client FD: 8, Client Pointer: 0x4dfffd0
+[2025-05-04 12:33:58] [DEBUG] Closing client FD 8
+[2025-05-04 12:33:58] [DEBUG] Attempting to remove FD 8 from epoll
+[2025-05-04 12:33:58] [DEBUG] Failed to remove FD 8 from epoll: Bad file descriptor
+[2025-05-04 12:33:58] [DEBUG] Deleting client object for FD 8
+[2025-05-04 12:33:58] [DEBUG] Destroying request
+[2025-05-04 12:33:58] [DEBUG] Destroying response
+[2025-05-04 12:33:58] [DEBUG] Destroying client 8
+[2025-05-04 12:33:58] [DEBUG] Failed to close FD 8: Bad file descriptor
+[2025-05-04 12:33:58] [DEBUG] Clients closed
+[2025-05-04 12:33:58] [DEBUG] Closing socket 4
+[2025-05-04 12:33:58] [DEBUG] Closing socket 4
+[2025-05-04 12:33:58] [DEBUG] Failed to Close FD 4: Bad file descriptor
+[2025-05-04 12:33:58] [DEBUG] Closing socket 5
+[2025-05-04 12:33:58] [DEBUG] Closing socket 5
+[2025-05-04 12:33:58] [DEBUG] Failed to Close FD 5: Bad file descriptor
+[2025-05-04 12:33:58] [DEBUG] Closing socket 6
+[2025-05-04 12:33:58] [DEBUG] Closing socket 6
+[2025-05-04 12:33:58] [DEBUG] Failed to Close FD 6: Bad file descriptor
+[2025-05-04 12:33:58] [DEBUG] Closing socket 7
+[2025-05-04 12:33:58] [DEBUG] Closing socket 7
+[2025-05-04 12:33:58] [DEBUG] Failed to Close FD 7: Bad file descriptor
+[2025-05-04 12:33:58] [DEBUG] Sockets closed
+[2025-05-04 12:33:58] [DEBUG] Epoll instance closed
+[2025-05-04 12:33:58] [INFO] Server stopped
+[2025-05-04 12:33:58] [INFO] Exiting program...
+[2025-05-04 12:33:58] [DEBUG] Closing all sockets and clients started
+[2025-05-04 12:33:58] [DEBUG] No clients in _clients_map.
+[2025-05-04 12:33:58] [DEBUG] Clients closed
+[2025-05-04 12:33:58] [DEBUG] Sockets closed
+[2025-05-04 12:33:58] [DEBUG] Epoll instance closed
+==3234300== 
+==3234300== HEAP SUMMARY:
+==3234300==     in use at exit: 0 bytes in 0 blocks
+==3234300==   total heap usage: 742 allocs, 742 frees, 144,521 bytes allocated
+==3234300== 
+==3234300== All heap blocks were freed -- no leaks are possible
+==3234300== 
+==3234300== For lists of detected and suppressed errors, rerun with: -s
+==3234300== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

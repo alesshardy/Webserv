@@ -97,6 +97,9 @@ class   Response
         bool                isTimeoutExceeded() const;
 
         void                handleError(int error_code, bool errorPage = true);
+
+        std::string resolveFilePathWithFilename(const std::string& filename) const;
+
 };
 
 #endif

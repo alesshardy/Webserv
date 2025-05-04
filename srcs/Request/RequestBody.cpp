@@ -58,6 +58,14 @@ void RequestBody::defineBodyDestination()
         {
             fileName = headers.at("Filename");
         }
+        else
+        {
+            // Générer un nom de fichier unique
+            std::ostringstream oss;
+            std::time_t now = std::time(0); // Obtenir l'horodatage actuel
+            oss << fileName << "_" << now << "_" << rand(); // Ajouter un timestamp et un identifiant aléatoire
+            fileName = oss.str();
+        }
 
         // Construire le chemin complet
         _tmpFilePath = basePath + fileName;
@@ -69,6 +77,7 @@ void RequestBody::defineBodyDestination()
             // throw std::runtime_error("ERROR: File already exists, cannot overwrite");
         }
 
+        std::cout << "FIchier cREER : " << _tmpFilePath << std::endl;
         // Étape 4 : Créer et ouvrir le fichier
         _fd = open(_tmpFilePath.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
         if (_fd == -1)
