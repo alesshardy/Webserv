@@ -594,7 +594,7 @@ void Request::parseBody()
         return;
     }
     
-    if (_headers.find("Content-Length") == _headers.end() && _headers.find("Transfer-Encoding") == _headers.end())
+    if (_headers.find("Content-Length") == _headers.end() && _headers.find("Transfer-Encoding") == _headers.end() && getMethod() != "DELETE") 
         return (handleError(400, ERROR, "ERROR: Bad Request, missing Content-Length or Transfer-Encoding"));
         
     if (_contentLength > _maxBodySize)
@@ -628,26 +628,33 @@ void Request::parseBody()
         }
 
         clearProcessedData(_i - startIndex);
-        if (isFileTransfer(_method, _headers) && !isCgi())
-        {
-            std::string fileName = extractFileNameFromMultipart(_raw);
-            if (!fileName.empty())
-            {
-                LogManager::log(LogManager::DEBUG, "File transfer detected with filename: %s", fileName.c_str());
-                handleFileTransfer();
-                // _state = END;
-                return;
-            }
-        }
+        // if (isFileTransfer(_method, _headers) && !isCgi())
+        // {
+        //     std::string fileName = extractFileNameFromMultipart(_raw);
+        //     if (!fileName.empty())
+        //     {
+        //         LogManager::log(LogManager::DEBUG, "File transfer detected with filename: %s", fileName.c_str());
+        //         handleFileTransfer();
+        //         // _state = END;
+        //         return;
+        //     }
+        // }
     
         // Gestion normale du corps
 
         if (_body->isComplete())
         {
+            if (isFileTransfer(_method, _headers, _body->readBody()) && !isCgi())
+            {
+                handleFileTransfer(); // Appeler après la complétion du corps
+                return;
+            }
+        
             if (isCgi())
                 _state = CGI;
             else
                 _state = END;
+        
             LogManager::log(LogManager::DEBUG, "Parse body DONE!");
         }
     } catch (const std::exception &e) {
@@ -688,35 +695,100 @@ void    Request::parseCgi()
 
 /********************************file Transfert ****************************************** */
 
+// void Request::handleFileTransfer()
+// {
+//     std::string uploadDir = "./www/uploads/";
+//     if (!directoryExists(uploadDir))
+//     {
+//         if (!createDirectory(uploadDir))
+//             return (handleError(500, ERROR, "ERROR: Unable to create upload directory"));
+//             // throw std::runtime_error("ERROR: Unable to create upload directory");
+//         LogManager::log(LogManager::DEBUG, "Upload directory created: %s", uploadDir.c_str());
+//     }
+
+//     std::string fileName = extractFileNameFromMultipart(_raw);
+//     if (fileName.empty())
+//         return (handleError(400, ERROR, "ERROR: Missing or invalid filename in multipart data"));
+//         // throw std::runtime_error("ERROR: Missing or invalid filename in multipart data");
+
+//     std::string filePath = uploadDir + sanitizeFileName(fileName);
+//     LogManager::log(LogManager::DEBUG, "Attempting to open file for writing: %s", filePath.c_str());
+
+//     std::ofstream outFile(filePath.c_str(), std::ios::binary);
+//     if (!outFile.is_open())
+//         return (handleError(500, ERROR, "ERROR: Unable to open file for writing"));
+//         // throw std::runtime_error("ERROR: Unable to open file for writing");
+
+//     outFile.write(_raw.c_str(), _raw.size());
+//     outFile.close();
+
+//     LogManager::log(LogManager::DEBUG, "File uploaded successfully: %s", filePath.c_str());
+//     _state = END;
+// }
+
 void Request::handleFileTransfer()
 {
+    LogManager::log(LogManager::DEBUG, "Handling file transfer");
+
+    // Vérifier si le corps est complet
+    if (!_body || !_body->isComplete())
+        return (handleError(400, ERROR, "ERROR: Request body is incomplete"));
+
+    // Lire le contenu du fichier temporaire
+    std::string bodyContent = _body->readBody();
+    LogManager::log(LogManager::DEBUG, "Body content: %s", bodyContent.c_str());
+
+    // Extraire le nom de fichier depuis le contenu
+    std::string fileName = extractFileNameFromMultipart(bodyContent);
+    if (fileName.empty())
+        return (handleError(400, ERROR, "ERROR: Missing or invalid filename in multipart data"));
+
+    // Extraire le contenu du fichier
+    std::string fileContent = extractFileContentFromMultipart(bodyContent);
+    if (fileContent.empty())
+        return (handleError(400, ERROR, "ERROR: Failed to extract file content from multipart data"));
+
+    // Construire le chemin du fichier
     std::string uploadDir = "./www/uploads/";
     if (!directoryExists(uploadDir))
     {
         if (!createDirectory(uploadDir))
             return (handleError(500, ERROR, "ERROR: Unable to create upload directory"));
-            // throw std::runtime_error("ERROR: Unable to create upload directory");
         LogManager::log(LogManager::DEBUG, "Upload directory created: %s", uploadDir.c_str());
     }
-
-    std::string fileName = extractFileNameFromMultipart(_raw);
-    if (fileName.empty())
-        return (handleError(400, ERROR, "ERROR: Missing or invalid filename in multipart data"));
-        // throw std::runtime_error("ERROR: Missing or invalid filename in multipart data");
 
     std::string filePath = uploadDir + sanitizeFileName(fileName);
     LogManager::log(LogManager::DEBUG, "Attempting to open file for writing: %s", filePath.c_str());
 
+    // Écrire le contenu dans le fichier
     std::ofstream outFile(filePath.c_str(), std::ios::binary);
     if (!outFile.is_open())
         return (handleError(500, ERROR, "ERROR: Unable to open file for writing"));
-        // throw std::runtime_error("ERROR: Unable to open file for writing");
 
-    outFile.write(_raw.c_str(), _raw.size());
+    outFile.write(fileContent.c_str(), fileContent.size());
     outFile.close();
 
     LogManager::log(LogManager::DEBUG, "File uploaded successfully: %s", filePath.c_str());
     _state = END;
+}
+
+std::string Request::extractFileContentFromMultipart(const std::string& bodyContent)
+{
+    size_t boundaryStart = bodyContent.find("\r\n");
+    if (boundaryStart == std::string::npos)
+        return "";
+
+    std::string boundary = bodyContent.substr(0, boundaryStart);
+    size_t fileContentStart = bodyContent.find("\r\n\r\n", boundaryStart);
+    if (fileContentStart == std::string::npos)
+        return "";
+
+    fileContentStart += 4; // Sauter les deux CRLF
+    size_t fileContentEnd = bodyContent.find(boundary, fileContentStart);
+    if (fileContentEnd == std::string::npos)
+        return "";
+
+    return bodyContent.substr(fileContentStart, fileContentEnd - fileContentStart - 2); // Retirer les deux derniers CRLF
 }
 /******************************************* TIMER *******************************************/
 

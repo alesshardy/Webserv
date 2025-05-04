@@ -139,6 +139,9 @@ class Request{
         void setError(int code, int state);
         
         bool isCgi() {return _isCgi;}
+
+        std::string extractFileContentFromMultipart(const std::string& bodyContent);
+
     };
 
 #endif
