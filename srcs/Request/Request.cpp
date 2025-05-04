@@ -628,20 +628,7 @@ void Request::parseBody()
         }
 
         clearProcessedData(_i - startIndex);
-        // if (isFileTransfer(_method, _headers) && !isCgi())
-        // {
-        //     std::string fileName = extractFileNameFromMultipart(_raw);
-        //     if (!fileName.empty())
-        //     {
-        //         LogManager::log(LogManager::DEBUG, "File transfer detected with filename: %s", fileName.c_str());
-        //         handleFileTransfer();
-        //         // _state = END;
-        //         return;
-        //     }
-        // }
     
-        // Gestion normale du corps
-
         if (_body->isComplete())
         {
             if (isFileTransfer(_method, _headers, _body->readBody()) && !isCgi())
@@ -694,37 +681,6 @@ void    Request::parseCgi()
 }
 
 /********************************file Transfert ****************************************** */
-
-// void Request::handleFileTransfer()
-// {
-//     std::string uploadDir = "./www/uploads/";
-//     if (!directoryExists(uploadDir))
-//     {
-//         if (!createDirectory(uploadDir))
-//             return (handleError(500, ERROR, "ERROR: Unable to create upload directory"));
-//             // throw std::runtime_error("ERROR: Unable to create upload directory");
-//         LogManager::log(LogManager::DEBUG, "Upload directory created: %s", uploadDir.c_str());
-//     }
-
-//     std::string fileName = extractFileNameFromMultipart(_raw);
-//     if (fileName.empty())
-//         return (handleError(400, ERROR, "ERROR: Missing or invalid filename in multipart data"));
-//         // throw std::runtime_error("ERROR: Missing or invalid filename in multipart data");
-
-//     std::string filePath = uploadDir + sanitizeFileName(fileName);
-//     LogManager::log(LogManager::DEBUG, "Attempting to open file for writing: %s", filePath.c_str());
-
-//     std::ofstream outFile(filePath.c_str(), std::ios::binary);
-//     if (!outFile.is_open())
-//         return (handleError(500, ERROR, "ERROR: Unable to open file for writing"));
-//         // throw std::runtime_error("ERROR: Unable to open file for writing");
-
-//     outFile.write(_raw.c_str(), _raw.size());
-//     outFile.close();
-
-//     LogManager::log(LogManager::DEBUG, "File uploaded successfully: %s", filePath.c_str());
-//     _state = END;
-// }
 
 void Request::handleFileTransfer()
 {

@@ -15,14 +15,6 @@ class   ErrorPage
     public:
         static std::string         getErrorPage(int error_code, const std::map<int, std::string>& error_pages);
         static std::string         generateStandardErrorPage(int error_code);
-        
-    
 };
-
-
-
-
-
-
 
 #endif

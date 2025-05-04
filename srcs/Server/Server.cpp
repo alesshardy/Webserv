@@ -489,77 +489,6 @@ void Server::log_clients_map() const
 
 /*************************************** UTILS **************************************************/
 
-/**
- * @brief Récupérer le bloc serveur correspondant à la requête
- * 
- * @param request 
- * @return BlocServer* 
- */
-// BlocServer* Server::getMatchingServer(const Request* request) const 
-// {
-//     if (!request) 
-//         throw std::runtime_error("ERROR: Request object is not initialized");
-
-//     // Récupérer les en-têtes de la requête
-//     std::map<std::string, std::string> headers = request->getHeaders();
-//     if (headers.find("Host") == headers.end()) 
-//         throw std::runtime_error("ERROR: Missing Host Header");
-
-
-//     std::cout << headers.find("Host")->second << std::endl;
-//     // Extraire le nom d'hôte et le port depuis l'en-tête Host
-//     std::string hostValue = headers["Host"];
-//     size_t colonPos = hostValue.find(':');
-//     std::string hostName = hostValue.substr(0, colonPos);
-//     int port = (colonPos != std::string::npos) ? ft_stoi(hostValue.substr(colonPos + 1)) : 80;
-
-//     // Trouver le bloc serveur correspondant
-//     const std::vector<BlocServer>& servers = _config.getServers();
-//     BlocServer* matchingServer = NULL;
-
-//     for (size_t i = 0; i < servers.size(); ++i) 
-//     {
-//         const BlocServer& server = _config.getServer(i); // Utilisation d'une référence constante
-
-//         // Vérifier si le port correspond
-//         bool portMatches = false;
-//         for (size_t j = 0; j < server.getListen().size(); ++j) 
-//         {
-//             if (server.getListen()[j].getPort() == port) 
-//             {
-//                 portMatches = true;
-//                 break;
-//             }
-//         }
-
-//         // Vérifier si le server_name correspond
-//         bool serverNameMatches = false;
-//         for (size_t j = 0; j < server.getServerName().size(); ++j) 
-//         {
-//             if (server.getServerName()[j] == hostName) 
-//             {
-//                 serverNameMatches = true;
-//                 break;
-//             }
-//         }
-
-//         // Si le port et le server_name correspondent, sélectionner ce bloc
-//         if (portMatches && serverNameMatches) 
-//             return const_cast<BlocServer*>(&server); // Suppression du const pour retourner un pointeur non-const
-
-//         // Si seul le port correspond, garder ce bloc comme fallback
-//         if (portMatches && !matchingServer) 
-//             matchingServer = const_cast<BlocServer*>(&server); // Suppression du const pour fallback
-//     }
-
-//     // Si aucun bloc serveur ne correspond, lever une erreur
-//     if (!matchingServer) 
-//         throw std::runtime_error("ERROR: No matching server block found for the request");
-
-//     return matchingServer;
-// }
-
-// VErsion mis a jour
 BlocServer* Server::getMatchingServer(const Request* request) const 
 {
     if (!request) 
@@ -576,17 +505,6 @@ BlocServer* Server::getMatchingServer(const Request* request) const
 
     // Utiliser le port stocké dans la requête
     int requestPort = request->getPort();
-
-    // // Si un port est spécifié dans l'en-tête Host, vérifier qu'il correspond au port stocké
-    // if (colonPos != std::string::npos)
-    // {
-    //     int hostPort = ft_stoi(hostValue.substr(colonPos + 1));
-    //     if (hostPort != requestPort)
-    //     {
-    //         LogManager::log(LogManager::ERROR, "Port mismatch: Host header port (%d) does not match request port (%d)", hostPort, requestPort);
-    //         throw std::runtime_error("ERROR: Port in Host header does not match request port");
-    //     }
-    // }
 
     // Trouver le bloc serveur correspondant
     const std::vector<BlocServer>& servers = _config.getServers();
