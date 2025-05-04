@@ -289,7 +289,7 @@ void Response::_handlePost()
 
     // Vérifier si la requête est un transfert de fichier
     //std::string resquestBody = _request->getBody()->readBody(); SIUUUU verifier efficacement le file transfert
-    if (isFileTransfer(_request->getMethod(), _request->getHeaders()))
+    if (isFileTransfer(_request->getMethod(), _request->getHeaders(), _request->getBody()->readBody()))
     {
         LogManager::log(LogManager::DEBUG, "File transfer detected in POST request");
 
@@ -401,8 +401,30 @@ void Response::_handleDelete()
         rootOrAlias = matchingServer->getRoot();
     }
 
-    // Construire le chemin complet
-    std::string filePathToDelete = rootOrAlias + filePath;
+    // ANcienne version 
+    // // Construire le chemin complet
+    // std::string filePathToDelete = rootOrAlias + filePath;
+    // std::cout << "fichier a supp : " << filePathToDelete << std::endl;
+
+
+    //WAAAAAAAAA
+    std::string filename;
+    // Vérifier si le header "Filename" est présent
+    if (_request->getHeaders().find("Filename") != _request->getHeaders().end())
+    {
+        filename = _request->getHeaders().at("Filename");
+        LogManager::log(LogManager::DEBUG, "Filename header found: %s", filename.c_str());
+    }
+    else if (_request->getMethod() == "DELETE")
+    {
+        filename = _request->getUri();
+    }
+
+    // Résoudre le chemin complet
+    std::string filePathToDelete = resolveFilePathWithFilename(filename);
+    LogManager::log(LogManager::DEBUG, "Resolved file path to delete: %s", filePathToDelete.c_str());
+    std::cout << "fichier a supp : " << filePathToDelete << std::endl; 
+
 
     // Vérifier si le fichier ou le répertoire existe
     if (directoryExists(filePathToDelete))
@@ -451,8 +473,45 @@ void Response::_handleDelete()
     LogManager::log(LogManager::DEBUG, "DELETE response prepared for client %d", _client_fd);
 }
 
+// WAAAAAAA
+std::string Response::resolveFilePathWithFilename(const std::string& filename) const
+{
+    // // Récupérer le bloc serveur correspondant
+    BlocServer* matchingServer = _request->getMatchingServer();
+    if (!matchingServer)
+        throw std::runtime_error("ERROR: No matching server found");
 
+    // // Vérifier si une location correspond à l'URI
+    const BlocLocation* matchingLocation = _request->getMatchingLocation();
+   
+    std::string basePath;
+    if (matchingLocation && !matchingLocation->getUploadPath().empty())
+    {
+        basePath = matchingLocation->getUploadPath();
+    }
+    else if (matchingLocation && !matchingLocation->getRoot().empty())
+    {
+        basePath = matchingLocation->getRoot();
+    }
+    else if (matchingServer)
+    {
+        basePath = matchingServer->getRoot();
+    }
 
+    // Ajouter un '/' à la fin du chemin si nécessaire
+    if (!basePath.empty() && basePath[basePath.size() - 1] != '/')
+    {
+        basePath += '/';
+    }
+
+    // // Étape 2 : Déterminer le nom du fichier
+    // if (filename == "")
+    //     basePath = basePath + "upload";
+    // else 
+    basePath = basePath + filename;
+
+    return (basePath);
+}
 /***Gestion des redirections*******************************************/
 
 /**
