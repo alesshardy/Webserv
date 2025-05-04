@@ -15,7 +15,6 @@ RequestBody::RequestBody(size_t maxBodySize, bool isChunked, Request *request)
     _isNew = false;
 }
 
-// SIUU gerere lesERREUR
 void RequestBody::defineBodyDestination()
 {
     const std::string& method = _request->getMethod();
@@ -106,111 +105,6 @@ void RequestBody::defineBodyDestination()
     }
 }
 
-//SIUUU on ne peut plus supprimer 
-//SIUUUUU Resoudre le probleme du chemin de la requete poste lorsqu'il est specifie dans le form du html et le conflit avec fileTransfert
-//ca rentre dans cette fonction meme si c'est un fileTransfert
-// void RequestBody::defineBodyDestination()
-// {
-//     const std::string& method = _request->getMethod();
-//     const BlocLocation* matchingLocation = _request->getMatchingLocation();
-//     const BlocServer* matchingServer = _request->getMatchingServer();
-//     bool isCgi = _request->isCgi();
-
-//     if (method == "POST" && !isCgi)
-//     {
-//         // Étape 1 : Déterminer le chemin de base
-//         std::string basePath;
-//         if (matchingLocation && !matchingLocation->getUploadPath().empty()) {
-//             basePath = matchingLocation->getUploadPath();
-//         } else if (matchingLocation && !matchingLocation->getRoot().empty()) {
-//             basePath = matchingLocation->getRoot();
-//         } else if (matchingServer) {
-//             basePath = matchingServer->getRoot();
-//         } else {
-//             return (_request->handleError(400, ERROR, "ERROR: No valid path found for upload"));
-//         }
-
-//         // Ajouter un '/' à la fin du chemin si nécessaire
-//         if (!basePath.empty() && basePath[basePath.size() - 1] != '/') {
-//             basePath += '/';
-//         }
-
-//         // Étape 2 : Récupérer l'URI
-//         std::string uri = _request->getUri();
-//         if (!uri.empty() && uri[0] == '/') {
-//             uri.erase(0, 1); // Supprimer le '/' initial
-//         }
-
-//         // Construire le chemin complet
-//         std::string filePath = basePath + uri;
-
-//         // Vérifier si le chemin correspond à un répertoire
-//         struct stat fileStat;
-//         if (stat(filePath.c_str(), &fileStat) == 0 && S_ISDIR(fileStat.st_mode)) {
-//             // Ajouter un nom de fichier par défaut si l'URI est un répertoire
-//             filePath += "upload.txt";
-//         }
-//         // Étape 3 : Vérifier si le fichier existe déjà
-//         if (fileExists(filePath)) {
-//             return (_request->handleError(400, ERROR, "ERROR: File already exists, cannot overwrite"));
-//         }
-
-//         // Étape 4 : Créer et ouvrir le fichier
-//         _fd = open(filePath.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
-//         if (_fd == -1) {
-//             return (_request->handleError(500, ERROR, "ERROR: Failed to create file: " + filePath));
-//         }
-//         _tmpFilePath = filePath;
-//         _isNew = true;
-//         _isTmp = false; // Ce n'est pas un fichier temporaire
-
-//         // Étape 5 : Lire et stocker les données du formulaire
-//         std::string body = readBody();
-//         std::map<std::string, std::string> formData = parseFormData(body);
-
-//         // Écrire les données dans le fichier
-//         std::ofstream outFile(filePath.c_str());
-//         if (!outFile.is_open()) {
-//             return (_request->handleError(500, ERROR, "ERROR: Failed to open file for writing: " + filePath));
-//         }
-//         for (std::map<std::string, std::string>::const_iterator it = formData.begin(); it != formData.end(); ++it) {
-//             outFile << it->first << "=" << it->second << "\n";
-//         }
-//         outFile.close();
-//     }
-//     else
-//     {
-//         // Cas CGI ou autre : créer un fichier temporaire
-//         char tmpFileName[] = "/tmp/request_body_XXXXXX";
-//         _fd = mkstemp(tmpFileName);
-//         if (_fd == -1) {
-//             return (_request->handleError(500, ERROR, "ERROR: Failed to create temporary file"));
-//         }
-
-//         _tmpFilePath = tmpFileName;
-//         _isTmp = true; // C'est un fichier temporaire
-//     }
-// }
-
-// std::map<std::string, std::string> RequestBody::parseFormData(const std::string& body) const
-// {
-//     std::map<std::string, std::string> formData;
-//     std::istringstream stream(body);
-//     std::string pair;
-
-//     while (std::getline(stream, pair, '&'))
-//     {
-//         size_t delimiter = pair.find('=');
-//         if (delimiter != std::string::npos)
-//         {
-//             std::string key = pair.substr(0, delimiter);
-//             std::string value = pair.substr(delimiter + 1);
-//             formData[key] = value;
-//         }
-//     }
-
-//     return formData;
-// }
 RequestBody::~RequestBody()
 {
     if (_fd != -1)

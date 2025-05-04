@@ -288,7 +288,6 @@ void Response::_handlePost()
     LogManager::log(LogManager::DEBUG, "Handling POST request");
 
     // Vérifier si la requête est un transfert de fichier
-    //std::string resquestBody = _request->getBody()->readBody(); SIUUUU verifier efficacement le file transfert
     if (isFileTransfer(_request->getMethod(), _request->getHeaders(), _request->getBody()->readBody()))
     {
         LogManager::log(LogManager::DEBUG, "File transfer detected in POST request");
@@ -400,16 +399,9 @@ void Response::_handleDelete()
         LogManager::log(LogManager::DEBUG, "No matching location found, using server root: %s", matchingServer->getRoot().c_str());
         rootOrAlias = matchingServer->getRoot();
     }
-
-    // ANcienne version 
-    // // Construire le chemin complet
-    // std::string filePathToDelete = rootOrAlias + filePath;
-    // std::cout << "fichier a supp : " << filePathToDelete << std::endl;
-
-
-    //WAAAAAAAAA
-    std::string filename;
+    
     // Vérifier si le header "Filename" est présent
+    std::string filename;
     if (_request->getHeaders().find("Filename") != _request->getHeaders().end())
     {
         filename = _request->getHeaders().at("Filename");
@@ -473,7 +465,6 @@ void Response::_handleDelete()
     LogManager::log(LogManager::DEBUG, "DELETE response prepared for client %d", _client_fd);
 }
 
-// WAAAAAAA
 std::string Response::resolveFilePathWithFilename(const std::string& filename) const
 {
     // // Récupérer le bloc serveur correspondant
@@ -503,11 +494,7 @@ std::string Response::resolveFilePathWithFilename(const std::string& filename) c
     {
         basePath += '/';
     }
-
-    // // Étape 2 : Déterminer le nom du fichier
-    // if (filename == "")
-    //     basePath = basePath + "upload";
-    // else 
+    
     basePath = basePath + filename;
 
     return (basePath);
