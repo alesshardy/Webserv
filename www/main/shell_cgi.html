@@ -1,0 +1,199 @@
+<!-- <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Shell CGI</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #f5f5f5;
+        }
+
+        form input, form button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        form button {
+            background-color: #e67e22;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        form button:hover {
+            background-color: #d35400;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test Shell CGI</h1>
+        <p>Saisissez une commande shell et exécutez-la :</p>
+        <form method="POST" action="./cgi-bin/execute_command.sh">
+            <input type="text" name="command" placeholder="Entrez une commande shell" required>
+            <button type="submit">Exécuter</button>
+        </form>
+    </div>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Shell CGI</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #f5f5f5;
+        }
+
+        form input, form button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        form button {
+            background-color: #e67e22;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        form button:hover {
+            background-color: #d35400;
+            transform: scale(1.05);
+        }
+
+        .terminal {
+            background-color: #000;
+            color: #0f0;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .terminal pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test Shell CGI</h1>
+        <p>Saisissez une commande shell et exécutez-la :</p>
+        <form method="POST" action="./cgi-bin/execute_command.sh" id="shellForm">
+            <input type="text" name="command" placeholder="Entrez une commande shell" required>
+            <button type="submit">Exécuter</button>
+        </form>
+        <div id="terminal" class="terminal">
+            <pre id="terminalOutput">Résultat de la commande s'affichera ici...</pre>
+        </div>
+    </div>
+    <script>
+        document.getElementById('shellForm').addEventListener('submit', async (event) => {
+            event.preventDefault(); // Empêche le rechargement de la page
+
+            const form = event.target;
+            const terminalOutput = document.getElementById('terminalOutput');
+
+            // Récupérer les données du formulaire
+            const formData = new FormData(form);
+            const params = new URLSearchParams();
+
+            // Convertir FormData en URLSearchParams pour un format correct
+            for (const [key, value] of formData.entries()) {
+                params.append(key, value);
+            }
+
+            try {
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded', // Spécifie le format attendu
+                    },
+                    body: params.toString(), // Convertit les données en chaîne encodée
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erreur : ${response.status} ${response.statusText}`);
+                }
+
+                const result = await response.text();
+                terminalOutput.textContent = result; // Affiche uniquement le texte brut dans le terminal
+            } catch (error) {
+                terminalOutput.textContent = `❌ Erreur : ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>

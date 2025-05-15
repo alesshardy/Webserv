@@ -108,6 +108,16 @@ $messages = [
         'color' => '#FF8C00',
         'icon' => '😰'
     ],
+    'playful' => [
+        'message' => 'Amuse-toi bien, la vie est un jeu ! 🎈',
+        'color' => '#FF4500',
+        'icon' => '🎠'
+    ],
+    'neutral' => [
+        'message' => 'Parfois, la neutralité est la meilleure option. 😌',
+        'color' => '#C0C0C0',
+        'icon' => '😐'
+    ],
     'unknown' => [
         'message' => 'Humeur inconnue, mais tu es génial(e) ! 🤔',
         'color' => '#D3D3D3',
