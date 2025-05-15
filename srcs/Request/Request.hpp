@@ -11,6 +11,7 @@
 #include <ctime>
 #include <sstream>
 #include <filesystem>
+#include <set>
 
 # define URI_MAX_SIZE 2048
 # define REQUETE_LINE_MAX_SIZE 8192
