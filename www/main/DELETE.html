@@ -18,6 +18,7 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
+            flex-direction: column; /* Ajout pour aligner le bouton en bas */
         }
 
         .container {
@@ -87,6 +88,24 @@
             height: 100%;
             z-index: -1;
         }
+
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .back-button:hover {
+            background-color: #357ABD;
+            transform: scale(1.1);
+        }
     </style>
 </head>
 <body>
@@ -103,6 +122,7 @@
         </form>
         <p id="responseMessage" class="result"></p>
     </div>
+    <button class="back-button" onclick="window.location.href='index.html'">Retour à l'accueil</button>
     <script src="https://cdn.jsdelivr.net/npm/js-confetti@latest/dist/js-confetti.browser.js"></script>
     <script>
         const jsConfetti = new JSConfetti();
