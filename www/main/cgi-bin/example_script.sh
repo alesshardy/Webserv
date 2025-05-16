@@ -1,0 +1,11 @@
+#!/bin/bash
+echo "Content-Type: text/html"
+echo ""
+echo "<!DOCTYPE html>"
+echo "<html lang='fr'>"
+echo "<head><title>Shell CGI Example</title></head>"
+echo "<body>"
+echo "<h1>Bienvenue dans le Shell CGI</h1>"
+echo "<p>Ce script a été exécuté avec succès !</p>"
+echo "</body>"
+echo "</html>"
