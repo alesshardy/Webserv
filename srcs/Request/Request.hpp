@@ -96,6 +96,8 @@ class Request{
         void skipHeaderEndSequence();
         void checkAllowedMethods();
         void validateHostPort();
+        void acceptedCgi();
+
         
         void handleFileTransfer();
         

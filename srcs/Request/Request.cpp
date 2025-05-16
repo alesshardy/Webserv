@@ -396,23 +396,7 @@ void Request::checkHeader()
     findMatchingServerAndLocation();
     validateHostPort();
     checkCgi();
-    
-    // SIUUUU
-    // --- PATCH: refuse POST sur URI script non configuré comme CGI ---
-    if (_method == "POST") 
-    {
-        std::string ext = getUriExtension();
-        // Initialisation compatible C++98
-        static const char* arr[] = { ".py", ".php", ".pl", ".rb", ".cgi" };
-        static const std::set<std::string> scriptExts(arr, arr + sizeof(arr)/sizeof(arr[0]));
-        if (!ext.empty() && scriptExts.count(ext) && (!_matchingLocation || !_matchingLocation->getCgiExtensions().count(ext))) 
-        {
-            LogManager::log(LogManager::ERROR, "POST on script-like URI [%s] but extension not configured as CGI", ext.c_str());
-            return handleError(501, ERROR, "CGI not supported for this extension");
-        }
-    }
-    // ---------------------------------------------------------------
-
+    acceptedCgi();
     getMaxBodySize();
     validateContentLengthAndEncoding();
     skipHeaderEndSequence();
@@ -427,8 +411,27 @@ void Request::checkHeader()
     LogManager::log(LogManager::DEBUG, "Checking headers DONE");
 }
 
+/**  
+ * @brief Vérifie si le port de l'hôte est valide.
+*/
+void    Request::acceptedCgi()
+{
+    if (_method == "POST") 
+    {
+        std::string ext = getUriExtension();
+        // Initialisation compatible C++98
+        static const char* arr[] = { ".py", ".php", ".pl", ".rb", ".cgi" };
+        static const std::set<std::string> scriptExts(arr, arr + sizeof(arr)/sizeof(arr[0]));
+        if (!ext.empty() && scriptExts.count(ext) && (!_matchingLocation || !_matchingLocation->getCgiExtensions().count(ext))) 
+        {
+            LogManager::log(LogManager::ERROR, "POST on script-like URI [%s] but extension not configured as CGI", ext.c_str());
+            return handleError(501, ERROR, "CGI not supported for this extension");
+        }
+    }
+}
+
 /**
- * @brief Vérifie si l'en-tête "Host" est présent dans la requête.
+ * @brief Vérifie si l'en-tête "Host" est présentDEBUG dans la requête.
  * 
  */
 void Request::checkHostHeader()
