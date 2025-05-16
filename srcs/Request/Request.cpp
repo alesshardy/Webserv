@@ -679,7 +679,7 @@ void Request::clearProcessedData(size_t processedBytes)
 {
     if (processedBytes > 0 && processedBytes <= _raw.size())
     {
-        // Log des données qui vont être supprimées SIUU
+        // Log des données qui vont être supprimées 
         // LogManager::log(LogManager::DEBUG, ("Clearing processed data: \"" + _raw.substr(0, processedBytes) + "\"").c_str());
         _raw.erase(0, processedBytes);
         _i -= processedBytes; // Ajuster l'index pour refléter le nettoyage

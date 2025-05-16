@@ -292,8 +292,6 @@ void Response::_handlePost()
     {
         LogManager::log(LogManager::DEBUG, "File transfer detected in POST request");
 
-
-        //SIUUU
         // utilisation de body au lieu de raw dans la fct extracFileNameFormMultipart
         std::string bodyContent = _request->getBody()->readBody();
         LogManager::log(LogManager::DEBUG, "Body content: %s", bodyContent.c_str());
