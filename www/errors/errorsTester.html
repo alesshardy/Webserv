@@ -78,7 +78,7 @@
                     url = '/cgi-bin/fail.py'; // Une URL qui provoque une erreur serveur
                     break;
                 case 405:
-                    url = '/method-not-allowed'; // Une URL qui n'autorise pas la méthode utilisée
+                    url = '/errors/method-not-allowed'; // Une URL qui n'autorise pas la méthode utilisée
                     options.method = 'DELETE'; // Utiliser une méthode non autorisée
                     break;
                 case 501:

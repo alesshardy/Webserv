@@ -116,7 +116,7 @@ void Server::checkAndStart()
     for (std::map<int, Socket *>::iterator it = _sockets_map.begin(); it != _sockets_map.end(); ++it)
     {
         LogManager::log(LogManager::DEBUG, "Socket: %d", it->first);
-        LogManager::log(LogManager::DEBUG, "Port: %d", it->second->get_port());
+        LogManager::log(LogManager::INFO, "Port: %d", it->second->get_port());
     }
 }
 
