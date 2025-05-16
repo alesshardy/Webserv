@@ -30,14 +30,17 @@ void RequestBody::defineBodyDestination()
         if (matchingLocation && !matchingLocation->getUploadPath().empty())
         {
             basePath = matchingLocation->getUploadPath();
+            std::cout << "Upload path1: " << basePath << std::endl;
         }
         else if (matchingLocation && !matchingLocation->getRoot().empty())
         {
             basePath = matchingLocation->getRoot();
+            std::cout << "Upload path2: " << basePath << std::endl;
         }
         else if (matchingServer)
         {
             basePath = matchingServer->getRoot();
+            std::cout << "Upload path3: " << basePath << std::endl;
         }
         else
         {
