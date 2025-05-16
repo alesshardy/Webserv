@@ -38,6 +38,13 @@ extern bool running;
 #define BG_CYAN "\033[46m"
 #define BG_WHITE "\033[47m"
 
-
+#include "Config.hpp"
+#include "Server.hpp"
+#include "CommandLineParser.hpp"
+#include <iostream>
+#include "LogManager.hpp"
+#include "Socket.hpp"
+#include <cstdlib> 
+#include <csignal>
 
 #endif

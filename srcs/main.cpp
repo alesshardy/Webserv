@@ -1,12 +1,4 @@
-#include <iostream>
-#include "LogManager.hpp"
-#include "Socket.hpp"
-#include <cstdlib> 
-#include <csignal>
 #include "../includes/Webserv.hpp"
-#include "Config.hpp"
-#include "Server.hpp"
-#include "CommandLineParser.hpp"
 
 bool running = true;
 
