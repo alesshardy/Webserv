@@ -76,7 +76,6 @@ std::string sanitizeFileName(const std::string& fileName)
 
 std::string extractFileNameFromMultipart(const std::string& rawData)
 {
-    std::cout << "Raw: " << rawData << std::endl;
     size_t dispositionPos = rawData.find("Content-Disposition:");
     if (dispositionPos == std::string::npos)
         return "";
