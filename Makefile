@@ -46,7 +46,7 @@ INC			=	-I./srcs/	\
 				-I./srcs/CommandLineParser \
 				
 				
-				
+TMP_PATH		=	./www/main/cgi-bin/tmp				
 # **************************************************************************** #
 #                                   SOURCES                                    #
 # **************************************************************************** #
@@ -93,7 +93,7 @@ clean:
 	@echo "${YELLOW}> Cleaning $(NAME)'s objects has been done ❌${END}\n"
 
 fclean:	clean
-	@$(RM) $(NAME)
+	@$(RM) $(NAME) $(TMP_PATH)
 	@echo "${YELLOW}> Cleaning of $(NAME) has been done ❌${END}\n"
 
 re: clean all
