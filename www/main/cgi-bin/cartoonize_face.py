@@ -63,29 +63,11 @@ if face_file.filename:
             result = color  # Utilisez `gray` pour un effet en niveaux de gris
         elif filter_type == "oil_painting":
             result = cv2.xphoto.oilPainting(img, 7, 1)
-        elif filter_type == "emboss":
-            kernel = np.array([[0, -1, -1],
-                            [1,  0, -1],
-                            [1,  1,  0]])
-            result = cv2.filter2D(img, -1, kernel)
-        elif filter_type == "glitch":
-            rows, cols, _ = img.shape
-            result = img.copy()
-            for i in range(0, rows, 10):
-                shift = np.random.randint(-10, 10)
-                result[i:i+10, :] = np.roll(img[i:i+10, :], shift, axis=1)
         elif filter_type == "thermal":
             result = cv2.applyColorMap(img, cv2.COLORMAP_JET)
         elif filter_type == "pixel_art":
             small = cv2.resize(img, (32, 32), interpolation=cv2.INTER_LINEAR)
             result = cv2.resize(small, (img.shape[1], img.shape[0]), interpolation=cv2.INTER_NEAREST)
-        elif filter_type == "halftone":
-            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            result = np.zeros_like(img)
-            for y in range(0, gray.shape[0], 10):
-                for x in range(0, gray.shape[1], 10):
-                    radius = int(gray[y, x] / 255 * 5)
-                    cv2.circle(result, (x, y), radius, (255, 255, 255), -1)
         elif filter_type == "cartoon_glow":
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             edges = cv2.Canny(gray, 100, 200)
