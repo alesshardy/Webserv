@@ -480,11 +480,6 @@ std::string Response::resolveFilePathWithFilename(const std::string& filename) c
     const BlocLocation* matchingLocation = _request->getMatchingLocation();
    
     std::string basePath;
-    // SIUU fix delete
-    // if (matchingLocation && !matchingLocation->getUploadPath().empty())
-    // {
-    //     basePath = matchingLocation->getUploadPath();
-    // }
     if (matchingLocation && !matchingLocation->getRoot().empty())
     {
         basePath = matchingLocation->getRoot();

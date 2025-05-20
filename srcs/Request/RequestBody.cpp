@@ -30,17 +30,14 @@ void RequestBody::defineBodyDestination()
         if (matchingLocation && !matchingLocation->getUploadPath().empty())
         {
             basePath = matchingLocation->getUploadPath();
-            std::cout << "Upload path1: " << basePath << std::endl;
         }
         else if (matchingLocation && !matchingLocation->getRoot().empty())
         {
             basePath = matchingLocation->getRoot();
-            std::cout << "Upload path2: " << basePath << std::endl;
         }
         else if (matchingServer)
         {
             basePath = matchingServer->getRoot();
-            std::cout << "Upload path3: " << basePath << std::endl;
         }
         else
         {
@@ -79,7 +76,7 @@ void RequestBody::defineBodyDestination()
             // throw std::runtime_error("ERROR: File already exists, cannot overwrite");
         }
 
-        std::cout << "FIchier cREER : " << _tmpFilePath << std::endl;
+        LogManager::log(LogManager::DEBUG, ("FIchier cREER : " + _tmpFilePath).c_str());
         // Étape 4 : Créer et ouvrir le fichier
         _fd = open(_tmpFilePath.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0666);
         if (_fd == -1)
