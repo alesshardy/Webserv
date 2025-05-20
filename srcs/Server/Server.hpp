@@ -26,7 +26,7 @@ class   Client;
 class   Request;
 class   Response;
 
-#define MAX_EVENTS 10
+#define MAX_EVENTS 100
 
 enum State
 {
