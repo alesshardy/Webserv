@@ -139,7 +139,6 @@ class Request{
         void setCode(int const &code) {_statusCode = code;}
         void setState(int const &state) {_state = state;}
         void setPort(int const &port) {_port = port;}
-        void setError(int code, int state);
         
         bool isCgi() {return _isCgi;}
 

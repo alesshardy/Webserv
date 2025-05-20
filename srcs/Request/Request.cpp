@@ -79,13 +79,6 @@ void Request::handleError(int code, int state, const std::string& errorMessage)
     throw std::runtime_error(errorMessage);
 }
 
-void Request::setError(int code, int state)
-{
-    setCode(code);      
-    setState(state);     
-}
-
-
 void Request::parseRequest(std::string str)
 {
     try

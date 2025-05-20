@@ -20,68 +20,6 @@ Server::~Server()
  * Cette méthode configure le serveur en créant des sockets pour chaque port spécifié dans la configuration.
  * 
  */
-// void Server::init()
-// {
-//     // Création de l'instance epoll
-//     _epoll_fd = epoll_create1(O_CLOEXEC); // surveiller les événements sur les descripteurs de fichiers.
-//     if (_epoll_fd == -1)
-//     {
-//         LogManager::log(LogManager::ERROR, "Error creating epoll instance");
-//         throw std::runtime_error("Failed to create epoll instance");
-//     }
-
-//     // Récupération des configurations des serveurs
-//     std::vector<BlocServer> servers = _config.getServers();
-
-//     for (size_t i = 0; i < servers.size(); i++)
-//     {
-//         const BlocServer &server = servers[i];
-//         const std::vector<Listen> &listens = server.getListen();
-
-//         for (size_t j = 0; j < listens.size(); j++)
-//         {
-//             int port = listens[j].getPort();
-//             std::string ip = listens[j].getIp();
-//             try
-//             {
-//                 // Créer un socket pour chaque port (utilisation de new)
-//                 Socket *socket = new Socket(port, ip);
-//                 LogManager::log(LogManager::DEBUG, "Socket created for port %d", port);
-
-//                 // Ajouter le socket à la map des sockets
-//                 _sockets_map[socket->get_socket_fd()] = socket;
-
-//                 // Si c'est le premier socket, l'assigner à _socket
-//                 if (_socket == -1)
-//                 {
-//                     _socket = socket->get_socket_fd();
-//                 }
-
-//                 // Ajouter le socket à epoll
-//                 struct epoll_event ev;
-//                 ev.events = EPOLLIN; // Surveiller les événements de lecture
-//                 ev.data.fd = socket->get_socket_fd();
-
-//                 if (epoll_ctl(_epoll_fd, EPOLL_CTL_ADD, socket->get_socket_fd(), &ev) == -1) 
-//                 {
-//                     LogManager::log(LogManager::ERROR, "Failed to add socket to epoll");
-//                     throw std::runtime_error("Failed to add socket to epoll");
-//                 }
-
-//                 LogManager::log(LogManager::DEBUG, "Socket added to epoll for port %d", port);
-//             }
-//             catch (const std::exception &e)
-//             {
-//                 LogManager::log(LogManager::ERROR, "Error initializing socket for port %d: %s", port, e.what());
-//             }
-//         }
-//     }
-
-//     LogManager::log(LogManager::INFO, "Server initialization complete");
-//     _state = INITIALIZED;
-// }
-
-// SIUUUUUU ajout de container de port deja ajouter
 void Server::init()
 {
     _epoll_fd = epoll_create1(O_CLOEXEC);
@@ -152,7 +90,6 @@ void Server::run()
         handleEpollEvents();
     }
 }
-
 
 /**
  * @brief vérifie l'état du serveur et le démarre
