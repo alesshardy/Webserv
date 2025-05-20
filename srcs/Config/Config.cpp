@@ -159,6 +159,14 @@ void    Config::handleListen(const std::string &arg, BlocServer &current)
             throw std::runtime_error("ERROR : Invalid port number in listen directive.");
         if (!isValidIPv4(ip))
             throw std::runtime_error("ERROR : Invalid ip: "+ ip + " in listen directive.");
+
+        // Vérification de la présence du port dans le bloc server
+        const std::vector<Listen>& listens = current.getListen();
+        for (size_t i = 0; i < listens.size(); ++i) 
+        {
+            if (listens[i].getPort() == port) 
+                throw std::runtime_error("ERROR : duplicate listen directive (" + toString(port) + ") in server block");
+        }
         current.addListen(Listen(ip, port));
 }
 
