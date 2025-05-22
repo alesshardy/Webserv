@@ -50,7 +50,10 @@ void Socket::bind_socket()
     _addr.sin_addr.s_addr = inet_addr(_ip.c_str());
 
     if (bind(_socket_fd, (struct sockaddr *)&_addr, sizeof(_addr)) < 0)
+    {
+        close(_socket_fd);
         throw std::runtime_error("Bind failed");
+    }
 }
 
 /**
